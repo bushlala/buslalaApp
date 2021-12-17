@@ -125,9 +125,12 @@ export default function TicketSummaryScreen(){
                                 <Text style={{color:"#000"}}>₹2,070.00</Text>
                             </View>
                         </View>
-                        <View style={{backgroundColor:"#e66349",justifyContent:"center",alignItems:"center",marginHorizontal:80,borderRadius:10,paddingVertical:12,elevation:5,marginBottom:40}}>
+                        <TouchableOpacity 
+                            style={{backgroundColor:"#e66349",justifyContent:"center",alignItems:"center",marginHorizontal:80,borderRadius:10,paddingVertical:12,elevation:5,marginBottom:40}}
+                            onPress={()=>navigation.navigate("PaymentScreen")}
+                        >
                             <Text style={{color:"#fff",fontSize:16}}>Proceed to Payment</Text>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </ScrollView>

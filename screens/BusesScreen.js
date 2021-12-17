@@ -13,7 +13,8 @@ import { dates } from '../data/dates'
 import SeaterOption from '../components/SeaterOption'
 import { Seats } from '../data/seatData'
 
-const {width} = Dimensions.get("window")
+const {width} = Dimensions.get("window");
+const {height} = Dimensions.get("window");
 
 const BusesScreen = () => {
 
@@ -443,7 +444,7 @@ const styles = StyleSheet.create({
     options:{
         alignItems:"center",
         width:width,
-        marginBottom:40
+        // marginBottom:40
     },
     filter:{
         backgroundColor:primary,

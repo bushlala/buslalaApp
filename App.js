@@ -22,9 +22,9 @@ import BusDetailsScreen from './screens/BusDetailsScreen';
 import BookedSuccessfullyScreen from './screens/BookedSuccessfullyScreen';
 import PaymentScreen from './screens/NewScreens/PaymentScreen';
 import TicketSummaryScreen from './screens/NewScreens/TicketSummary_rountrip';
-import UserDetails_11_1 from './screens/NewScreens/UserDetails-11_1';
+import UserDetails_11_2 from './screens/NewScreens/UserDetails-11_2';
 import SelectedScreen from './screens/NewScreens/SelectedScreen';
-import SeatBooking_round_10_4 from './screens/NewScreens/seatBooking/RoundTrip-10_4';
+import SeatBooking_round_trip from './screens/NewScreens/SeatBookingRoundTrip';
 import NotificationScreen from './screens/NewScreens/NotificationScreen';
 
 const Stack = createNativeStackNavigator();
@@ -54,9 +54,9 @@ const App = () => {
           <Stack.Screen name="Bookings" component={BookingsScreen}/>
           <Stack.Screen name="PaymentScreen" component={PaymentScreen}/>
           <Stack.Screen name="Tickets" component={TicketSummaryScreen}/>
-          <Stack.Screen name="UserDetails" component={UserDetails_11_1}/>
+          <Stack.Screen name="UserDetails" component={UserDetails_11_2}/>
           <Stack.Screen name="SelectedScreen" component={SelectedScreen}/>
-          <Stack.Screen name="SeatBookingRound" component={SeatBooking_round_10_4}/>
+          <Stack.Screen name="SeatBookingRoundTrip" component={SeatBooking_round_trip}/>
           <Stack.Screen name="Notifications" component={NotificationScreen}/>
         </Stack.Navigator>
       </NavigationContainer>

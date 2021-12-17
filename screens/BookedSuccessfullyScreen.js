@@ -19,7 +19,7 @@ const BookedSuccessfullyScreen = () => {
             </View>
             <View style={styles.view2}>
                 <KeyboardAvoidingView behavior="padding" style={styles.box}>
-                    <Text style={{fontFamily:RalewayRegular, fontSize:20, color:"#242424", marginBottom:10, fontWeight:"bold"}}>Hello! {route.params.myName}</Text>
+                    <Text style={{fontFamily:RalewayRegular, fontSize:20, color:"#242424", marginBottom:10, fontWeight:"bold"}}>Hello! route.params.myName</Text>
                     <Text style={{fontFamily:RalewayBold, fontSize:18, color:"black"}}>For The Ticket Confirmation Letter</Text>
                     <Text style={{fontFamily:RalewayBold, fontSize:18, color:"black", marginBottom:20}}>Please Check Your Mail Box</Text>
                     <TouchableOpacity activeOpacity={0.8} style={styles.button}

@@ -90,7 +90,8 @@ const LoginScreen = () => {
         }else{
             setError(false);
             setError1(false);
-        navigation.navigate("Buses",{oneWay: isOneWay, twoWay: isTwoWay, from: from, to: to, deptDate: deptDate, returnDate: returnDate})
+            // navigation.navigate("SeatBookingRoundTrip")
+            navigation.navigate("Buses",{oneWay: isOneWay, twoWay: isTwoWay, from: from, to: to, deptDate: deptDate, returnDate: returnDate})
     }}
 
     return (

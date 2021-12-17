@@ -163,7 +163,10 @@ export default function UserDetails_11_2(){
                             <Text style={{color:"#000"}}>₹2,020</Text>
                         </View>
                     </View>
-                    <TouchableOpacity style={{elevation:5, backgroundColor:"#ed6c39", borderRadius:10, padding:10,alignItems:"center",marginVertical:10,marginLeft:10,paddingHorizontal:20}}>
+                    <TouchableOpacity 
+                        style={{elevation:5, backgroundColor:"#ed6c39", borderRadius:10, padding:10,alignItems:"center",marginVertical:10,marginLeft:10,paddingHorizontal:20}}
+                        onPress={()=>navigation.navigate("BusDetails")}
+                        >
                         <Text style={{color:"#fff",fontSize:18}}>Proceed</Text>
                     </TouchableOpacity>
                 </View>

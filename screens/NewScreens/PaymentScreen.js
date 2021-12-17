@@ -124,16 +124,18 @@ export default function PaymentScreen(){
                                 <View style={{}}>
                                     <Image source={require("../../assets/icons/phonepe.png")} style={{height:40,width:50,resizeMode:"contain"}} />
                                 </View>
-                                <View style={{flexDirection:"row",alignItems:"center",justifyContent:"space-between",flex:1}}>
+                                <TouchableOpacity 
+                                    style={{flexDirection:"row",alignItems:"center",justifyContent:"space-between",flex:1}}
+                                >
                                     <Text style={{color:"#000",marginVertical:10,marginLeft:5}}>Phonepe</Text>
                                     {/* <MaterialIcons name="done" color="#000" size={24} style={{marginRight:5}}/> */}
-                                </View>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </View>
                 </View>
             </ScrollView>
-            <View style={{
+            <TouchableOpacity style={{
                 backgroundColor:"#e66349",
                 justifyContent:"center",
                 alignItems:"center",
@@ -143,9 +145,10 @@ export default function PaymentScreen(){
                 elevation:5,
                 marginBottom:10
                 }}
+                onPress={()=>navigation.navigate("Booked Successfully")}
             >
                 <Text style={{color:"#fff",fontSize:16}}>Pay  ₹2,070</Text>
-            </View>
+            </TouchableOpacity>
         </View>
     );
 };

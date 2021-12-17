@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, TextInput, Image } from "react-native";
 import ToggleSwitch  from "toggle-switch-react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -246,8 +246,8 @@ export default function SelectedScreen(){
                 </View>
                 
             </View>
-            <View style={{paddingHorizontal:30,marginBottom:200}}>
-                {/* <ScrollView style={{}} showsVerticalScrollIndicator={false}> */}
+            <View style={{marginHorizontal:20,marginBottom:200}}>
+                <ScrollView style={{}} showsVerticalScrollIndicator={false}>
                     <View style={{alignItems:"center",marginTop:10}}>
                         <View>
                             <Text style={{color:"#000",marginBottom:5}}>Prices</Text>
@@ -278,9 +278,9 @@ export default function SelectedScreen(){
                             <Text style={{color:toggle === false ? "#000" : "#e66349",marginRight:10,marginLeft:10}}>Upper</Text>
                         </View>
                     </View> 
-                    <ScrollView style={{marginBottom:100,marginTop:10}} showsHorizontalScrollIndicator={false}>
+                    {/* <ScrollView style={{marginBottom:100,marginTop:10}} showsHorizontalScrollIndicator={false}> */}
                         <View style={styles.circle}>
-                            <View style={{borderWidth:1,borderRadius:45/2,height:45,width:45,alignItems:"center",justifyContent:"center",borderColor:"gray"}}>
+                            {/* <View style={{borderWidth:1,borderRadius:45/2,height:45,width:45,alignItems:"center",justifyContent:"center",borderColor:"gray"}}>
                                 <View style={{borderWidth:1,height:13,borderColor:"gray",backgroundColor:"gray"}} />
                                 <View style={{flexDirection:"row",alignItems:"center"}}>
                                     <View style={{borderWidth:1,width:13,height:0,borderColor:"gray",backgroundColor:"gray"}} />
@@ -288,11 +288,34 @@ export default function SelectedScreen(){
                                     <View style={{borderWidth:1,width:13,height:0,borderColor:"gray",backgroundColor:"gray"}} />
                                 </View>
                                 <View style={{borderWidth:1,height:13,borderColor:"gray",backgroundColor:"gray"}} />
-                            </View>
+                            </View> */}
+                            <Image source={require("../../assets/icons/steering-wheel.png")} style={{height:40,width:40}} />
                         </View>
                         {toggle === true ? <Upper /> : <Lower />}  
-                    </ScrollView>                   
-                {/* </ScrollView> */}
+                    {/* </ScrollView>                    */}
+                </ScrollView>
+                <View style={{elevation:5,backgroundColor:"#fff",width:"100%",borderRadius:10,marginTop:-110,flexDirection:"row",padding:10,justifyContent:"space-between",paddingVertical:30}}>
+                    <View style={{flexDirection:"row",marginLeft:10}}>
+                        <View style={{alignItems:"center"}}>
+                            <Text style={{color:"gray"}}>Selected seats</Text>
+                            <Text style={{color:"#000"}}>A4, B4</Text>
+                        </View>
+                        <View style={{backgroundColor:"#4a4847",borderWidth:1,marginHorizontal:20,borderColor:"#4a4847"}}></View>
+                        <View style={{alignItems:"center"}}>
+                            <Text style={{color:"gray"}}>Price</Text>
+                            <Text style={{color:"#000"}}>₹2,020</Text>
+                        </View>
+                    </View>
+                    <View>
+                        <TouchableOpacity onPress={()=>navigation.navigate("UserDetails")}
+                            style={{backgroundColor:"#ed6c39",paddingVertical:8,paddingHorizontal:20,borderRadius:10,elevation:5}}
+                        >
+                            <View>
+                                <Text style={{color:"#fff",fontSize:20}}>Proceed</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </View>
         </View>
     );

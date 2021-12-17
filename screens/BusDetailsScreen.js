@@ -83,9 +83,9 @@ const BusDetailsScreen = () => {
                     onChangeText={(text)=>setEmails(text)}
                     keyboardType="email-address"
                     />
-                    <Text style={styles.text}>{route.params.name}</Text>
-                    <Text style={styles.text}>Ticket Price: Rs{route.params.price}</Text>
-                    <Text style={styles.text}>From {route.params.deptHour} to {route.params.arrivalHour}</Text>
+                    <Text style={styles.text}>route.params.name</Text>
+                    <Text style={styles.text}>Ticket Price: Rs route.params.price</Text>
+                    <Text style={styles.text}>From route.params.deptHour to route.params.arrivalHour</Text>
                     <TextInput
                     maxLength={100}
                     numberOfLines={2}
@@ -99,7 +99,7 @@ const BusDetailsScreen = () => {
                     keyboardType="default"
                     />
                     <TouchableOpacity disabled={error ? true : false} activeOpacity={0.8} style={styles.button}
-                    onPress={submitHandler}
+                    onPress={()=> navigation.navigate("Tickets")}
                     >
                         <Text style={{color:"white",fontSize:18, fontFamily:RalewayRegular}}>Confirm Booking</Text>
                     </TouchableOpacity>

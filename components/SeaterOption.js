@@ -12,12 +12,12 @@ const SeaterOption = ({name, price, hours, rating, desc, seats, deptHour, arriva
     const navigation = useNavigation();
 
     const busHandler=()=>{
-        navigation.navigate("BusDetails", {"name": name, "price": price, "hours": hours, "deptHour": deptHour, "arrivalHour": arrivalHour})
+        navigation.navigate("SelectedScreen", {"name": name, "price": price, "hours": hours, "deptHour": deptHour, "arrivalHour": arrivalHour})
     }
 
     return (
         <TouchableOpacity activeOpacity={0.8} style={styles.container}
-        onPress={busHandler}
+            onPress={busHandler}
         >
             <View style={styles.view1}>
                 <Text style={{fontFamily:RalewayBold, color:"black", fontSize:14, marginBottom:5}}>{name}</Text>
@@ -66,8 +66,8 @@ const styles = StyleSheet.create({
         backgroundColor:"white",
         elevation:5,
         marginVertical:10,
-        width: width -60,
-        paddingHorizontal:10,
+        width: width - 60,
+        paddingHorizontal:20,
         marginHorizontal:10
     },
     view1:{
