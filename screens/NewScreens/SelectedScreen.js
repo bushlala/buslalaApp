@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, TextInput, Image } from "react-native";
+import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, TextInput, Image, Modal } from "react-native";
 import ToggleSwitch  from "toggle-switch-react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -20,55 +20,60 @@ export default function SelectedScreen(){
     const navigation = useNavigation();
 
     const [toggle, setToggle] = useState(false);
+    const [isOpen,  setIsOpen]   = useState(false);
+
+    const closeHandle=()=>{
+        setIsOpen(false);
+    };
 
     const Upper=()=>(
         <View>
             <View style={{flexDirection:"row",justifyContent:"space-around",marginTop:20}}>
                 <View style={{flexDirection:"row"}}>
-                    <View style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
                     <View style={{backgroundColor:"#fff",height:90,width:40,borderRadius:5}}></View>
                 </View>
                 <View style={{flexDirection:"row"}}>
-                    <View style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <View style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
                 </View>
             </View> 
             <View style={{flexDirection:"row",justifyContent:"space-around",marginTop:20}}>
                 <View style={{flexDirection:"row"}}>
-                    <View style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <View style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
                 </View>
                 <View style={{flexDirection:"row"}}>
-                    <View style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <View style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
                 </View>
             </View>
             <View style={{flexDirection:"row",justifyContent:"space-around",marginTop:20}}>
                 <View style={{flexDirection:"row"}}>
-                    <View style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <View style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
                 </View>
                 <View style={{flexDirection:"row"}}>
-                    <View style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <View style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
                 </View>
             </View>
             <View style={{flexDirection:"row",justifyContent:"space-around",marginTop:20,marginBottom:20}}>
                 <View style={{flexDirection:"row"}}>
-                    <View style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <View style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
                 </View>
                 <View style={{flexDirection:"row"}}>
-                    <View style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <View style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
                 </View>
             </View>
         </View>
@@ -78,95 +83,95 @@ export default function SelectedScreen(){
         <View style={{marginBottom:20}}>
             <View style={{flexDirection:"row",justifyContent:"space-around",marginTop:20}}>
                 <View style={{flexDirection:"row"}}>
-                    <View style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}} onPress={()=>setIsOpen(true)}></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
                     <View style={{backgroundColor:"#fff",height:70,width:40,borderRadius:5}}></View>
                 </View>
                 <View>
                     <View style={{flexDirection:"row"}}>
-                        <View style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></View>
+                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
                         <View style={{marginHorizontal:10}} />
-                        <View style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></View>
+                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
                     </View>
                     <View style={{flexDirection:"row",marginTop:10}}>
-                        <View style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></View>
+                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
                         <View style={{marginHorizontal:10}} />
-                        <View style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></View>
+                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
                     </View>             
                 </View>        
             </View>
             <View style={{flexDirection:"row",justifyContent:"space-around"}}>
                 <View style={{flexDirection:"row",marginTop:-10}}>
-                    <View style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <View style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
                 </View>
                 <View>
                     <View style={{flexDirection:"row",marginTop:10}}>
-                        <View style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></View>
+                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
                         <View style={{marginHorizontal:10}} />
-                        <View style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></View>
+                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
                     </View>
                     <View style={{flexDirection:"row",marginTop:10}}>
-                        <View style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></View>
+                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
                         <View style={{marginHorizontal:10}} />
-                        <View style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></View>
+                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
                     </View>             
                 </View>        
             </View>
             <View style={{flexDirection:"row",justifyContent:"space-around"}}>
                 <View style={{flexDirection:"row",marginTop:-30}}>
-                    <View style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <View style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
                 </View>
                 <View>
                     <View style={{flexDirection:"row",marginTop:10}}>
-                        <View style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></View>
+                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
                         <View style={{marginHorizontal:10}} />
-                        <View style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></View>
+                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
                     </View>            
                 </View>        
             </View>
             <View style={{flexDirection:"row",justifyContent:"space-around"}}>
                 <View style={{flexDirection:"row",marginTop:-20}}>
-                    <View style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <View style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
                 </View>
                 <View>
                     <View style={{flexDirection:"row",marginTop:10}}>
-                        <View style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></View>
+                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
                         <View style={{marginHorizontal:10}} />
-                        <View style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></View>
+                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
                     </View>            
                 </View>        
             </View>
             <View style={{flexDirection:"row",justifyContent:"space-around"}}>
                 <View style={{flexDirection:"row",marginTop:-10}}>
-                    <View style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <View style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
                 </View>
                 <View>
                     <View style={{flexDirection:"row",marginTop:10}}>
-                        <View style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></View>
+                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
                         <View style={{marginHorizontal:10}} />
-                        <View style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></View>
+                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
                     </View>            
                 </View>        
             </View>
             <View style={{flexDirection:"row",justifyContent:"space-around"}}>
                 <View style={{flexDirection:"row",marginTop:0}}>
-                    <View style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <View style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
                 </View>
                 <View>
                     <View style={{flexDirection:"row",marginTop:10}}>
-                        <View style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></View>
+                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
                         <View style={{marginHorizontal:10}} />
-                        <View style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></View>
+                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
                     </View>            
                 </View>        
             </View>
@@ -247,7 +252,7 @@ export default function SelectedScreen(){
                 
             </View>
             <View style={{marginHorizontal:20,marginBottom:200}}>
-                <ScrollView style={{}} showsVerticalScrollIndicator={false}>
+                <ScrollView style={{marginBottom:100}} showsVerticalScrollIndicator={false}>
                     <View style={{alignItems:"center",marginTop:10}}>
                         <View>
                             <Text style={{color:"#000",marginBottom:5}}>Prices</Text>
@@ -291,31 +296,62 @@ export default function SelectedScreen(){
                             </View> */}
                             <Image source={require("../../assets/icons/steering-wheel.png")} style={{height:40,width:40}} />
                         </View>
-                        {toggle === true ? <Upper /> : <Lower />}  
+                        {toggle === false ? <Lower /> : <Upper />}  
                     {/* </ScrollView>                    */}
                 </ScrollView>
-                <View style={{elevation:5,backgroundColor:"#fff",width:"100%",borderRadius:10,marginTop:-110,flexDirection:"row",padding:10,justifyContent:"space-between",paddingVertical:30}}>
-                    <View style={{flexDirection:"row",marginLeft:10}}>
-                        <View style={{alignItems:"center"}}>
-                            <Text style={{color:"gray"}}>Selected seats</Text>
-                            <Text style={{color:"#000"}}>A4, B4</Text>
-                        </View>
-                        <View style={{backgroundColor:"#4a4847",borderWidth:1,marginHorizontal:20,borderColor:"#4a4847"}}></View>
-                        <View style={{alignItems:"center"}}>
-                            <Text style={{color:"gray"}}>Price</Text>
-                            <Text style={{color:"#000"}}>₹2,020</Text>
-                        </View>
-                    </View>
-                    <View>
-                        <TouchableOpacity onPress={()=>navigation.navigate("UserDetails")}
-                            style={{backgroundColor:"#ed6c39",paddingVertical:8,paddingHorizontal:20,borderRadius:10,elevation:5}}
-                        >
-                            <View>
-                                <Text style={{color:"#fff",fontSize:20}}>Proceed</Text>
+                <View style={styles.modal}>
+                        <View style={{flexDirection:"row",marginLeft:10}}>
+                            <View style={{alignItems:"center"}}>
+                                <Text style={{color:"gray"}}>Selected seats</Text>
+                                <Text style={{color:"#000"}}>A4, B4</Text>
                             </View>
-                        </TouchableOpacity>
+                            <View style={{backgroundColor:"#4a4847",borderWidth:1,marginHorizontal:20,borderColor:"#4a4847"}}></View>
+                            <View style={{alignItems:"center"}}>
+                                <Text style={{color:"gray"}}>Price</Text>
+                                <Text style={{color:"#000"}}>₹2,020</Text>
+                            </View>
+                        </View>
+                        <View>
+                            <TouchableOpacity onPress={()=>navigation.navigate("UserDetails")}
+                                style={{backgroundColor:"#ed6c39",paddingVertical:8,paddingHorizontal:20,borderRadius:10,elevation:5}}
+                            >
+                                <View>
+                                    <Text style={{color:"#fff",fontSize:20}}>Proceed</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </View>
+                {/* <Modal
+                    animationType={"slide"}
+                    onRequestClose={closeHandle}
+                    transparent={true}
+                    visible={isOpen}
+                >
+                    <View style={{alignItems:"center", marginHorizontal:20, width:"90%", flex:1, justifyContent:"flex-end"}}>
+                        <View style={{elevation:5,backgroundColor:"#fff",width:"100%",borderRadius:10,marginTop:-110,flexDirection:"row",padding:10,justifyContent:"space-between",paddingVertical:30}}>
+                            <View style={{flexDirection:"row",marginLeft:10}}>
+                                <View style={{alignItems:"center"}}>
+                                    <Text style={{color:"gray"}}>Selected seats</Text>
+                                    <Text style={{color:"#000"}}>A4, B4</Text>
+                                </View>
+                                <View style={{backgroundColor:"#4a4847",borderWidth:1,marginHorizontal:20,borderColor:"#4a4847"}}></View>
+                                <View style={{alignItems:"center"}}>
+                                    <Text style={{color:"gray"}}>Price</Text>
+                                    <Text style={{color:"#000"}}>₹2,020</Text>
+                                </View>
+                            </View>
+                            <View>
+                                <TouchableOpacity onPress={()=>navigation.navigate("UserDetails")}
+                                    style={{backgroundColor:"#ed6c39",paddingVertical:8,paddingHorizontal:20,borderRadius:10,elevation:5}}
+                                >
+                                    <View>
+                                        <Text style={{color:"#fff",fontSize:20}}>Proceed</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal> */}
             </View>
         </View>
     );
@@ -366,5 +402,18 @@ const styles = StyleSheet.create({
         alignItems:"flex-end",
         marginRight:55,
         marginTop:10
+    },
+    modal: {
+        elevation:5,
+        backgroundColor:"#edf5f7",
+        width:"100%",
+        borderRadius:10,
+        marginTop:-100,
+        flexDirection:"row",
+        padding:10,
+        justifyContent:"space-between",
+        paddingVertical:30,
+        // borderColor:"gray",
+        // borderTopWidth:2
     }
 });

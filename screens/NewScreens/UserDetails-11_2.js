@@ -90,7 +90,7 @@ export default function UserDetails_11_2(){
                 </View>
                 
             </View>
-            <View style={{paddingHorizontal:30,marginBottom:200}}>
+            <View style={{paddingHorizontal:30,marginBottom:0}}>
             <ScrollView style={{}} showsVerticalScrollIndicator={false}>
                     <View style={{marginHorizontal:5}}>
                         <Text style={{color:"#000",marginTop:40}}>Personal Detials</Text>
@@ -100,11 +100,15 @@ export default function UserDetails_11_2(){
                             <Text style={{color:"#000"}}>A4</Text>
                         </View>
                         <View style={{elevation:5,width:"100%", backgroundColor:"white", borderRadius:10, padding:10,marginTop:10}}>
-                            <TextInput style={{width:"100%",paddingLeft:10}} placeholder="Full Name" placeholderTextColor="gray" />
+                            <TextInput 
+                                style={{paddingLeft:10,color:"#000",borderRadius:10}} 
+                                placeholder="Full Name" 
+                                placeholderTextColor="gray" 
+                            />
                         </View>
                         <View style={{flexDirection:"row",justifyContent:"space-between"}}>
                             <View style={{flexDirection:"row",elevation:5, backgroundColor:"white", borderRadius:10, padding:10,marginTop:10}}>
-                                <TextInput style={{paddingLeft:10,width:width/3}} placeholder="Age" placeholderTextColor="gray" />
+                                <TextInput style={{color:"#000",paddingLeft:10,width:width/3}} placeholder="Age" placeholderTextColor="gray" keyboardType="number-pad" />
                             </View>
                             <View style={{elevation:5, backgroundColor:"white", borderRadius:10, padding:10,marginTop:10,flexDirection:'row',alignItems:"center"}}>
                                 <Text style={{color:"gray"}}>Gender</Text>
@@ -118,11 +122,11 @@ export default function UserDetails_11_2(){
                             <Text style={{color:"#000"}}>B4</Text>
                         </View>
                         <View style={{elevation:5,width:"100%", backgroundColor:"white", borderRadius:10, padding:10,marginTop:10}}>
-                            <TextInput style={{width:"100%",paddingLeft:10}} placeholder="Full Name" placeholderTextColor="gray" />
+                            <TextInput style={{color:"#000",width:"100%",paddingLeft:10}} placeholder="Full Name" placeholderTextColor="gray" />
                         </View>
                         <View style={{flexDirection:"row",justifyContent:"space-between"}}>
                             <View style={{flexDirection:"row",elevation:5, backgroundColor:"white", borderRadius:10, padding:10,marginTop:10}}>
-                                <TextInput style={{paddingLeft:10,width:width/3}} placeholder="Age" placeholderTextColor="gray" />
+                                <TextInput style={{color:"#000",paddingLeft:10,width:width/3}} placeholder="Age" placeholderTextColor="gray" keyboardType="number-pad" />
                             </View>
                             <View style={{elevation:5, backgroundColor:"white", borderRadius:10, padding:10,marginTop:10,flexDirection:'row',alignItems:"center"}}>
                                 <Text style={{color:"gray"}}>Gender</Text>
@@ -131,12 +135,12 @@ export default function UserDetails_11_2(){
                             </View>
                         </View>
                         <Text style={{color:"#000",marginTop:40}}>Contact Detials</Text>
-                        <Text style={{color:"gray",marginLeft:20}}>Your ticket will be sent here</Text>
+                        <Text style={{color:"gray",marginTop:10}}>Your ticket will be sent here</Text>
                         <View style={{elevation:5, backgroundColor:"white", borderRadius:10, padding:5,marginTop:10}}>
-                            <TextInput style={{paddingLeft:10,width:width/3}} placeholder="Phone number" placeholderTextColor="gray" />
+                            <TextInput style={{color:"#000",paddingLeft:10,borderRadius:10}} placeholder="Phone number" placeholderTextColor="gray" keyboardType="number-pad" />
                         </View>
                         <View style={{elevation:5, backgroundColor:"white", borderRadius:10, padding:5,marginTop:10}}>
-                            <TextInput style={{paddingLeft:10,width:width/3}} placeholder="Email" placeholderTextColor="gray" />
+                            <TextInput style={{color:"#000",paddingLeft:10}} placeholder="Email" placeholderTextColor="gray" />
                         </View>
                         <View style={{flexDirection:"row",alignItems:"center",marginVertical:10}}>
                             <View style={{height:15,width:15,borderWidth:1,borderColor:"gray",borderRadius:2}}></View>
@@ -146,30 +150,30 @@ export default function UserDetails_11_2(){
                             <View style={{height:15,width:15,borderWidth:1,borderColor:"gray",borderRadius:2}}></View>
                             <Text style={{color:"#66645f",marginLeft:10}}>Upload Cowin Certificate (Optional)</Text>
                         </View>
-                        <TouchableOpacity style={{elevation:5, backgroundColor:"#ed6c39", borderRadius:10, padding:15,marginTop:20,alignItems:"center",marginHorizontal:90,marginBottom:250}}>
+                        <TouchableOpacity style={{elevation:5, backgroundColor:"#ed6c39", borderRadius:10, padding:15,marginTop:20,alignItems:"center",marginHorizontal:90}}>
                             <Text style={{color:"#fff"}}>+ Add file</Text>
                         </TouchableOpacity>
+                        <View style={{elevation:5,width:"100%", backgroundColor:"#fff", borderRadius:10,padding:10,alignItems:"center",flexDirection:"row",marginBottom:200,marginTop:20}}>
+                            <View style={{flexDirection:"row",justifyContent:"space-between"}}>
+                                <View style={{alignItems:"center"}}>
+                                    <Text style={{color:"gray"}}>Selected seats</Text>
+                                    <Text style={{color:"#000"}}>A4, B4</Text>
+                                </View>
+                                <View style={{borderWidth:0.9,borderColor:"#000",backgroundColor:"#000",marginHorizontal:15}} />
+                                <View style={{alignItems:"center"}}>
+                                    <Text style={{color:"gray"}}>Price</Text>
+                                    <Text style={{color:"#000"}}>₹2,020</Text>
+                                </View>
+                            </View>
+                            <TouchableOpacity 
+                                style={{elevation:5, backgroundColor:"#ed6c39", borderRadius:10, padding:10,alignItems:"center",marginVertical:10,marginLeft:10,paddingHorizontal:20}}
+                                onPress={()=>navigation.navigate("BusDetails")}
+                                >
+                                <Text style={{color:"#fff",fontSize:18}}>Proceed</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </ScrollView>
-                <View style={{elevation:5,width:"100%", backgroundColor:"#fff", borderRadius:10,marginTop:-100,padding:10,alignItems:"center",flexDirection:"row"}}>
-                    <View style={{flexDirection:"row",justifyContent:"space-between"}}>
-                        <View style={{alignItems:"center"}}>
-                            <Text style={{color:"gray"}}>Selected seats</Text>
-                            <Text style={{color:"#000"}}>A4, B4</Text>
-                        </View>
-                        <View style={{borderWidth:0.9,borderColor:"#000",backgroundColor:"#000",marginHorizontal:15}} />
-                        <View style={{alignItems:"center"}}>
-                            <Text style={{color:"gray"}}>Price</Text>
-                            <Text style={{color:"#000"}}>₹2,020</Text>
-                        </View>
-                    </View>
-                    <TouchableOpacity 
-                        style={{elevation:5, backgroundColor:"#ed6c39", borderRadius:10, padding:10,alignItems:"center",marginVertical:10,marginLeft:10,paddingHorizontal:20}}
-                        onPress={()=>navigation.navigate("BusDetails")}
-                        >
-                        <Text style={{color:"#fff",fontSize:18}}>Proceed</Text>
-                    </TouchableOpacity>
-                </View>
             </View>
         </View>
     );
