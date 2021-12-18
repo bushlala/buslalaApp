@@ -1,9 +1,10 @@
-import { useNavigation, useRoute } from '@react-navigation/core'
-import React, { useState } from 'react'
+import { useNavigation, useRoute } from '@react-navigation/core';
+import React, { useState } from 'react';
 import axios from "axios";
-import { Alert, Image, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { RalewayBold, RalewayLight, RalewayRegular } from '../assets/fonts/fonts'
-import { primary, secondary, textColor } from '../components/Colors'
+import { Alert, Image, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { RalewayBold, RalewayLight, RalewayRegular } from '../assets/fonts/fonts';
+import { primary, secondary, textColor } from '../components/Colors';
+import { signup, authenticate, isAuthenticated } from "../Auth/Signup";
 
 const OtpScreen = () => {
 
@@ -60,6 +61,13 @@ const OtpScreen = () => {
         //     console.log(err.message)
         // })
     }
+    const clickSubmit = () => {
+        if(OTP == 123456){
+            navigation.navigate("OtpVerified", {number: route.params.number})
+        }else{
+            alert("OTP does not match")
+        }
+    };
 
     return (
         <View style={styles.screen}>
@@ -73,7 +81,8 @@ const OtpScreen = () => {
             <View style={styles.view2}>
                 <KeyboardAvoidingView behavior="padding" style={styles.box}>
                     <Text style={{fontFamily:RalewayBold, fontSize:20, color:"#242424", marginBottom:10}}>OTP Verification</Text>
-                    <Text style={{fontFamily:RalewayRegular, fontSize:18, color:"#242424"}}>Code Sent to {route.params.number}</Text>
+                    {/* <Text style={{fontFamily:RalewayRegular, fontSize:18, color:"#242424"}}>Code Sent to {route.params.number}</Text> */}
+                    <Text style={{fontFamily:RalewayRegular, fontSize:18, color:"#242424"}}>Enter the Code 123456</Text>
                     {error ? <Text style={{color:"red", fontSize:12, marginBottom:1}}>Please Enter a Valid OTP!</Text>:<Text></Text>}
                     {otp ? <Text style={{color:"red", fontSize:12, marginBottom:1}}>Invalid OTP!</Text>:<Text></Text>}
                     <TextInput
@@ -87,7 +96,7 @@ const OtpScreen = () => {
                     keyboardType="number-pad"
                     />
                     <TouchableOpacity disabled={error ? true : false} activeOpacity={0.8} style={styles.button}
-                    onPress={()=>navigation.navigate("OtpVerified", {number: route.params.number})}
+                    onPress={clickSubmit}
                     >
                         <Text style={{color:"white",fontSize:18, fontFamily:RalewayRegular}}>Verify</Text>
                     </TouchableOpacity>

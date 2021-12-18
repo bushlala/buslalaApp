@@ -7,12 +7,12 @@ import { RalewayBold, RalewayRegular } from '../assets/fonts/fonts';
 
 const {width} = Dimensions.get("window");
 
-const SeaterOption = ({name, price, hours, rating, desc, seats, deptHour, arrivalHour}) => {
+const SeaterOption = ({name, price, hours, rating, desc, seats, deptHour, arrivalHour, src, dest}) => {
 
     const navigation = useNavigation();
 
     const busHandler=()=>{
-        navigation.navigate("SelectedScreen", {"name": name, "price": price, "hours": hours, "deptHour": deptHour, "arrivalHour": arrivalHour})
+        navigation.navigate("SelectedScreen", {"name": name, "price": price, "hours": hours, "deptHour": deptHour, "arrivalHour": arrivalHour, "src": src, "dest": dest})
     }
 
     return (

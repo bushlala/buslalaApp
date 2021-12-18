@@ -4,7 +4,7 @@ import ToggleSwitch  from "toggle-switch-react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation, useRoute } from '@react-navigation/core';
 
 
 import { fontColor, newColor, primary, secondary } from '../../components/Colors';
@@ -18,6 +18,8 @@ const {height} = Dimensions.get("window");
 export default function SelectedScreen(){
 
     const navigation = useNavigation();
+    const route = useRoute();
+    const { src, dest, name, deptHour, arrivalHour } = route.params;
 
     const [toggle, setToggle] = useState(false);
     const [isOpen,  setIsOpen]   = useState(false);
@@ -233,19 +235,19 @@ export default function SelectedScreen(){
                     </TouchableOpacity>
                     <View style={{flexDirection:"row",justifyContent:"space-between",flex:1}}>
                         <View style={{marginLeft:10}}>
-                            <Text style={{fontSize:17, color:"black"}}>Company Name Travels</Text>
+                            <Text style={{fontSize:17, color:"black"}}>{name}</Text>
                             <View style={{flexDirection:"row",marginTop:5}}>
                                 <Text style={{color:"gray"}}>22 Oct, Sun</Text>
                                 <View style={{borderWidth:0.8,backgroundColor:"#000",marginHorizontal:10}}></View>
-                                <Text style={{color:"gray"}}>09:00PM</Text>
+                                <Text style={{color:"gray"}}>{deptHour}</Text>
                             </View>
                         </View>
                         <View style={{marginRight:20}}>
-                            <Text style={{color:"black"}}>HYD</Text>
+                            <Text style={{color:"black"}}>{src}</Text>
                             <View style={{flexDirection:"row",justifyContent:"center"}}>
                                 <MaterialIcons name="import-export" color="#ed6c39" size={20} />
                             </View>
-                            <Text style={{color:"black"}}>MAS</Text>
+                            <Text style={{color:"black"}}>{dest}</Text>
                         </View>
                     </View>
                 </View>
@@ -312,7 +314,7 @@ export default function SelectedScreen(){
                             </View>
                         </View>
                         <View>
-                            <TouchableOpacity onPress={()=>navigation.navigate("UserDetails")}
+                            <TouchableOpacity onPress={()=>navigation.navigate("UserDetails",{ src: src, dest: dest, name: name, deptHour: deptHour, arivHour: arrivalHour })}
                                 style={{backgroundColor:"#ed6c39",paddingVertical:8,paddingHorizontal:20,borderRadius:10,elevation:5}}
                             >
                                 <View>

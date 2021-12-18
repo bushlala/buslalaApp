@@ -1,9 +1,11 @@
-import React from "react";
-import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, TextInput } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, TextInput, Picker } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
-import { useNavigation } from '@react-navigation/core'
+import { useNavigation } from '@react-navigation/core';
+import DocumentPicker from 'react-native-document-picker';
+import SelectDropdown from 'react-native-select-dropdown';
 
 import { fontColor, newColor, primary, secondary } from '../../components/Colors';
 
@@ -13,9 +15,54 @@ const {height} = Dimensions.get("window");
 
 
 
-export default function UserDetails_11_2(){
+export default function UserDetails_11_2({route}){
 
     const navigation = useNavigation();
+    const { name, src, dest, deptHour, arivHour } = route.params;
+    const [ textInput, setTextInput ] = useState({
+        fullName1: "",
+        age1: "",
+        fullName2: "",
+        age2: "",
+        ph: "",
+        email: "",
+        pickerValue: ""
+    });
+    const Gender = ["Male", "Female", "Others"]
+    const [singleFile, setSingleFile] = useState(null);
+    // console.log(singleFile)
+    const selectOneFile = async () => {
+        //Opening Document Picker for selection of one file
+        try {
+          const res = await DocumentPicker.pick({
+            type: [DocumentPicker.types.images,DocumentPicker.types.pdf],
+            //There can me more options as well
+            // DocumentPicker.types.allFiles
+            // DocumentPicker.types.images
+            // DocumentPicker.types.plainText
+            // DocumentPicker.types.audio
+            // DocumentPicker.types.pdf
+          });
+          //Printing the log realted to the file
+        //   console.log('res : ' + JSON.stringify(res));
+        //   console.log('URI : ' + res.uri);
+        //   console.log('Type : ' + res.type);
+        //   console.log('File Name : ' + res.name);
+        //   console.log('File Size : ' + res.size);
+          //Setting the state to show single file attributes
+          res.map(item=>(setSingleFile(item.name)));
+        } catch (err) {
+          //Handling any exception (If any)
+          if (DocumentPicker.isCancel(err)) {
+            //If user canceled the document selection
+            alert('Canceled');
+          } else {
+            //For Unknown Error
+            alert('Unknown Error: ' + JSON.stringify(err));
+            throw err;
+          }
+        }
+      };
 
     return(
         <View style={styles.screen}>
@@ -72,19 +119,19 @@ export default function UserDetails_11_2(){
                     </TouchableOpacity>
                     <View style={{flexDirection:"row",justifyContent:"space-between",flex:1}}>
                         <View style={{marginLeft:10}}>
-                            <Text style={{fontSize:17, color:"black"}}>Company Name Travels</Text>
+                            <Text style={{fontSize:17, color:"black"}}>{name}</Text>
                             <View style={{flexDirection:"row",marginTop:5}}>
                                 <Text style={{color:"gray"}}>22 Oct, Sun</Text>
                                 <View style={{borderWidth:0.8,backgroundColor:"#000",marginHorizontal:10}}></View>
-                                <Text style={{color:"gray"}}>09:00PM</Text>
+                                <Text style={{color:"gray"}}>{deptHour}</Text>
                             </View>
                         </View>
                         <View style={{marginRight:20}}>
-                            <Text style={{color:"black"}}>HYD</Text>
+                            <Text style={{color:"black"}}>{src}</Text>
                             <View style={{flexDirection:"row",justifyContent:"center"}}>
                                 <MaterialIcons name="import-export" color="#ed6c39" size={20} />
                             </View>
-                            <Text style={{color:"black"}}>MAS</Text>
+                            <Text style={{color:"black"}}>{dest}</Text>
                         </View>
                     </View>
                 </View>
@@ -104,16 +151,46 @@ export default function UserDetails_11_2(){
                                 style={{paddingLeft:10,color:"#000",borderRadius:10}} 
                                 placeholder="Full Name" 
                                 placeholderTextColor="gray" 
+                                onChangeText={(text)=>setTextInput({...textInput, fullName1: text})}
                             />
                         </View>
                         <View style={{flexDirection:"row",justifyContent:"space-between"}}>
                             <View style={{flexDirection:"row",elevation:5, backgroundColor:"white", borderRadius:10, padding:10,marginTop:10}}>
-                                <TextInput style={{color:"#000",paddingLeft:10,width:width/3}} placeholder="Age" placeholderTextColor="gray" keyboardType="number-pad" />
+                                <TextInput 
+                                    style={{color:"#000",paddingLeft:10,width:width/3}} 
+                                    placeholder="Age" 
+                                    placeholderTextColor="gray" 
+                                    keyboardType="number-pad" 
+                                    onChangeText={(text)=>setTextInput({...textInput, age1: text})}
+                                />
                             </View>
-                            <View style={{elevation:5, backgroundColor:"white", borderRadius:10, padding:10,marginTop:10,flexDirection:'row',alignItems:"center"}}>
-                                <Text style={{color:"gray"}}>Gender</Text>
-                                <View style={{paddingHorizontal:20}}></View>
-                                <MaterialIcons name="expand-more" color="#000" size={24} />
+                            <View style={{elevation:5, backgroundColor:"white", borderRadius:10, padding:10,marginTop:10,}}>
+                                <SelectDropdown
+                                    data={Gender}
+                                    defaultButtonText={"Gender"}
+                                    onSelect={(selectedItem) => {
+                                        console.log(selectedItem);
+                                    }}
+                                    buttonTextAfterSelection={(selectedItem) => {
+                                        return selectedItem;
+                                    }}
+                                    rowTextForSelection={(item, index) => {
+                                        return item;
+                                    }}
+                                    buttonStyle={styles.dropdown2BtnStyle}
+                                    renderDropdownIcon={(isOpened) => {
+                                        return (
+                                          <MaterialIcons
+                                            name={isOpened ? "expand-less" : "expand-more"}
+                                            color={"#000"}
+                                            size={24}
+                                          />
+                                        );
+                                      }}
+                                      dropdownIconPosition={"right"}
+                                      dropdownStyle={styles.DropdownStyle}
+                                      rowStyle={styles.rowStyle}
+                                />
                             </View>
                         </View>
                         <View style={{flexDirection:"row",justifyContent:"center",marginTop:20}}>
@@ -122,25 +199,70 @@ export default function UserDetails_11_2(){
                             <Text style={{color:"#000"}}>B4</Text>
                         </View>
                         <View style={{elevation:5,width:"100%", backgroundColor:"white", borderRadius:10, padding:10,marginTop:10}}>
-                            <TextInput style={{color:"#000",width:"100%",paddingLeft:10}} placeholder="Full Name" placeholderTextColor="gray" />
+                            <TextInput 
+                                style={{color:"#000",width:"100%",paddingLeft:10}} 
+                                placeholder="Full Name" 
+                                placeholderTextColor="gray" 
+                                onChangeText={(text)=>setTextInput({...textInput, fullName2: text})}
+                            />
                         </View>
                         <View style={{flexDirection:"row",justifyContent:"space-between"}}>
-                            <View style={{flexDirection:"row",elevation:5, backgroundColor:"white", borderRadius:10, padding:10,marginTop:10}}>
-                                <TextInput style={{color:"#000",paddingLeft:10,width:width/3}} placeholder="Age" placeholderTextColor="gray" keyboardType="number-pad" />
+                            <View style={{flexDirection:"row",elevation:5, backgroundColor:"white", borderRadius:10,padding:10,marginTop:10}}>
+                                <TextInput 
+                                    style={{color:"#000",paddingLeft:10,width:width/3}} 
+                                    placeholder="Age" 
+                                    placeholderTextColor="gray"
+                                    keyboardType="number-pad" 
+                                    onChangeText={(text)=>setTextInput({...textInput, age2: text})}
+                                />
                             </View>
-                            <View style={{elevation:5, backgroundColor:"white", borderRadius:10, padding:10,marginTop:10,flexDirection:'row',alignItems:"center"}}>
-                                <Text style={{color:"gray"}}>Gender</Text>
-                                <View style={{paddingHorizontal:20}}></View>
-                                <MaterialIcons name="expand-more" color="#000" size={24} />
+                            <View style={{elevation:5, backgroundColor:"white", borderRadius:10, padding:10,marginTop:10,}}>
+                                <SelectDropdown
+                                    data={Gender}
+                                    defaultButtonText={"Gender"}
+                                    onSelect={(selectedItem) => {
+                                        console.log(selectedItem);
+                                    }}
+                                    buttonTextAfterSelection={(selectedItem) => {
+                                        return selectedItem;
+                                    }}
+                                    rowTextForSelection={(item, index) => {
+                                        return item;
+                                    }}
+                                    buttonStyle={styles.dropdown2BtnStyle}
+                                    renderDropdownIcon={(isOpened) => {
+                                        return (
+                                          <MaterialIcons
+                                            name={isOpened ? "expand-less" : "expand-more"}
+                                            color={"#000"}
+                                            size={24}
+                                          />
+                                        );
+                                      }}
+                                      dropdownIconPosition={"right"}
+                                      dropdownStyle={styles.DropdownStyle}
+                                      rowStyle={styles.rowStyle}
+                                />
                             </View>
                         </View>
                         <Text style={{color:"#000",marginTop:40}}>Contact Detials</Text>
                         <Text style={{color:"gray",marginTop:10}}>Your ticket will be sent here</Text>
                         <View style={{elevation:5, backgroundColor:"white", borderRadius:10, padding:5,marginTop:10}}>
-                            <TextInput style={{color:"#000",paddingLeft:10,borderRadius:10}} placeholder="Phone number" placeholderTextColor="gray" keyboardType="number-pad" />
+                            <TextInput 
+                                style={{color:"#000",paddingLeft:10,borderRadius:10}} 
+                                placeholder="Phone number" 
+                                placeholderTextColor="gray" 
+                                keyboardType="number-pad" 
+                                onChangeText={(text)=>setTextInput({...textInput, ph: text})}
+                            />
                         </View>
                         <View style={{elevation:5, backgroundColor:"white", borderRadius:10, padding:5,marginTop:10}}>
-                            <TextInput style={{color:"#000",paddingLeft:10}} placeholder="Email" placeholderTextColor="gray" />
+                            <TextInput 
+                                style={{color:"#000",paddingLeft:10}} 
+                                placeholder="Email"
+                                 placeholderTextColor="gray" 
+                                 onChangeText={(text)=>setTextInput({...textInput, email: text})}
+                            />
                         </View>
                         <View style={{flexDirection:"row",alignItems:"center",marginVertical:10}}>
                             <View style={{height:15,width:15,borderWidth:1,borderColor:"gray",borderRadius:2}}></View>
@@ -150,7 +272,18 @@ export default function UserDetails_11_2(){
                             <View style={{height:15,width:15,borderWidth:1,borderColor:"gray",borderRadius:2}}></View>
                             <Text style={{color:"#66645f",marginLeft:10}}>Upload Cowin Certificate (Optional)</Text>
                         </View>
-                        <TouchableOpacity style={{elevation:5, backgroundColor:"#ed6c39", borderRadius:10, padding:15,marginTop:20,alignItems:"center",marginHorizontal:90}}>
+                        {
+                            singleFile !== null ? 
+                                <View style={{marginTop:10,flexDirection:"row"}}>
+                                    <Text style={styles.textStyle}>File Name: </Text>
+                                    <Text style={styles.fileStyle}>{singleFile}</Text>
+                                </View> 
+                                : 
+                                null
+                        }
+                        <TouchableOpacity 
+                            onPress={selectOneFile}
+                            style={{elevation:5, backgroundColor:"#ed6c39", borderRadius:10, padding:15,marginTop:20,alignItems:"center",marginHorizontal:90}}>
                             <Text style={{color:"#fff"}}>+ Add file</Text>
                         </TouchableOpacity>
                         <View style={{elevation:5,width:"100%", backgroundColor:"#fff", borderRadius:10,padding:10,alignItems:"center",flexDirection:"row",marginBottom:200,marginTop:20}}>
@@ -167,7 +300,7 @@ export default function UserDetails_11_2(){
                             </View>
                             <TouchableOpacity 
                                 style={{elevation:5, backgroundColor:"#ed6c39", borderRadius:10, padding:10,alignItems:"center",marginVertical:10,marginLeft:10,paddingHorizontal:20}}
-                                onPress={()=>navigation.navigate("BusDetails")}
+                                onPress={()=>navigation.navigate("BusDetails",{ busName: name, deptHour: deptHour, arivHour: arivHour })}
                                 >
                                 <Text style={{color:"#fff",fontSize:18}}>Proceed</Text>
                             </TouchableOpacity>
@@ -220,6 +353,25 @@ const styles = StyleSheet.create({
         right: 3,
         top: 3
     },
-    
-
+    textStyle: {
+        color:"#000",
+        textAlign:"center"
+    },
+    fileStyle: {
+        color:"#3b3b38"
+    },
+    dropdown2BtnStyle: {
+        backgroundColor: "#fff",
+        borderRadius: 10,
+        width: width/3
+    },
+    DropdownStyle: {
+        backgroundColor: "#fff",
+        borderRadius: 5
+    },
+    rowStyle: {
+        backgroundColor: "#fff",
+        borderBottomEndRadius: 20,
+        borderBottomStartRadius: 20
+    }
 });

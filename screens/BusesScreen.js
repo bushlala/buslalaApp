@@ -22,6 +22,8 @@ const BusesScreen = () => {
     const route = useRoute();
     const oneway = route.params.oneWay;
     const twoway = route.params.twoWay;
+    const src = route.params.from;
+    const dest = route.params.to;
     const [isOpen, setIsOpen]=useState(false);
     const [click1, setClick1] = useState(false);
     const [click2, setClick2] = useState(false);
@@ -140,7 +142,7 @@ const BusesScreen = () => {
                     />
                     </TouchableOpacity>
                     <View style={{flexDirection:"row", alignItems:"center"}}>
-                        <Text style={{fontSize:18, color:"black", fontFamily:RalewayBold, marginRight:10}}>{route.params?.from}</Text>
+                        <Text style={{fontSize:18, color:"black", fontFamily:RalewayBold, marginRight:10}}>{src}</Text>
                         {twoway && <AntDesign
                         name="swap"
                         size={24}
@@ -151,7 +153,7 @@ const BusesScreen = () => {
                         color="black"
                         size={24}
                         />}
-                        <Text style={{fontSize:18, color:"black", fontFamily:RalewayBold, marginLeft:10}}>{route.params?.to}</Text>
+                        <Text style={{fontSize:18, color:"black", fontFamily:RalewayBold, marginLeft:10}}>{dest}</Text>
                     </View>
                     <AntDesign
                     name="down"
@@ -181,15 +183,17 @@ const BusesScreen = () => {
                     data={Seats}
                     renderItem={({item,index})=>(
                         <SeaterOption
-                        key={item.id}
-                        name={item.name}
-                        hours={item.hours}
-                        arrivalHour={item.arrivalTime}
-                        deptHour={item.depatureTime}
-                        price={item.price}
-                        rating={item.rating}
-                        seats={item.noOfSeats}
-                        desc={item.description}
+                            key={item.id}
+                            name={item.name}
+                            hours={item.hours}
+                            arrivalHour={item.arrivalTime}
+                            deptHour={item.depatureTime}
+                            price={item.price}
+                            rating={item.rating}
+                            seats={item.noOfSeats}
+                            desc={item.description}
+                            src={src}
+                            dest={dest}
                         />
                     )}
                     />

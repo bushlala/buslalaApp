@@ -1,4 +1,4 @@
-import { useNavigation, useRoute } from '@react-navigation/core'
+import { useNavigation } from '@react-navigation/core'
 import axios from 'axios'
 import React, { useState } from 'react'
 import { Alert, Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
@@ -6,10 +6,10 @@ import { RalewayBold, RalewayLight, RalewayRegular } from '../assets/fonts/fonts
 import { primary, secondary, textColor } from '../components/Colors'
 // import sendEmail from "react-native-email";
 
-const BusDetailsScreen = () => {
+const BusDetailsScreen = ({route}) => {
 
     const navigation = useNavigation();
-    const route = useRoute();
+    const { busName, deptHour, arivHour } = route.params;
     const [error, setError] = useState(false);
     const [user, setUser]= useState(false);
     const [myName, setMyName] = useState("");
@@ -83,9 +83,9 @@ const BusDetailsScreen = () => {
                     onChangeText={(text)=>setEmails(text)}
                     keyboardType="email-address"
                     />
-                    <Text style={styles.text}>route.params.name</Text>
+                    <Text style={styles.text}>{busName}</Text>
                     <Text style={styles.text}>Ticket Price: Rs route.params.price</Text>
-                    <Text style={styles.text}>From route.params.deptHour to route.params.arrivalHour</Text>
+                    <Text style={styles.text}>From {deptHour} to {arivHour}</Text>
                     <TextInput
                     maxLength={100}
                     numberOfLines={2}
