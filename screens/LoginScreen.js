@@ -1,9 +1,9 @@
-import { useNavigation } from '@react-navigation/core'
-import axios from 'axios'
-import React, { useState } from 'react'
-import { Alert, Image, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { RalewayBold, RalewayLight, RalewayRegular } from '../assets/fonts/fonts'
-import { primary, secondary, textColor } from '../components/Colors'
+import { useNavigation } from '@react-navigation/core';
+import axios from 'axios';
+import React, { useState } from 'react';
+import { Alert, Image, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { RalewayBold, RalewayLight, RalewayRegular } from '../assets/fonts/fonts';
+import { primary, secondary, textColor } from '../components/Colors';
 
 const LoginScreen = () => {
 
@@ -21,7 +21,7 @@ const LoginScreen = () => {
         }
     }
 
-    const verificatioHandler=()=>{
+    const clickSubmit=()=>{
         {num &&
         axios.post("https://buslala-backend-api.herokuapp.com/api/user/signup", {"number": num})
         .then((response)=>{
@@ -85,7 +85,7 @@ const LoginScreen = () => {
                     keyboardType="number-pad"
                     />
                     <TouchableOpacity disabled={error ? true : false} activeOpacity={0.8} style={styles.button}
-                    onPress={()=>navigation.navigate("Otp", {number:num})}
+                    onPress={clickSubmit}
                     >
                         <Text style={{color:"white",fontSize:18, fontFamily:RalewayRegular}}>Enter</Text>
                     </TouchableOpacity>

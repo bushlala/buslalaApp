@@ -8,10 +8,11 @@ import { useNavigation, useRoute } from '@react-navigation/core';
 
 
 import { fontColor, newColor, primary, secondary } from '../../components/Colors';
+import { lowerData, upperData } from "../../data/seatData";
 
 
-const {width} = Dimensions.get("window");
-const {height} = Dimensions.get("window");
+const { width } = Dimensions.get("window");
+const { height } = Dimensions.get("window");
 
 
 
@@ -21,161 +22,441 @@ export default function SelectedScreen(){
     const route = useRoute();
     const { src, dest, name, deptHour, arrivalHour } = route.params;
 
-    const [toggle, setToggle] = useState(false);
-    const [isOpen,  setIsOpen]   = useState(false);
+    const [ toggle, setToggle ] = useState(false);
+    // const [ price, setPrice ] = useState("");
+    const [ select, setSelect ] = useState({
+        seat1: false,
+        seat2: false,
+        seat3: false,
+        seat4: false,
+        seat5: false,
+        seat6: false,
+        seat7: false,
+        seat8: false,
+        seat9: false,
+        seat10: false,
+        seat11: false,
+        seat12: false
+    });
 
-    const closeHandle=()=>{
-        setIsOpen(false);
+    const { seat1, seat2, seat3, seat4, seat5, seat6, seat7, seat8, seat9, seat10, seat11, seat12 } = select;
+
+    const handleSelect1=()=>{
+        seat1 === false ? setSelect({...select, seat1: true}) : setSelect({...select, seat1: false})
+    };
+    const handleSelect2=()=>{
+        seat2 === false ? setSelect({...select, seat2: true}) : setSelect({...select, seat2: false})
+    };
+    const handleSelect3=()=>{
+        seat3 === false ? setSelect({...select, seat3: true}) : setSelect({...select, seat3: false})
+    };
+    const handleSelect4=()=>{
+        seat4 === false ? setSelect({...select, seat4: true}) : setSelect({...select, seat4: false})
+    };
+    const handleSelect5=()=>{
+        seat5 === false ? setSelect({...select, seat5: true}) : setSelect({...select, seat5: false})
+    };
+    const handleSelect6=()=>{
+        seat6 === false ? setSelect({...select, seat6: true}) : setSelect({...select, seat6: false})
+    };
+    const handleSelect7=()=>{
+        seat7 === false ? setSelect({...select, seat7: true}) : setSelect({...select, seat7: false})
+    };
+    const handleSelect8=()=>{
+        seat8 === false ? setSelect({...select, seat8: true}) : setSelect({...select, seat8: false})
+    };
+    const handleSelect9=()=>{
+        seat9 === false ? setSelect({...select, seat9: true}) : setSelect({...select, seat9: false})
+    };
+    const handleSelect10=()=>{
+        seat10 === false ? setSelect({...select, seat10: true}) : setSelect({...select, seat10: false})
+    };
+    const handleSelect11=()=>{
+        seat11 === false ? setSelect({...select, seat11: true}) : setSelect({...select, seat11: false})
+    };
+    const handleSelect12=()=>{
+        seat12 === false ? setSelect({...select, seat12: true}) : setSelect({...select, seat12: false})
     };
 
     const Upper=()=>(
-        <View>
-            <View style={{flexDirection:"row",justifyContent:"space-around",marginTop:20}}>
+    // console.log(price),
+    // console.log(select),
+        <View style={{marginVertical:20}}>
+            <View style={styles.upperView1}>
                 <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity 
+                
+                        style={[styles.upperView2]}
+                        onPress={handleSelect1}
+                    >
+                        {
+                            seat1 === true ? <Text style={{color:"#000"}}>✓</Text> : null
+                        }
+                    </TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <View style={{backgroundColor:"#fff",height:90,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity 
+                       
+                        style={[styles.upperView2]}
+                        onPress={handleSelect2}
+                    >
+                        {
+                            seat2 === true ? <Text style={{color:"#000"}}>✓</Text> : null
+                        }
+                    </TouchableOpacity>
                 </View>
                 <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity 
+                        
+                        style={[styles.upperView2]}
+                        onPress={handleSelect3}
+                    >
+                        {
+                            seat3 === true ? <Text style={{color:"#000"}}>✓</Text> : null
+                        }
+                    </TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
-                </View>
-            </View> 
-            <View style={{flexDirection:"row",justifyContent:"space-around",marginTop:20}}>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
-                </View>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity 
+                       
+                        style={[styles.upperView2]}
+                        onPress={handleSelect4}
+                    >
+                        {
+                            seat4 === true ? <Text style={{color:"#000"}}>✓</Text> : null
+                        }
+                    </TouchableOpacity>
                 </View>
             </View>
-            <View style={{flexDirection:"row",justifyContent:"space-around",marginTop:20}}>
+            <View style={styles.upperView1}>
                 <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity 
+                
+                        style={[styles.upperView2]}
+                        onPress={handleSelect5}
+                    >
+                        {
+                            seat5 === true ? <Text style={{color:"#000"}}>✓</Text> : null
+                        }
+                    </TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity 
+                       
+                        style={[styles.upperView2]}
+                        onPress={handleSelect6}
+                    >
+                        {
+                            seat6 === true ? <Text style={{color:"#000"}}>✓</Text> : null
+                        }
+                    </TouchableOpacity>
                 </View>
                 <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity 
+                        
+                        style={[styles.upperView2]}
+                        onPress={handleSelect7}
+                    >
+                        {
+                            seat7 === true ? <Text style={{color:"#000"}}>✓</Text> : null
+                        }
+                    </TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity 
+                       
+                        style={[styles.upperView2]}
+                        onPress={handleSelect8}
+                    >
+                        {
+                            seat8 === true ? <Text style={{color:"#000"}}>✓</Text> : null
+                        }
+                    </TouchableOpacity>
                 </View>
             </View>
-            <View style={{flexDirection:"row",justifyContent:"space-around",marginTop:20,marginBottom:20}}>
+            <View style={styles.upperView1}>
                 <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity 
+                
+                        style={[styles.upperView2]}
+                        onPress={handleSelect9}
+                    >
+                        {
+                            seat9 === true ? <Text style={{color:"#000"}}>✓</Text> : null
+                        }
+                    </TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity 
+                       
+                        style={[styles.upperView2]}
+                        onPress={handleSelect10}
+                    >
+                        {
+                            seat10 === true ? <Text style={{color:"#000"}}>✓</Text> : null
+                        }
+                    </TouchableOpacity>
                 </View>
                 <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity 
+                        
+                        style={[styles.upperView2]}
+                        onPress={handleSelect11}
+                    >
+                        {
+                            seat11 === true ? <Text style={{color:"#000"}}>✓</Text> : null
+                        }
+                    </TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:90,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity 
+                       
+                        style={[styles.upperView2]}
+                        onPress={handleSelect12}
+                    >
+                        {
+                            seat12 === true ? <Text style={{color:"#000"}}>✓</Text> : null
+                        }
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>
     );
 
     const Lower=()=>(
-        <View style={{marginBottom:20}}>
-            <View style={{flexDirection:"row",justifyContent:"space-around",marginTop:20}}>
+        // <View style={{marginBottom:20}}>
+        //     <View style={{flexDirection:"row",justifyContent:"space-around",marginTop:20}}>
+        //         <View style={{flexDirection:"row"}}>
+        //             <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}} onPress={()=>setIsOpen(true)}></TouchableOpacity>
+        //             <View style={{marginHorizontal:10}} />
+        //             <View style={{backgroundColor:"#fff",height:70,width:40,borderRadius:5}}></View>
+        //         </View>
+        //         <View>
+        //             <View style={{flexDirection:"row"}}>
+        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+        //                 <View style={{marginHorizontal:10}} />
+        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+        //             </View>
+        //             <View style={{flexDirection:"row",marginTop:10}}>
+        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+        //                 <View style={{marginHorizontal:10}} />
+        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+        //             </View>             
+        //         </View>        
+        //     </View>
+        //     <View style={{flexDirection:"row",justifyContent:"space-around"}}>
+        //         <View style={{flexDirection:"row",marginTop:-10}}>
+        //             <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
+        //             <View style={{marginHorizontal:10}} />
+        //             <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
+        //         </View>
+        //         <View>
+        //             <View style={{flexDirection:"row",marginTop:10}}>
+        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+        //                 <View style={{marginHorizontal:10}} />
+        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+        //             </View>
+        //             <View style={{flexDirection:"row",marginTop:10}}>
+        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+        //                 <View style={{marginHorizontal:10}} />
+        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+        //             </View>             
+        //         </View>        
+        //     </View>
+        //     <View style={{flexDirection:"row",justifyContent:"space-around"}}>
+        //         <View style={{flexDirection:"row",marginTop:-30}}>
+        //             <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
+        //             <View style={{marginHorizontal:10}} />
+        //             <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
+        //         </View>
+        //         <View>
+        //             <View style={{flexDirection:"row",marginTop:10}}>
+        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
+        //                 <View style={{marginHorizontal:10}} />
+        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
+        //             </View>            
+        //         </View>        
+        //     </View>
+        //     <View style={{flexDirection:"row",justifyContent:"space-around"}}>
+        //         <View style={{flexDirection:"row",marginTop:-20}}>
+        //             <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
+        //             <View style={{marginHorizontal:10}} />
+        //             <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
+        //         </View>
+        //         <View>
+        //             <View style={{flexDirection:"row",marginTop:10}}>
+        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
+        //                 <View style={{marginHorizontal:10}} />
+        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
+        //             </View>            
+        //         </View>        
+        //     </View>
+        //     <View style={{flexDirection:"row",justifyContent:"space-around"}}>
+        //         <View style={{flexDirection:"row",marginTop:-10}}>
+        //             <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
+        //             <View style={{marginHorizontal:10}} />
+        //             <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
+        //         </View>
+        //         <View>
+        //             <View style={{flexDirection:"row",marginTop:10}}>
+        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
+        //                 <View style={{marginHorizontal:10}} />
+        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
+        //             </View>            
+        //         </View>        
+        //     </View>
+        //     <View style={{flexDirection:"row",justifyContent:"space-around"}}>
+        //         <View style={{flexDirection:"row",marginTop:0}}>
+        //             <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
+        //             <View style={{marginHorizontal:10}} />
+        //             <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
+        //         </View>
+        //         <View>
+        //             <View style={{flexDirection:"row",marginTop:10}}>
+        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
+        //                 <View style={{marginHorizontal:10}} />
+        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
+        //             </View>            
+        //         </View>        
+        //     </View>
+        // </View>
+        <View style={{marginVertical:20}}>
+            <View style={{flexDirection:"row",justifyContent:"space-around",marginBottom:5}}>
                 <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}} onPress={()=>setIsOpen(true)}></TouchableOpacity>
+                    <TouchableOpacity 
+                        style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}
+                    ></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <View style={{backgroundColor:"#fff",height:70,width:40,borderRadius:5}}></View>
+                    <TouchableOpacity 
+                    style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}
+                    ></TouchableOpacity>
                 </View>
-                <View>
-                    <View style={{flexDirection:"row"}}>
-                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-                        <View style={{marginHorizontal:10}} />
-                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-                    </View>
-                    <View style={{flexDirection:"row",marginTop:10}}>
-                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-                        <View style={{marginHorizontal:10}} />
-                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-                    </View>             
-                </View>        
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity 
+                    style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}
+                    ></TouchableOpacity>
+                    <View style={{marginHorizontal:10}} />
+                    <TouchableOpacity 
+                    style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}
+                    ></TouchableOpacity>
+                </View>
             </View>
-            <View style={{flexDirection:"row",justifyContent:"space-around"}}>
-                <View style={{flexDirection:"row",marginTop:-10}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
+            <View style={{flexDirection:"row",justifyContent:"space-around",marginBottom:5}}>
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity 
+                    style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}
+                    ></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity 
+                    style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}
+                    ></TouchableOpacity>
                 </View>
-                <View>
-                    <View style={{flexDirection:"row",marginTop:10}}>
-                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-                        <View style={{marginHorizontal:10}} />
-                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-                    </View>
-                    <View style={{flexDirection:"row",marginTop:10}}>
-                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-                        <View style={{marginHorizontal:10}} />
-                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-                    </View>             
-                </View>        
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity 
+                    style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}
+                    ></TouchableOpacity>
+                    <View style={{marginHorizontal:10}} />
+                    <TouchableOpacity 
+                    style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}
+                    ></TouchableOpacity>
+                </View>
             </View>
-            <View style={{flexDirection:"row",justifyContent:"space-around"}}>
-                <View style={{flexDirection:"row",marginTop:-30}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
+            <View style={{flexDirection:"row",justifyContent:"space-around",marginBottom:5}}>
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity 
+                    style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}
+                    ></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity 
+                    style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}
+                    ></TouchableOpacity>
                 </View>
-                <View>
-                    <View style={{flexDirection:"row",marginTop:10}}>
-                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
-                        <View style={{marginHorizontal:10}} />
-                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
-                    </View>            
-                </View>        
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <View style={{marginHorizontal:10}} />
+                    <TouchableOpacity 
+                    style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}
+                    ></TouchableOpacity>
+                </View>
             </View>
-            <View style={{flexDirection:"row",justifyContent:"space-around"}}>
-                <View style={{flexDirection:"row",marginTop:-20}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
+            <View style={{flexDirection:"row",justifyContent:"space-around",marginBottom:5}}>
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity 
+                    style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
                 </View>
-                <View>
-                    <View style={{flexDirection:"row",marginTop:10}}>
-                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
-                        <View style={{marginHorizontal:10}} />
-                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
-                    </View>            
-                </View>        
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <View style={{marginHorizontal:10}} />
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                </View>
             </View>
-            <View style={{flexDirection:"row",justifyContent:"space-around"}}>
-                <View style={{flexDirection:"row",marginTop:-10}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
+            <View style={{flexDirection:"row",justifyContent:"space-around",marginBottom:5}}>
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
                 </View>
-                <View>
-                    <View style={{flexDirection:"row",marginTop:10}}>
-                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
-                        <View style={{marginHorizontal:10}} />
-                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
-                    </View>            
-                </View>        
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <View style={{marginHorizontal:10}} />
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                </View>
             </View>
-            <View style={{flexDirection:"row",justifyContent:"space-around"}}>
-                <View style={{flexDirection:"row",marginTop:0}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
+            <View style={{flexDirection:"row",justifyContent:"space-around",marginBottom:5}}>
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
                 </View>
-                <View>
-                    <View style={{flexDirection:"row",marginTop:10}}>
-                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
-                        <View style={{marginHorizontal:10}} />
-                        <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
-                    </View>            
-                </View>        
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <View style={{marginHorizontal:10}} />
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                </View>
+            </View>
+            <View style={{flexDirection:"row",justifyContent:"space-around",marginBottom:5}}>
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <View style={{marginHorizontal:10}} />
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                </View>
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <View style={{marginHorizontal:10}} />
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                </View>
+            </View>
+            <View style={{flexDirection:"row",justifyContent:"space-around",marginBottom:5}}>
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <View style={{marginHorizontal:10}} />
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                </View>
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <View style={{marginHorizontal:10}} />
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                </View>
+            </View>
+            <View style={{flexDirection:"row",justifyContent:"space-around",marginBottom:5}}>
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <View style={{marginHorizontal:10}} />
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                </View>
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <View style={{marginHorizontal:10}} />
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                </View>
+            </View>
+            <View style={{flexDirection:"row",justifyContent:"space-around",marginBottom:5}}>
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <View style={{marginHorizontal:10}} />
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                </View>
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <View style={{marginHorizontal:10}} />
+                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                </View>
             </View>
         </View>
     );
@@ -296,9 +577,11 @@ export default function SelectedScreen(){
                                 </View>
                                 <View style={{borderWidth:1,height:13,borderColor:"gray",backgroundColor:"gray"}} />
                             </View> */}
-                            <Image source={require("../../assets/icons/steering-wheel.png")} style={{height:40,width:40}} />
+                            <MaterialCommunityIcons name="steering" color={"#646666"} size={38}/>
                         </View>
-                        {toggle === false ? <Lower /> : <Upper />}  
+                        {
+                            toggle === false ? <Lower /> : <Upper />
+                        }  
                     {/* </ScrollView>                    */}
                 </ScrollView>
                 <View style={styles.modal}>
@@ -362,7 +645,7 @@ export default function SelectedScreen(){
 const styles = StyleSheet.create({
     screen:{
         flex: 1,
-        backgroundColor: "#fff",
+        backgroundColor: "#edf5f7",
         width: width
     },
     view:{
@@ -401,21 +684,32 @@ const styles = StyleSheet.create({
         top: 3
     },
     circle:{
-        alignItems:"flex-end",
-        marginRight:55,
-        marginTop:10
+        alignItems: "flex-end",
+        marginRight: 60,
+        marginTop: 10
     },
     modal: {
-        elevation:5,
-        backgroundColor:"#edf5f7",
-        width:"100%",
-        borderRadius:10,
-        marginTop:-100,
-        flexDirection:"row",
-        padding:10,
-        justifyContent:"space-between",
-        paddingVertical:30,
-        // borderColor:"gray",
-        // borderTopWidth:2
+        elevation: 5,
+        backgroundColor: "#fff",
+        width: "100%",
+        borderRadius: 10,
+        marginTop: -100,
+        flexDirection: "row",
+        padding: 10,
+        justifyContent: "space-between",
+        paddingVertical: 30
+    },
+    upperView1: {
+        flexDirection: "row",
+        justifyContent: "space-around",
+        marginBottom: 10
+    },
+    upperView2: {
+        height: 90,
+        width: 40,
+        borderRadius: 5,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#9ea5b0"
     }
 });

@@ -19,19 +19,29 @@ export default function UserDetails_11_2({route}){
 
     const navigation = useNavigation();
     const { name, src, dest, deptHour, arivHour } = route.params;
-    const [ textInput, setTextInput ] = useState({
+    const [ values, setValues ] = useState({
         fullName1: "",
         age1: "",
         fullName2: "",
         age2: "",
-        ph: "",
+        number: "",
         email: "",
-        pickerValue: ""
+        gender1: "",
+        gender2: ""
     });
-    const Gender = ["Male", "Female", "Others"]
-    const [singleFile, setSingleFile] = useState(null);
-    // console.log(singleFile)
-    const selectOneFile = async () => {
+    const { fullName1, age1, fullName2, age2, number, email, gender1, gender2 } = values;
+    const [select1, setSelect1] = useState(false);
+    const [select2, setSelect2] = useState(false);
+    const Gender = ["Male", "Female", "Others"];
+    const [idProof, setIdProof] = useState(null);
+
+    const optionalClick1 =()=>{
+        select1 === false ? setSelect1(true) : setSelect1(false);
+    }
+    const optionalClick2 =()=>{
+        select2 === false ? setSelect2(true) : setSelect2(false);
+    }
+    const selectFile = async () => {
         //Opening Document Picker for selection of one file
         try {
           const res = await DocumentPicker.pick({
@@ -50,7 +60,7 @@ export default function UserDetails_11_2({route}){
         //   console.log('File Name : ' + res.name);
         //   console.log('File Size : ' + res.size);
           //Setting the state to show single file attributes
-          res.map(item=>(setSingleFile(item.name)));
+          res.map(item=>(setIdProof(item.name)));
         } catch (err) {
           //Handling any exception (If any)
           if (DocumentPicker.isCancel(err)) {
@@ -151,7 +161,7 @@ export default function UserDetails_11_2({route}){
                                 style={{paddingLeft:10,color:"#000",borderRadius:10}} 
                                 placeholder="Full Name" 
                                 placeholderTextColor="gray" 
-                                onChangeText={(text)=>setTextInput({...textInput, fullName1: text})}
+                                onChangeText={(text)=>setValues({...values, fullName1: text})}
                             />
                         </View>
                         <View style={{flexDirection:"row",justifyContent:"space-between"}}>
@@ -161,7 +171,7 @@ export default function UserDetails_11_2({route}){
                                     placeholder="Age" 
                                     placeholderTextColor="gray" 
                                     keyboardType="number-pad" 
-                                    onChangeText={(text)=>setTextInput({...textInput, age1: text})}
+                                    onChangeText={(text)=>setValues({...values, age1: text})}
                                 />
                             </View>
                             <View style={{elevation:5, backgroundColor:"white", borderRadius:10, padding:10,marginTop:10,}}>
@@ -169,7 +179,7 @@ export default function UserDetails_11_2({route}){
                                     data={Gender}
                                     defaultButtonText={"Gender"}
                                     onSelect={(selectedItem) => {
-                                        console.log(selectedItem);
+                                        setValues({...values,gender1: selectedItem})
                                     }}
                                     buttonTextAfterSelection={(selectedItem) => {
                                         return selectedItem;
@@ -187,15 +197,15 @@ export default function UserDetails_11_2({route}){
                                           />
                                         );
                                       }}
-                                      dropdownIconPosition={"right"}
-                                      dropdownStyle={styles.DropdownStyle}
-                                      rowStyle={styles.rowStyle}
+                                    dropdownIconPosition={"right"}
+                                    dropdownStyle={styles.DropdownStyle}
+                                    rowStyle={styles.rowStyle}
                                 />
                             </View>
                         </View>
                         <View style={{flexDirection:"row",justifyContent:"center",marginTop:20}}>
                             <Text style={{color:"#000"}}>Person 2</Text>
-                            <View style={{borderWidth:0.8,marginHorizontal:20}}></View>
+                            <View style={{borderWidth:0.8,marginHorizontal:20,backgroundColor:"#000"}}></View>
                             <Text style={{color:"#000"}}>B4</Text>
                         </View>
                         <View style={{elevation:5,width:"100%", backgroundColor:"white", borderRadius:10, padding:10,marginTop:10}}>
@@ -203,7 +213,7 @@ export default function UserDetails_11_2({route}){
                                 style={{color:"#000",width:"100%",paddingLeft:10}} 
                                 placeholder="Full Name" 
                                 placeholderTextColor="gray" 
-                                onChangeText={(text)=>setTextInput({...textInput, fullName2: text})}
+                                onChangeText={(text)=>setValues({...values, fullName2: text})}
                             />
                         </View>
                         <View style={{flexDirection:"row",justifyContent:"space-between"}}>
@@ -213,7 +223,7 @@ export default function UserDetails_11_2({route}){
                                     placeholder="Age" 
                                     placeholderTextColor="gray"
                                     keyboardType="number-pad" 
-                                    onChangeText={(text)=>setTextInput({...textInput, age2: text})}
+                                    onChangeText={(text)=>setValues({...values, age2: text})}
                                 />
                             </View>
                             <View style={{elevation:5, backgroundColor:"white", borderRadius:10, padding:10,marginTop:10,}}>
@@ -221,7 +231,7 @@ export default function UserDetails_11_2({route}){
                                     data={Gender}
                                     defaultButtonText={"Gender"}
                                     onSelect={(selectedItem) => {
-                                        console.log(selectedItem);
+                                        setValues({...values,gender2: selectedItem})
                                     }}
                                     buttonTextAfterSelection={(selectedItem) => {
                                         return selectedItem;
@@ -253,7 +263,7 @@ export default function UserDetails_11_2({route}){
                                 placeholder="Phone number" 
                                 placeholderTextColor="gray" 
                                 keyboardType="number-pad" 
-                                onChangeText={(text)=>setTextInput({...textInput, ph: text})}
+                                onChangeText={(text)=>setValues({...values, number: text})}
                             />
                         </View>
                         <View style={{elevation:5, backgroundColor:"white", borderRadius:10, padding:5,marginTop:10}}>
@@ -261,28 +271,37 @@ export default function UserDetails_11_2({route}){
                                 style={{color:"#000",paddingLeft:10}} 
                                 placeholder="Email"
                                  placeholderTextColor="gray" 
-                                 onChangeText={(text)=>setTextInput({...textInput, email: text})}
+                                 onChangeText={(text)=>setValues({...values, email: text})}
                             />
                         </View>
-                        <View style={{flexDirection:"row",alignItems:"center",marginVertical:10}}>
-                            <View style={{height:15,width:15,borderWidth:1,borderColor:"gray",borderRadius:2}}></View>
-                            <Text style={{color:"#66645f",marginLeft:10}}>Upload ID Proof (Optional)</Text>
+                        <View style={{marginVertical:10}}>
+                            <TouchableOpacity style={{flexDirection:"row",alignItems:"center"}} 
+                                onPress={optionalClick1}
+                            >
+                                <MaterialCommunityIcons name={select1===true?"check-box-outline":"crop-square"} color={"#000"} size={22} />
+                                <Text style={{color:"#66645f",marginLeft:10}}>Upload ID Proof (Optional)</Text>
+                            </TouchableOpacity>
                         </View>
-                        <View style={{flexDirection:"row",alignItems:"center"}}>
-                            <View style={{height:15,width:15,borderWidth:1,borderColor:"gray",borderRadius:2}}></View>
-                            <Text style={{color:"#66645f",marginLeft:10}}>Upload Cowin Certificate (Optional)</Text>
+                        <View style={{marginVertical:10}}>
+                            <TouchableOpacity style={{flexDirection:"row",alignItems:"center"}} 
+                                onPress={optionalClick2}
+                            >
+                                <MaterialCommunityIcons name={select2===true?"check-box-outline":"crop-square"} color={"#000"} size={22} />
+                                <Text style={{color:"#66645f",marginLeft:10}}>Upload Cowin Certificate (Optional)</Text>
+                            </TouchableOpacity>
                         </View>
                         {
-                            singleFile !== null ? 
+                            idProof !== null ? 
                                 <View style={{marginTop:10,flexDirection:"row"}}>
                                     <Text style={styles.textStyle}>File Name: </Text>
-                                    <Text style={styles.fileStyle}>{singleFile}</Text>
+                                    <Text style={styles.fileStyle}>{idProof}</Text>
                                 </View> 
                                 : 
                                 null
                         }
                         <TouchableOpacity 
-                            onPress={selectOneFile}
+                            disabled={select1 === true || select2 === true ? false : true}
+                            onPress={selectFile}
                             style={{elevation:5, backgroundColor:"#ed6c39", borderRadius:10, padding:15,marginTop:20,alignItems:"center",marginHorizontal:90}}>
                             <Text style={{color:"#fff"}}>+ Add file</Text>
                         </TouchableOpacity>
@@ -300,7 +319,11 @@ export default function UserDetails_11_2({route}){
                             </View>
                             <TouchableOpacity 
                                 style={{elevation:5, backgroundColor:"#ed6c39", borderRadius:10, padding:10,alignItems:"center",marginVertical:10,marginLeft:10,paddingHorizontal:20}}
-                                onPress={()=>navigation.navigate("BusDetails",{ busName: name, deptHour: deptHour, arivHour: arivHour })}
+                                onPress={()=>navigation.navigate("BusDetails",{ 
+                                    busName: name, deptHour: deptHour, arivHour: arivHour,
+                                    fullName1: fullName1, age1: age1, fullName2: fullName2, 
+                                    age2: age2, number: number, Email: email, gender1: gender1, gender2: gender2
+                                })}
                                 >
                                 <Text style={{color:"#fff",fontSize:18}}>Proceed</Text>
                             </TouchableOpacity>

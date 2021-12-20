@@ -4,15 +4,17 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 // import Entypo from "react-native-vector-icons/Entypo";
-import { useNavigation } from '@react-navigation/core'
+import { useNavigation } from '@react-navigation/core';
 
 
 const { width } = Dimensions.get("window");
 const { height } = Dimensions.get("window");
 
-export default function TicketSummaryScreen(){
+export default function TicketSummaryScreen({route}){
 
     const navigation = useNavigation();
+    const {Name,busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number, Email, gender1, gender2, price} = route.params;
+    // console.log(route.params);
 
     return(
         <View style={styles.screen}>
@@ -79,17 +81,17 @@ export default function TicketSummaryScreen(){
                             <View style={{flexDirection:"row",justifyContent:"space-between"}}>
                                 <MaterialCommunityIcons name="chair-rolling" color="#000" size={24} />
                                 <Text style={{color:"#e66349"}}>A4</Text>
-                                <Text style={{color:"#000"}}>Jack Petter</Text>
-                                <Text style={{color:"#000"}}>21</Text>
-                                <Text style={{color:"#000"}}>Male</Text>
+                                <Text style={{color:"#000"}}>{fullName1}</Text>
+                                <Text style={{color:"#000"}}>{age1}</Text>
+                                <Text style={{color:"#000"}}>{gender1}  </Text>
                             </View>
                             <View style={{borderWidth:0.2,borderColor:"gray",backgroundColor:"gray",marginVertical:10}} />
                             <View style={{flexDirection:"row",justifyContent:"space-between"}}>
                                 <MaterialCommunityIcons name="chair-rolling" color="#000" size={24} />
                                 <Text style={{color:"#e66349"}}>B4</Text>
-                                <Text style={{color:"#000"}}>Hardha</Text>
-                                <Text style={{color:"#000"}}>13</Text>
-                                <Text style={{color:"#000"}}>Male</Text>
+                                <Text style={{color:"#000"}}>{fullName2}</Text>
+                                <Text style={{color:"#000"}}>{age2}</Text>
+                                <Text style={{color:"#000"}}>{gender2}</Text>
                             </View>
                             <View></View>
                         </View>
@@ -99,12 +101,12 @@ export default function TicketSummaryScreen(){
                         <View style={{marginTop:10}}>
                             <View style={{flexDirection:"row"}}>
                                 <Text style={{color:"gray"}}>Phone number - </Text>
-                                <Text style={{color:"#000"}}>9856485234</Text>
+                                <Text style={{color:"#000"}}>{number}</Text>
                             </View>
                             <View style={{borderWidth:0.2,borderColor:"gray",backgroundColor:"gray",marginVertical:10}} />
                             <View style={{flexDirection:"row"}}>
                                 <Text style={{color:"gray"}}>Email - </Text>
-                                <Text style={{color:"#000"}}>hardha678@gmail.com</Text>
+                                <Text style={{color:"#000"}}>{Email}</Text>
                             </View>
                             <View></View>
                         </View>

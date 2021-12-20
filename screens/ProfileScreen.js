@@ -55,10 +55,10 @@ const ProfileScreen = () => {
                 res[1]
             )    
         } catch (error) {
-            if(DocumentPicker.isCancel(err)){
+            if(DocumentPicker.isCancel(error)){
 
             }else{
-                throw err;
+                throw error;
             }
         }
     }
@@ -134,7 +134,7 @@ const ProfileScreen = () => {
                     <ProfileOptions
                     text="Payment"
                     desc="UPI, Saved Cards"
-                    nav={()=>navigation.navigate("PaymentScreen")}
+                    nav={()=>navigation.navigate("PaymentSettings")}
                     />
                     <ProfileOptions
                     text="My Bookings"

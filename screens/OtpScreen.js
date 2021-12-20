@@ -10,6 +10,7 @@ const OtpScreen = () => {
 
     const navigation = useNavigation();
     const route = useRoute();
+    const { number } = route.params;
     const [error, setError] = useState(false);
     const [OTP, setOTP]= useState("");
     const [otp, setOtp] = useState(false);
@@ -20,7 +21,20 @@ const OtpScreen = () => {
         }else{
             setError(false);
         }
-    }
+    };
+    const clickSubmit=()=>{
+        signup({"otp": OTP,"number": number}).then( data => {
+            if(data.error){
+                console.log(data.error);
+            }
+            else{
+                authenticate(data, ()=>{
+                    console.log("user logged in");
+                    navigation.navigate("OtpVerified", {number: route.params.number});
+                })
+            }
+        })
+    };
 
     const verificatioHandler=()=>{
 
@@ -61,7 +75,7 @@ const OtpScreen = () => {
         //     console.log(err.message)
         // })
     }
-    const clickSubmit = () => {
+    const clickSubmit1 = () => {
         if(OTP == 123456){
             navigation.navigate("OtpVerified", {number: route.params.number})
         }else{

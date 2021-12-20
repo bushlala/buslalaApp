@@ -2,7 +2,7 @@ import {AsyncStorage} from "react-native";
 import { API } from "../config";
 
 export const signup = user => {
-    return fetch(`${API}/signup`, {
+    return fetch(`${API}/signup/verify`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -21,6 +21,7 @@ export const signup = user => {
 export const authenticate = async(data, next) => {
     if (typeof window !== 'undefined') {
         AsyncStorage.setItem('jwt', JSON.stringify(data));
+        console.log(data)
         next();
     };
 };

@@ -1,1 +1,1 @@
-export const API = `https://buslala-backend-api.herokuapp.com/api/user/`;
+export const API = `https://buslala-backend-api.herokuapp.com/api/user`;

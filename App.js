@@ -49,11 +49,11 @@ const App = () => {
           <Stack.Screen name="Booked Successfully" component={BookedSuccessfullyScreen}/>
           <Stack.Screen name="Profile" component={ProfileScreen}/>
           {/* <Stack.Screen name="Notifications" component={NotificationScreen}/> */}
-          {/* <Stack.Screen name="PaymentSettings" component={PaymentSettings}/> */}
-          {/* <Stack.Screen name="Tickets" component={TicketScreen}/> */}
+          <Stack.Screen name="PaymentSettings" component={PaymentSettings}/>
+          <Stack.Screen name="Tickets" component={TicketScreen}/>
           <Stack.Screen name="Bookings" component={BookingsScreen}/>
           <Stack.Screen name="PaymentScreen" component={PaymentScreen}/>
-          <Stack.Screen name="Tickets" component={TicketSummaryScreen}/>
+          <Stack.Screen name="TicketSummary" component={TicketSummaryScreen}/>
           <Stack.Screen name="UserDetails" component={UserDetails_11_2}/>
           <Stack.Screen name="SelectedScreen" component={SelectedScreen}/>
           <Stack.Screen name="SeatBookingRoundTrip" component={SeatBooking_round_trip}/>
