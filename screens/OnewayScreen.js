@@ -27,7 +27,6 @@ const LoginScreen = () => {
     const [isOneWay, setIsOneWay] = useState(true);
     const [isTwoWay, setIsTwoWay] = useState(false);
 
-
     const inputHandler=()=>{
         if(from===""){
         setError1(true)}
@@ -71,17 +70,16 @@ const LoginScreen = () => {
         }else{
             setError(false);
             setError1(false);
-            axios.post("https://buslala-backend.herokuapp.com/api/user/one_way",{"Source": from, "Destination": to, "Date": deptDate})
+            axios.post("https://buslala-backend-api.herokuapp.com/api/user/searchOneWayBus",{"source": from, "destination": to, "date": deptDate})
             .then((response)=>{
                 if(response.status===200){
-                    console.log(response.data)
-                    navigation.navigate("Buses",{oneWay: isOneWay, twoWay: isTwoWay, from: from, to: to, deptDate: deptDate})
+                    console.log(response.data);
+                    navigation.navigate("Buses",{oneWay: isOneWay, twoWay: isTwoWay, from: from, to: to, deptDate: deptDate});
                 }else{
-                    console.log("Error")
+                    console.log("Error");
                 }
-            }).catch((err)=>console.log(err))
-
-    }}
+            }).catch((err)=>console.log(err));
+    }};
 
     const busesHandler1=()=>{
         if(from==="" || to==="" || deptDate==="" || returnDate===""){
@@ -90,9 +88,16 @@ const LoginScreen = () => {
         }else{
             setError(false);
             setError1(false);
-            // navigation.navigate("SeatBookingRoundTrip")
-            navigation.navigate("Buses",{oneWay: isOneWay, twoWay: isTwoWay, from: from, to: to, deptDate: deptDate, returnDate: returnDate})
-    }}
+            axios.post("https://buslala-backend-api.herokuapp.com/api/user/searchOneWayBus",{"source": from, "destination": to, "deptDate": deptDate,"retrunDate": returnDate})
+            .then((response)=>{
+                if(response.status===200){
+                    console.log(response.data);
+                    navigation.navigate("Buses",{oneWay: isOneWay, twoWay: isTwoWay, from: from, to: to, deptDate: deptDate, returnDate: returnDate})
+                }else{
+                    console.log("Error");
+                }
+            }).catch((err)=>console.log(err));           
+    }};
 
     return (
         <View style={styles.screen}>
@@ -243,15 +248,15 @@ const LoginScreen = () => {
                             <TouchableOpacity activeOpacity={0.8}
                             onPress={()=>setIsVisible1(true)}
                             style={{paddingBottom: 3,alignItems:"center", justifyContent:"space-between", flexDirection:"row", borderBottomColor:"black", borderBottomWidth:1}}>
-                                {(deptDate==="") ? <Text style={{fontSize:15, color:"gray", padding:5}}>DD/MM/YYYY</Text>
+                                {(deptDate==="") ? <Text style={{fontSize:15, color:"gray", padding:5}}>YYYY-MM-DD</Text>
                                 : <Text style={{fontSize:15, color:"gray", padding:5}}>{deptDate}</Text>}
                                 <DatePicker
                                 mode="date"
                                 onCloseModal={()=>setIsVisible1(false)}
-                                format="DD/MM/YYYY"
+                                format="YYYY-MM-DD"
                                 hideText={true}
                                 minDate={new Date()}
-                                maxDate="31/12/2021"
+                                maxDate="2021-12-31"
                                 onDateChange={handleConfirm1}
                                 cancelBtnText="Cancel"
                                 confirmBtnText="Confirm"
@@ -269,17 +274,17 @@ const LoginScreen = () => {
                                 <TouchableOpacity activeOpacity={0.8}
                                 onPress={()=>setIsVisible1(true)}
                                 style={{paddingBottom: 3,alignItems:"center", justifyContent:"space-between", flexDirection:"row", borderBottomColor:"black", borderBottomWidth:1}}>
-                                    {(deptDate==="") ? <Text style={{fontSize:15, color:"gray", padding:5}}>DD/MM/YYYY</Text>
+                                    {(deptDate==="") ? <Text style={{fontSize:15, color:"gray", padding:5}}>YYYY-MM-DD</Text>
                                     : <Text style={{fontSize:15, color:"gray", padding:5}}>{deptDate}</Text>}
                                     <DatePicker
                                     mode="date"
                                     onCloseModal={()=>setIsVisible11(false)}
-                                    format="DD/MM/YYYY"
+                                    format="YYYY-MM-DD"
                                     hideText={true}
                                     onDateChange={handleConfirm1}
                                     cancelBtnText="Cancel"
                                     minDate={new Date()}
-                                    maxDate="31/12/2021"
+                                    maxDate="2021-12-31"
                                     confirmBtnText="Confirm"
                                     customStyles={{
                                         dateIcon:{
@@ -294,15 +299,15 @@ const LoginScreen = () => {
                                 <TouchableOpacity activeOpacity={0.8}
                                 onPress={()=>setIsVisible2(true)}
                                 style={{paddingBottom: 3,alignItems:"center", justifyContent:"space-between", flexDirection:"row", borderBottomColor:"black", borderBottomWidth:1}}>
-                                    {(returnDate==="") ? <Text style={{fontSize:15, color:"gray", padding:5}}>DD/MM/YYYY</Text>
+                                    {(returnDate==="") ? <Text style={{fontSize:15, color:"gray", padding:5}}>YYYY-MM-DD</Text>
                                     : <Text style={{fontSize:15, color:"gray", padding:5}}>{returnDate}</Text>}
                                     <DatePicker
                                     mode="date"
                                     onCloseModal={()=>setIsVisible2(false)}
-                                    format="DD/MM/YYYY"
+                                    format="YYYY-MM-DD"
                                     hideText={true}
                                     minDate={new Date()}
-                                    maxDate="31/12/2021"
+                                    maxDate="2021-12-31"
                                     onDateChange={handleConfirm2}
                                     cancelBtnText="Cancel"
                                     confirmBtnText="Confirm"

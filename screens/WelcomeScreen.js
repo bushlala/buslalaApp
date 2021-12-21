@@ -8,6 +8,10 @@ const WelcomeScreen = () => {
 
     const navigation= useNavigation();
 
+    const isUser=()=>{
+        navigation.navigate("Login");
+    }
+
     return (
         <View style={styles.screen}>
             <Image
@@ -26,7 +30,7 @@ const WelcomeScreen = () => {
                     <Text style={{color:textColor, maxWidth:400, fontSize:18, textAlign:"center", fontFamily:RalewayLight}}>Book your tickets online with your best preferences</Text>
                 </View>
                 <TouchableOpacity activeOpacity={0.8} style={styles.button}
-                onPress={()=>navigation.navigate("Login")}
+                onPress={isUser}
                 >
                     <Text style={{color:textColor, fontFamily:RalewayRegular, fontSize:18}}>Get Started</Text>
                 </TouchableOpacity>

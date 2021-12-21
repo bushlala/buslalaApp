@@ -5,6 +5,7 @@ import { Alert, Image, KeyboardAvoidingView, StyleSheet, Text, TextInput, Toucha
 import { RalewayBold, RalewayLight, RalewayRegular } from '../assets/fonts/fonts';
 import { primary, secondary, textColor } from '../components/Colors';
 import { signup, authenticate, isAuthenticated } from "../Auth/Signup";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const OtpScreen = () => {
 
@@ -14,6 +15,7 @@ const OtpScreen = () => {
     const [error, setError] = useState(false);
     const [OTP, setOTP]= useState("");
     const [otp, setOtp] = useState(false);
+    const [redirect, setRedirect] = useState(false);
 
     const inputHandler=()=>{
         if(OTP==="" || OTP.length!==6){
@@ -26,28 +28,32 @@ const OtpScreen = () => {
         signup({"otp": OTP,"number": number}).then( data => {
             if(data.error){
                 console.log(data.error);
+                // setRedirect(false);
             }
             else{
-                authenticate(data, ()=>{
-                    console.log("user logged in");
-                    navigation.navigate("OtpVerified", {number: route.params.number});
+                navigation.navigate("OtpVerified", {number: route.params.number})
+                // setRedirect(true);
+                authenticate(data, ()=>{                   
+                    // if(redirect ===true){
+                        console.log("user logged in");
+                    // }else setRedirect(false);
                 })
             }
         })
     };
 
-    const verificatioHandler=()=>{
+    const verificatioHandler=async(data)=>{
 
         axios.post("https://buslala-backend-api.herokuapp.com/api/user/signup/verify", {
-            "number": route.params.number,
+            "number": number,
             "otp": OTP
         })
         .then((response)=>{
-            if(response){
+            if(response.status === 200){
             console.log("User Registerd Successfully");
-            console.log(response)
+            //AsyncStorage
             setOtp(false);
-            {OTP && navigation.navigate("OtpVerified", {number: route.params.number})}
+            {OTP && navigation.navigate("OtpVerified", {number: number})}
             }else{
                 Alert.alert("Invalid Otp");
                 console.log("Invalid")
@@ -76,11 +82,7 @@ const OtpScreen = () => {
         // })
     }
     const clickSubmit1 = () => {
-        if(OTP == 123456){
-            navigation.navigate("OtpVerified", {number: route.params.number})
-        }else{
-            alert("OTP does not match")
-        }
+        navigation.navigate("OtpVerified", {number: route.params.number})
     };
 
     return (
@@ -95,8 +97,7 @@ const OtpScreen = () => {
             <View style={styles.view2}>
                 <KeyboardAvoidingView behavior="padding" style={styles.box}>
                     <Text style={{fontFamily:RalewayBold, fontSize:20, color:"#242424", marginBottom:10}}>OTP Verification</Text>
-                    {/* <Text style={{fontFamily:RalewayRegular, fontSize:18, color:"#242424"}}>Code Sent to {route.params.number}</Text> */}
-                    <Text style={{fontFamily:RalewayRegular, fontSize:18, color:"#242424"}}>Enter the Code 123456</Text>
+                    <Text style={{fontFamily:RalewayRegular, fontSize:18, color:"#242424"}}>Code Sent to {route.params.number}</Text>
                     {error ? <Text style={{color:"red", fontSize:12, marginBottom:1}}>Please Enter a Valid OTP!</Text>:<Text></Text>}
                     {otp ? <Text style={{color:"red", fontSize:12, marginBottom:1}}>Invalid OTP!</Text>:<Text></Text>}
                     <TextInput
@@ -110,7 +111,7 @@ const OtpScreen = () => {
                     keyboardType="number-pad"
                     />
                     <TouchableOpacity disabled={error ? true : false} activeOpacity={0.8} style={styles.button}
-                    onPress={clickSubmit}
+                    onPress={verificatioHandler}
                     >
                         <Text style={{color:"white",fontSize:18, fontFamily:RalewayRegular}}>Verify</Text>
                     </TouchableOpacity>

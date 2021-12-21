@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, TextInput, Image, Modal } from "react-native";
+import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, TextInput, Image, Modal, FlatList } from "react-native";
 import ToggleSwitch  from "toggle-switch-react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -20,11 +20,23 @@ export default function SelectedScreen(){
 
     const navigation = useNavigation();
     const route = useRoute();
-    const { src, dest, name, deptHour, arrivalHour } = route.params;
+    const { src, dest, name, deptHour, arrivalHour, price, hours } = route.params;
 
-    const [ toggle, setToggle ] = useState(false);
-    // const [ price, setPrice ] = useState("");
-    const [ select, setSelect ] = useState({
+    const [toggle, setToggle] = useState(false);
+    const [prices, setPrices] = useState(price);
+    const [selectedSeat1, setSelectedSeat1] = useState(false);
+    const [selectedSeat2, setSelectedSeat2] = useState(false);
+    const [selectedSeat3, setSelectedSeat3] = useState(false);
+    const [selectedSeat4, setSelectedSeat4] = useState(false);
+    const [selectedSeat5, setSelectedSeat5] = useState(false);
+    const [selectedSeat6, setSelectedSeat6] = useState(false);
+    const [selectedSeat7, setSelectedSeat7] = useState(false);
+    const [selectedSeat8, setSelectedSeat8] = useState(false);
+    const [selectedSeat9, setSelectedSeat9] = useState(false);
+    const [selectedSeat10, setSelectedSeat10] = useState(false);
+    const [selectedSeat11, setSelectedSeat11] = useState(false);
+    const [selectedSeat12, setSelectedSeat12] = useState(false);
+    const [select, setSelect] = useState({
         seat1: false,
         seat2: false,
         seat3: false,
@@ -42,40 +54,52 @@ export default function SelectedScreen(){
     const { seat1, seat2, seat3, seat4, seat5, seat6, seat7, seat8, seat9, seat10, seat11, seat12 } = select;
 
     const handleSelect1=()=>{
-        seat1 === false ? setSelect({...select, seat1: true}) : setSelect({...select, seat1: false})
+        seat1 === false ? setSelect({...select, seat1: true}) : setSelect({...select, seat1: false});
+        selectedSeat1 === false ? setSelectedSeat1(true) : setSelectedSeat1(false)
     };
     const handleSelect2=()=>{
-        seat2 === false ? setSelect({...select, seat2: true}) : setSelect({...select, seat2: false})
+        seat2 === false ? setSelect({...select, seat2: true}) : setSelect({...select, seat2: false});
+        selectedSeat2 === false ? setSelectedSeat2(true) : setSelectedSeat2(false)
     };
     const handleSelect3=()=>{
-        seat3 === false ? setSelect({...select, seat3: true}) : setSelect({...select, seat3: false})
+        seat3 === false ? setSelect({...select, seat3: true}) : setSelect({...select, seat3: false});
+        selectedSeat3 === false ? setSelectedSeat3(true) : setSelectedSeat3(false)
     };
     const handleSelect4=()=>{
-        seat4 === false ? setSelect({...select, seat4: true}) : setSelect({...select, seat4: false})
+        seat4 === false ? setSelect({...select, seat4: true}) : setSelect({...select, seat4: false});
+        selectedSeat4 === false ? setSelectedSeat4(true) : setSelectedSeat4(false)
     };
     const handleSelect5=()=>{
-        seat5 === false ? setSelect({...select, seat5: true}) : setSelect({...select, seat5: false})
+        seat5 === false ? setSelect({...select, seat5: true}) : setSelect({...select, seat5: false});
+        selectedSeat5 === false ? setSelectedSeat5(true) : setSelectedSeat5(false)
     };
     const handleSelect6=()=>{
-        seat6 === false ? setSelect({...select, seat6: true}) : setSelect({...select, seat6: false})
+        seat6 === false ? setSelect({...select, seat6: true}) : setSelect({...select, seat6: false});
+        selectedSeat6 === false ? setSelectedSeat6(true) : setSelectedSeat6(false)
     };
     const handleSelect7=()=>{
-        seat7 === false ? setSelect({...select, seat7: true}) : setSelect({...select, seat7: false})
+        seat7 === false ? setSelect({...select, seat7: true}) : setSelect({...select, seat7: false});
+        selectedSeat7 === false ? setSelectedSeat7(true) : setSelectedSeat7(false)
     };
     const handleSelect8=()=>{
-        seat8 === false ? setSelect({...select, seat8: true}) : setSelect({...select, seat8: false})
+        seat8 === false ? setSelect({...select, seat8: true}) : setSelect({...select, seat8: false});
+        selectedSeat8 === false ? setSelectedSeat8(true) : setSelectedSeat8(false)
     };
     const handleSelect9=()=>{
-        seat9 === false ? setSelect({...select, seat9: true}) : setSelect({...select, seat9: false})
+        seat9 === false ? setSelect({...select, seat9: true}) : setSelect({...select, seat9: false});
+        selectedSeat9 === false ? setSelectedSeat9(true) : setSelectedSeat9(false)
     };
     const handleSelect10=()=>{
-        seat10 === false ? setSelect({...select, seat10: true}) : setSelect({...select, seat10: false})
+        seat10 === false ? setSelect({...select, seat10: true}) : setSelect({...select, seat10: false});
+        selectedSeat10 === false ? setSelectedSeat10(true) : setSelectedSeat10(false)
     };
     const handleSelect11=()=>{
-        seat11 === false ? setSelect({...select, seat11: true}) : setSelect({...select, seat11: false})
+        seat11 === false ? setSelect({...select, seat11: true}) : setSelect({...select, seat11: false});
+        selectedSeat11 === false ? setSelectedSeat11(true) : setSelectedSeat11(false)
     };
     const handleSelect12=()=>{
-        seat12 === false ? setSelect({...select, seat12: true}) : setSelect({...select, seat12: false})
+        seat12 === false ? setSelect({...select, seat12: true}) : setSelect({...select, seat12: false});
+        selectedSeat12 === false ? setSelectedSeat12(true) : setSelectedSeat12(false)
     };
 
     const Upper=()=>(
@@ -593,11 +617,13 @@ export default function SelectedScreen(){
                             <View style={{backgroundColor:"#4a4847",borderWidth:1,marginHorizontal:20,borderColor:"#4a4847"}}></View>
                             <View style={{alignItems:"center"}}>
                                 <Text style={{color:"gray"}}>Price</Text>
-                                <Text style={{color:"#000"}}>₹2,020</Text>
+                                <Text style={{color:"#000"}}>{prices}</Text>
                             </View>
                         </View>
                         <View>
-                            <TouchableOpacity onPress={()=>navigation.navigate("UserDetails",{ src: src, dest: dest, name: name, deptHour: deptHour, arivHour: arrivalHour })}
+                            <TouchableOpacity 
+                                onPress={()=>navigation.navigate("UserDetails",{ src: src, dest: dest, name: name, 
+                                    deptHour: deptHour, arivHour: arrivalHour, price: price, hours: hours })}
                                 style={{backgroundColor:"#ed6c39",paddingVertical:8,paddingHorizontal:20,borderRadius:10,elevation:5}}
                             >
                                 <View>

@@ -1,4 +1,4 @@
-import {AsyncStorage} from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API } from "../config";
 
 export const signup = user => {
@@ -18,12 +18,13 @@ export const signup = user => {
         });
 };
 
-export const authenticate = async(data, next) => {
-    if (typeof window !== 'undefined') {
-        AsyncStorage.setItem('jwt', JSON.stringify(data));
-        console.log(data)
-        next();
-    };
+export const authenticate = async(data) => {
+    try{
+        await AsyncStorage.setItem('jwt', JSON.stringify(data));
+        console.log(JSON.stringify(data));
+    } catch(error) {
+        console.log(error);
+    }
 };
 
 export const isAuthenticated = async() => {
