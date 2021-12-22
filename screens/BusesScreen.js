@@ -20,10 +20,12 @@ const BusesScreen = () => {
 
     const navigation = useNavigation();
     const route = useRoute();
+    const Data = [route.params.Data];
+    console.log(Data)
     const oneway = route.params.oneWay;
-    const twoway = route.params.twoWay;
-    const src = route.params.from;
-    const dest = route.params.to;
+    const roundTrip = route.params.roundTrip;
+    const src = route.params.src;
+    const dest = route.params.dest;
     const [isOpen, setIsOpen]=useState(false);
     const [click1, setClick1] = useState(false);
     const [click2, setClick2] = useState(false);
@@ -143,7 +145,7 @@ const BusesScreen = () => {
                     </TouchableOpacity>
                     <View style={{flexDirection:"row", alignItems:"center"}}>
                         <Text style={{fontSize:18, color:"black", fontFamily:RalewayBold, marginRight:10}}>{src}</Text>
-                        {twoway && <AntDesign
+                        {roundTrip && <AntDesign
                         name="swap"
                         size={24}
                         color="black"
@@ -178,23 +180,30 @@ const BusesScreen = () => {
                     />
                 </View>
                 <View style={styles.options}>
+                    {/* {Data.map(item=>(
+                        <View key={item.data.tripId}>
+                            <Text style={{color:"#000"}}>{item.tripId}</Text>
+                        </View>
+                    ))} */}
                     <FlatList
                     showsVerticalScrollIndicator={false}
-                    data={Seats}
+                    data={Data}
                     renderItem={({item,index})=>(
-                        <SeaterOption
-                            key={item.id}
-                            name={item.name}
-                            hours={item.hours}
-                            arrivalHour={item.arrivalTime}
-                            deptHour={item.depatureTime}
-                            price={item.price}
-                            rating={item.rating}
-                            seats={item.noOfSeats}
-                            desc={item.description}
-                            src={src}
-                            dest={dest}
-                        />
+                        item.data.map(item1=>(
+                            <SeaterOption
+                                key={index}
+                                name={item1.bus.name}
+                                hours={item.hours}
+                                arrivalHour={item1.time.arr}
+                                deptHour={item1.time.dept}
+                                price={item1.bus.fare.upperBerth}
+                                rating={item1.bus.rating}
+                                seats={item1.bus.seats.total}
+                                desc={item.description}
+                                src={src}
+                                dest={dest}
+                            />
+                        ))
                     )}
                     />
                 </View>

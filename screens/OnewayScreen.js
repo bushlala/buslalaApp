@@ -14,6 +14,9 @@ import DatePicker from 'react-native-datepicker'
 
 const LoginScreen = () => {
 
+    // const [Data, setData] = useState([]);
+    // console.log(Data);
+
     const navigation = useNavigation();
     const [isVisible1, setIsVisible1] = useState(false);
     const [isVisible2, setIsVisible2] = useState(false);
@@ -70,11 +73,11 @@ const LoginScreen = () => {
         }else{
             setError(false);
             setError1(false);
-            axios.post("https://buslala-backend-api.herokuapp.com/api/user/searchOneWayBus",{"source": from, "destination": to, "date": deptDate})
+            axios.post("https://buslala-backend-api.herokuapp.com/api/user/searchOneWayBus",{"source": from, "destination": to, "date": "2021-12-10"})
             .then((response)=>{
                 if(response.status===200){
                     console.log(response.data);
-                    navigation.navigate("Buses",{oneWay: isOneWay, twoWay: isTwoWay, from: from, to: to, deptDate: deptDate});
+                    navigation.navigate("Buses",{"Data": response.data,"src": from,"dest": to,"oneWay": isOneWay,"roundTrip": isTwoWay});
                 }else{
                     console.log("Error");
                 }
