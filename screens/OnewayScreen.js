@@ -73,7 +73,7 @@ const LoginScreen = () => {
         }else{
             setError(false);
             setError1(false);
-            axios.post("https://buslala-backend-api.herokuapp.com/api/user/searchOneWayBus",{"source": from, "destination": to, "date": "2021-12-10"})
+            axios.post("https://buslala-backend-api.herokuapp.com/api/user/searchOneWayBus",{"source": "place1", "destination": "place2", "date": "2021-12-10"})
             .then((response)=>{
                 if(response.status===200){
                     console.log(response.data);
@@ -91,11 +91,11 @@ const LoginScreen = () => {
         }else{
             setError(false);
             setError1(false);
-            axios.post("https://buslala-backend-api.herokuapp.com/api/user/searchOneWayBus",{"source": from, "destination": to, "deptDate": deptDate,"retrunDate": returnDate})
+            axios.post("https://buslala-backend-api.herokuapp.com/api/user/roundTrip",{"source": "place1", "destination": "place2", "deptDate": "2021-12-10", "returnDate": "2021-12-11"})
             .then((response)=>{
                 if(response.status===200){
                     console.log(response.data);
-                    navigation.navigate("Buses",{oneWay: isOneWay, twoWay: isTwoWay, from: from, to: to, deptDate: deptDate, returnDate: returnDate})
+                    navigation.navigate("Buses",{"Data": response.data,"src": from,"dest": to,"oneWay": isOneWay,"roundTrip": isTwoWay}) 
                 }else{
                     console.log("Error");
                 }

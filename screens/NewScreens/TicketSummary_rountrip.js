@@ -13,7 +13,7 @@ const { height } = Dimensions.get("window");
 export default function TicketSummaryScreen({route}){
 
     const navigation = useNavigation();
-    const {Name,busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number, Email, gender1, gender2, price} = route.params;
+    const {Name,busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number, email, gender1, gender2, price} = route.params;
     // console.log(route.params);
 
     return(
@@ -106,7 +106,7 @@ export default function TicketSummaryScreen({route}){
                             <View style={{borderWidth:0.2,borderColor:"gray",backgroundColor:"gray",marginVertical:10}} />
                             <View style={{flexDirection:"row"}}>
                                 <Text style={{color:"gray"}}>Email - </Text>
-                                <Text style={{color:"#000"}}>{Email}</Text>
+                                <Text style={{color:"#000"}}>{email}</Text>
                             </View>
                             <View></View>
                         </View>
@@ -127,12 +127,14 @@ export default function TicketSummaryScreen({route}){
                                 <Text style={{color:"#000"}}>₹2,070.00</Text>
                             </View>
                         </View>
-                        <TouchableOpacity 
-                            style={{backgroundColor:"#e66349",justifyContent:"center",alignItems:"center",marginHorizontal:80,borderRadius:10,paddingVertical:12,elevation:5,marginBottom:40}}
-                            onPress={()=>navigation.navigate("PaymentScreen")}
-                        >
-                            <Text style={{color:"#fff",fontSize:16}}>Proceed to Payment</Text>
-                        </TouchableOpacity>
+                        <View style={{alignItems:"center"}}>
+                            <TouchableOpacity 
+                                style={styles.proceed}
+                                onPress={()=>navigation.navigate("PaymentScreen")}
+                            >
+                                <Text style={{color:"#fff",fontSize:16}}>Proceed to Payment</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </ScrollView>
@@ -181,4 +183,14 @@ const styles = StyleSheet.create({
         marginTop: -15,
         paddingHorizontal: 20,
     },
+    proceed: {
+        backgroundColor:"#e66349",
+        justifyContent:"center",
+        alignItems:"center",
+        borderRadius:10,
+        paddingVertical:12,
+        elevation:5,
+        marginBottom:40,
+        width:"70%"
+    }
 });

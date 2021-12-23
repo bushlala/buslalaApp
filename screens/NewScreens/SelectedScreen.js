@@ -8,7 +8,6 @@ import { useNavigation, useRoute } from '@react-navigation/core';
 
 
 import { fontColor, newColor, primary, secondary } from '../../components/Colors';
-import { lowerData, upperData } from "../../data/seatData";
 
 
 const { width } = Dimensions.get("window");
@@ -20,10 +19,10 @@ export default function SelectedScreen(){
 
     const navigation = useNavigation();
     const route = useRoute();
-    const { src, dest, name, deptHour, arrivalHour, price, hours } = route.params;
+    const { src, dest, name, deptHour, arrivalHour, priceLower, priceUpper, duration } = route.params;
 
     const [toggle, setToggle] = useState(false);
-    const [prices, setPrices] = useState(price);
+    // const [prices, setPrices] = useState();
     const [selectedSeat1, setSelectedSeat1] = useState(false);
     const [selectedSeat2, setSelectedSeat2] = useState(false);
     const [selectedSeat3, setSelectedSeat3] = useState(false);
@@ -242,244 +241,183 @@ export default function SelectedScreen(){
     );
 
     const Lower=()=>(
-        // <View style={{marginBottom:20}}>
-        //     <View style={{flexDirection:"row",justifyContent:"space-around",marginTop:20}}>
-        //         <View style={{flexDirection:"row"}}>
-        //             <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}} onPress={()=>setIsOpen(true)}></TouchableOpacity>
-        //             <View style={{marginHorizontal:10}} />
-        //             <View style={{backgroundColor:"#fff",height:70,width:40,borderRadius:5}}></View>
-        //         </View>
-        //         <View>
-        //             <View style={{flexDirection:"row"}}>
-        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-        //                 <View style={{marginHorizontal:10}} />
-        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-        //             </View>
-        //             <View style={{flexDirection:"row",marginTop:10}}>
-        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-        //                 <View style={{marginHorizontal:10}} />
-        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-        //             </View>             
-        //         </View>        
-        //     </View>
-        //     <View style={{flexDirection:"row",justifyContent:"space-around"}}>
-        //         <View style={{flexDirection:"row",marginTop:-10}}>
-        //             <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
-        //             <View style={{marginHorizontal:10}} />
-        //             <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
-        //         </View>
-        //         <View>
-        //             <View style={{flexDirection:"row",marginTop:10}}>
-        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-        //                 <View style={{marginHorizontal:10}} />
-        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-        //             </View>
-        //             <View style={{flexDirection:"row",marginTop:10}}>
-        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-        //                 <View style={{marginHorizontal:10}} />
-        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-        //             </View>             
-        //         </View>        
-        //     </View>
-        //     <View style={{flexDirection:"row",justifyContent:"space-around"}}>
-        //         <View style={{flexDirection:"row",marginTop:-30}}>
-        //             <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
-        //             <View style={{marginHorizontal:10}} />
-        //             <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
-        //         </View>
-        //         <View>
-        //             <View style={{flexDirection:"row",marginTop:10}}>
-        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
-        //                 <View style={{marginHorizontal:10}} />
-        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
-        //             </View>            
-        //         </View>        
-        //     </View>
-        //     <View style={{flexDirection:"row",justifyContent:"space-around"}}>
-        //         <View style={{flexDirection:"row",marginTop:-20}}>
-        //             <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
-        //             <View style={{marginHorizontal:10}} />
-        //             <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
-        //         </View>
-        //         <View>
-        //             <View style={{flexDirection:"row",marginTop:10}}>
-        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
-        //                 <View style={{marginHorizontal:10}} />
-        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
-        //             </View>            
-        //         </View>        
-        //     </View>
-        //     <View style={{flexDirection:"row",justifyContent:"space-around"}}>
-        //         <View style={{flexDirection:"row",marginTop:-10}}>
-        //             <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
-        //             <View style={{marginHorizontal:10}} />
-        //             <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
-        //         </View>
-        //         <View>
-        //             <View style={{flexDirection:"row",marginTop:10}}>
-        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
-        //                 <View style={{marginHorizontal:10}} />
-        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
-        //             </View>            
-        //         </View>        
-        //     </View>
-        //     <View style={{flexDirection:"row",justifyContent:"space-around"}}>
-        //         <View style={{flexDirection:"row",marginTop:0}}>
-        //             <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
-        //             <View style={{marginHorizontal:10}} />
-        //             <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:70,width:40,borderRadius:5}}></TouchableOpacity>
-        //         </View>
-        //         <View>
-        //             <View style={{flexDirection:"row",marginTop:10}}>
-        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
-        //                 <View style={{marginHorizontal:10}} />
-        //                 <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:60,width:40,borderRadius:5}}></TouchableOpacity>
-        //             </View>            
-        //         </View>        
-        //     </View>
-        // </View>
         <View style={{marginVertical:20}}>
-            <View style={{flexDirection:"row",justifyContent:"space-around",marginBottom:5}}>
+            <View style={styles.lowerSeatContainer}>
                 <View style={{flexDirection:"row"}}>
                     <TouchableOpacity 
-                        style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}
+                        style={styles.lowerSeat}
                     ></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
                     <TouchableOpacity 
-                    style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}
+                        style={styles.lowerSeat}
                     ></TouchableOpacity>
                 </View>
                 <View style={{flexDirection:"row"}}>
                     <TouchableOpacity 
-                    style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}
+                        style={styles.lowerSeat}
                     ></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
                     <TouchableOpacity 
-                    style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}
-                    ></TouchableOpacity>
-                </View>
-            </View>
-            <View style={{flexDirection:"row",justifyContent:"space-around",marginBottom:5}}>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity 
-                    style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}
-                    ></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity 
-                    style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}
-                    ></TouchableOpacity>
-                </View>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity 
-                    style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}
-                    ></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity 
-                    style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}
+                        style={styles.lowerSeat}
                     ></TouchableOpacity>
                 </View>
             </View>
-            <View style={{flexDirection:"row",justifyContent:"space-around",marginBottom:5}}>
+            <View style={styles.lowerSeatContainer}>
                 <View style={{flexDirection:"row"}}>
                     <TouchableOpacity 
-                    style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}
+                        style={styles.lowerSeat}
                     ></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
                     <TouchableOpacity 
-                    style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}
+                        style={styles.lowerSeat}
                     ></TouchableOpacity>
                 </View>
                 <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity 
+                        style={styles.lowerSeat}
+                    ></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
                     <TouchableOpacity 
-                    style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}
+                        style={styles.lowerSeat}
                     ></TouchableOpacity>
                 </View>
             </View>
-            <View style={{flexDirection:"row",justifyContent:"space-around",marginBottom:5}}>
+            <View style={styles.lowerSeatContainer}>
                 <View style={{flexDirection:"row"}}>
                     <TouchableOpacity 
-                    style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                        style={styles.lowerSeat}
+                    ></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity 
+                        style={styles.lowerSeat}
+                    ></TouchableOpacity>
                 </View>
                 <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity 
+                        style={styles.lowerSeat}
+                    ></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-                </View>
-            </View>
-            <View style={{flexDirection:"row",justifyContent:"space-around",marginBottom:5}}>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-                </View>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity 
+                        style={styles.lowerSeat}
+                    ></TouchableOpacity>
                 </View>
             </View>
-            <View style={{flexDirection:"row",justifyContent:"space-around",marginBottom:5}}>
+            <View style={styles.lowerSeatContainer}>
                 <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity 
+                        style={styles.lowerSeat}
+                    ></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity 
+                        style={styles.lowerSeat}
+                    ></TouchableOpacity>
                 </View>
                 <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity 
+                        style={styles.lowerSeat}
+                    ></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-                </View>
-            </View>
-            <View style={{flexDirection:"row",justifyContent:"space-around",marginBottom:5}}>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-                </View>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity                         
+                        style={styles.lowerSeat}
+                    ></TouchableOpacity>
                 </View>
             </View>
-            <View style={{flexDirection:"row",justifyContent:"space-around",marginBottom:5}}>
+            <View style={styles.lowerSeatContainer}>
                 <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity 
+                        style={styles.lowerSeat}
+                    ></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity 
+                        style={styles.lowerSeat}
+                    ></TouchableOpacity>
                 </View>
                 <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity style={styles.lowerSeat}
+                    ></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-                </View>
-            </View>
-            <View style={{flexDirection:"row",justifyContent:"space-around",marginBottom:5}}>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-                </View>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity style={styles.lowerSeat}
+                    ></TouchableOpacity>
                 </View>
             </View>
-            <View style={{flexDirection:"row",justifyContent:"space-around",marginBottom:5}}>
+            <View style={styles.lowerSeatContainer}>
                 <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity style={styles.lowerSeat}
+                    ></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity style={styles.lowerSeat}
+                    ></TouchableOpacity>
                 </View>
                 <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity style={styles.lowerSeat}
+                    ></TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={{backgroundColor:"#9ea5b0",height:40,width:40,borderRadius:5}}></TouchableOpacity>
+                    <TouchableOpacity style={styles.lowerSeat}
+                    ></TouchableOpacity>
+                </View>
+            </View>
+            <View style={styles.lowerSeatContainer}>
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity style={styles.lowerSeat}
+                    ></TouchableOpacity>
+                    <View style={{marginHorizontal:10}} />
+                    <TouchableOpacity style={styles.lowerSeat}
+                    ></TouchableOpacity>
+                </View>
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity style={styles.lowerSeat}
+                    ></TouchableOpacity>
+                    <View style={{marginHorizontal:10}} />
+                    <TouchableOpacity style={styles.lowerSeat}
+                    ></TouchableOpacity>
+                </View>
+            </View>
+            <View style={styles.lowerSeatContainer}>
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity style={styles.lowerSeat}
+                    ></TouchableOpacity>
+                    <View style={{marginHorizontal:10}} />
+                    <TouchableOpacity style={styles.lowerSeat}
+                    ></TouchableOpacity>
+                </View>
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity style={styles.lowerSeat}
+                    ></TouchableOpacity>
+                    <View style={{marginHorizontal:10}} />
+                    <TouchableOpacity style={styles.lowerSeat}
+                    ></TouchableOpacity>
+                </View>
+            </View>
+            <View style={styles.lowerSeatContainer}>
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity style={styles.lowerSeat}
+                    ></TouchableOpacity>
+                    <View style={{marginHorizontal:10}} />
+                    <TouchableOpacity style={styles.lowerSeat}
+                    ></TouchableOpacity>
+                </View>
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity style={styles.lowerSeat}
+                    ></TouchableOpacity>
+                    <View style={{marginHorizontal:10}} />
+                    <TouchableOpacity style={styles.lowerSeat}
+                    ></TouchableOpacity>
+                </View>
+            </View>
+            <View style={styles.lowerSeatContainer}>
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity style={styles.lowerSeat}
+                    ></TouchableOpacity>
+                    <View style={{marginHorizontal:10}} />
+                    <TouchableOpacity style={styles.lowerSeat}
+                    ></TouchableOpacity>
+                </View>
+                <View style={{flexDirection:"row"}}>
+                    <TouchableOpacity style={styles.lowerSeat}
+                    ></TouchableOpacity>
+                    <View style={{marginHorizontal:10}} />
+                    <TouchableOpacity style={styles.lowerSeat}
+                    ></TouchableOpacity>
                 </View>
             </View>
         </View>
@@ -555,8 +493,7 @@ export default function SelectedScreen(){
                             <Text style={{color:"black"}}>{dest}</Text>
                         </View>
                     </View>
-                </View>
-                
+                </View>                
             </View>
             <View style={{marginHorizontal:20,marginBottom:200}}>
                 <ScrollView style={{marginBottom:100}} showsVerticalScrollIndicator={false}>
@@ -570,99 +507,49 @@ export default function SelectedScreen(){
                             </View>
                             <View style={{borderWidth:0.8,backgroundColor:"gray",borderColor:"gray",marginVertical:8}} />
                             <View>
-                                <Text style={{color:"#000",paddingHorizontal:12,paddingVertical:8}}>₹1199</Text>
+                                <Text style={{color:"#000",paddingHorizontal:12,paddingVertical:8}}>₹{priceLower}</Text>
                             </View>
                             <View style={{borderWidth:0.8,backgroundColor:"gray",borderColor:"gray",marginVertical:8}} />
                             <View>
-                                <Text style={{color:"#000",paddingHorizontal:12,paddingVertical:8}}>₹2499</Text>
+                                <Text style={{color:"#000",paddingHorizontal:12,paddingVertical:8}}>₹{priceUpper}</Text>
                             </View>
                         </View>
                         <View style={{flexDirection:"row",marginTop:10}}>
                             <Text style={{color:toggle === false ? "#e66349" : "#000",marginRight:10}}>Lower</Text>
-                            {/* <View style={{marginHorizontal:10}}> */}
                                 <ToggleSwitch isOn={toggle}
                                     onColor="#e66349"
                                     offColor="#e66349"                          
                                     size="medium"
                                     onToggle={() =>{toggle === false ? setToggle(true) : setToggle(false)}}
                                 />
-                            {/* </View> */}
                             <Text style={{color:toggle === false ? "#000" : "#e66349",marginRight:10,marginLeft:10}}>Upper</Text>
                         </View>
                     </View> 
-                    {/* <ScrollView style={{marginBottom:100,marginTop:10}} showsHorizontalScrollIndicator={false}> */}
-                        <View style={styles.circle}>
-                            {/* <View style={{borderWidth:1,borderRadius:45/2,height:45,width:45,alignItems:"center",justifyContent:"center",borderColor:"gray"}}>
-                                <View style={{borderWidth:1,height:13,borderColor:"gray",backgroundColor:"gray"}} />
-                                <View style={{flexDirection:"row",alignItems:"center"}}>
-                                    <View style={{borderWidth:1,width:13,height:0,borderColor:"gray",backgroundColor:"gray"}} />
-                                    <View style={{borderWidth:1,borderRadius:15/2,height:15,width:15,borderColor:"gray"}} />
-                                    <View style={{borderWidth:1,width:13,height:0,borderColor:"gray",backgroundColor:"gray"}} />
-                                </View>
-                                <View style={{borderWidth:1,height:13,borderColor:"gray",backgroundColor:"gray"}} />
-                            </View> */}
-                            <MaterialCommunityIcons name="steering" color={"#646666"} size={38}/>
-                        </View>
-                        {
-                            toggle === false ? <Lower /> : <Upper />
-                        }  
-                    {/* </ScrollView>                    */}
+                    <View style={styles.circle}>
+                        <MaterialCommunityIcons name="steering" color={"#646666"} size={38}/>
+                    </View>
+                    {toggle === false ? <Lower /> : <Upper />}  
                 </ScrollView>
                 <View style={styles.modal}>
-                        <View style={{flexDirection:"row",marginLeft:10}}>
-                            <View style={{alignItems:"center"}}>
-                                <Text style={{color:"gray"}}>Selected seats</Text>
-                                <Text style={{color:"#000"}}>A4, B4</Text>
-                            </View>
-                            <View style={{backgroundColor:"#4a4847",borderWidth:1,marginHorizontal:20,borderColor:"#4a4847"}}></View>
-                            <View style={{alignItems:"center"}}>
-                                <Text style={{color:"gray"}}>Price</Text>
-                                <Text style={{color:"#000"}}>{prices}</Text>
-                            </View>
+                    <View style={{flexDirection:"row",marginLeft:10}}>
+                        <View style={{alignItems:"center"}}>
+                            <Text style={{color:"gray"}}>Selected seats</Text>
+                            <Text style={{color:"#000"}}>A4, B4</Text>
                         </View>
-                        <View>
-                            <TouchableOpacity 
-                                onPress={()=>navigation.navigate("UserDetails",{ src: src, dest: dest, name: name, 
-                                    deptHour: deptHour, arivHour: arrivalHour, price: price, hours: hours })}
-                                style={{backgroundColor:"#ed6c39",paddingVertical:8,paddingHorizontal:20,borderRadius:10,elevation:5}}
-                            >
-                                <View>
-                                    <Text style={{color:"#fff",fontSize:20}}>Proceed</Text>
-                                </View>
-                            </TouchableOpacity>
+                        <View style={{backgroundColor:"#4a4847",borderWidth:1,marginHorizontal:10,borderColor:"#4a4847"}}></View>
+                        <View style={{alignItems:"center"}}>
+                            <Text style={{color:"gray"}}>Price</Text>
+                            <Text style={{color:"#000"}}>₹{toggle === false ? priceLower: priceUpper}</Text>
                         </View>
                     </View>
-                {/* <Modal
-                    animationType={"slide"}
-                    onRequestClose={closeHandle}
-                    transparent={true}
-                    visible={isOpen}
-                >
-                    <View style={{alignItems:"center", marginHorizontal:20, width:"90%", flex:1, justifyContent:"flex-end"}}>
-                        <View style={{elevation:5,backgroundColor:"#fff",width:"100%",borderRadius:10,marginTop:-110,flexDirection:"row",padding:10,justifyContent:"space-between",paddingVertical:30}}>
-                            <View style={{flexDirection:"row",marginLeft:10}}>
-                                <View style={{alignItems:"center"}}>
-                                    <Text style={{color:"gray"}}>Selected seats</Text>
-                                    <Text style={{color:"#000"}}>A4, B4</Text>
-                                </View>
-                                <View style={{backgroundColor:"#4a4847",borderWidth:1,marginHorizontal:20,borderColor:"#4a4847"}}></View>
-                                <View style={{alignItems:"center"}}>
-                                    <Text style={{color:"gray"}}>Price</Text>
-                                    <Text style={{color:"#000"}}>₹2,020</Text>
-                                </View>
-                            </View>
-                            <View>
-                                <TouchableOpacity onPress={()=>navigation.navigate("UserDetails")}
-                                    style={{backgroundColor:"#ed6c39",paddingVertical:8,paddingHorizontal:20,borderRadius:10,elevation:5}}
-                                >
-                                    <View>
-                                        <Text style={{color:"#fff",fontSize:20}}>Proceed</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </View>
-                </Modal> */}
+                    <TouchableOpacity 
+                        onPress={()=>navigation.navigate("UserDetails",{ "src": src, "dest": dest, "name": name, 
+                            "deptHour": deptHour, "arivHour": arrivalHour, "priceLower": priceLower,"priceUpper": priceUpper, "duration": duration })}
+                        style={{backgroundColor:"#ed6c39",paddingVertical:8,paddingHorizontal:20,borderRadius:10,elevation:5,marginRight:5}}
+                    >
+                        <Text style={{color:"#fff",fontSize:20}}>Proceed</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     );
@@ -719,9 +606,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         width: "100%",
         borderRadius: 10,
-        marginTop: -100,
+        marginTop: -110,
         flexDirection: "row",
-        padding: 10,
         justifyContent: "space-between",
         paddingVertical: 30
     },
@@ -737,5 +623,16 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#9ea5b0"
+    },
+    lowerSeatContainer: {
+        flexDirection:"row",
+        justifyContent:"space-around",
+        marginBottom:5
+    },
+    lowerSeat: {
+        backgroundColor:"#9ea5b0",
+        height:40,
+        width:40,
+        borderRadius:5
     }
 });

@@ -18,7 +18,7 @@ const {height} = Dimensions.get("window");
 export default function UserDetails_11_2({route}){
 
     const navigation = useNavigation();
-    const { name, src, dest, deptHour, arivHour } = route.params;
+    const { name, src, dest, deptHour, arivHour, priceUpper, priceLower, duration } = route.params;
     const [ values, setValues ] = useState({
         fullName1: "",
         age1: "",
@@ -311,14 +311,14 @@ export default function UserDetails_11_2({route}){
                                     <Text style={{color:"gray"}}>Selected seats</Text>
                                     <Text style={{color:"#000"}}>A4, B4</Text>
                                 </View>
-                                <View style={{borderWidth:0.9,borderColor:"#000",backgroundColor:"#000",marginHorizontal:15}} />
+                                <View style={{borderWidth:0.9,borderColor:"#000",backgroundColor:"#000",marginHorizontal:5}} />
                                 <View style={{alignItems:"center"}}>
                                     <Text style={{color:"gray"}}>Price</Text>
                                     <Text style={{color:"#000"}}>₹2,020</Text>
                                 </View>
                             </View>
                             <TouchableOpacity 
-                                style={{elevation:5, backgroundColor:"#ed6c39", borderRadius:10, padding:10,alignItems:"center",marginVertical:10,marginLeft:10,paddingHorizontal:20}}
+                                style={{elevation:5, backgroundColor:"#ed6c39", borderRadius:10, padding:10, alignItems:"center",marginVertical:10,marginLeft:10}}
                                 onPress={()=>navigation.navigate("BusDetails",{ 
                                     busName: name, deptHour: deptHour, arivHour: arivHour,
                                     fullName1: fullName1, age1: age1, fullName2: fullName2, 

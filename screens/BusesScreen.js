@@ -21,7 +21,7 @@ const BusesScreen = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const Data = [route.params.Data];
-    console.log(Data)
+    // console.log(Data);
     const oneway = route.params.oneWay;
     const roundTrip = route.params.roundTrip;
     const src = route.params.src;
@@ -180,11 +180,6 @@ const BusesScreen = () => {
                     />
                 </View>
                 <View style={styles.options}>
-                    {/* {Data.map(item=>(
-                        <View key={item.data.tripId}>
-                            <Text style={{color:"#000"}}>{item.tripId}</Text>
-                        </View>
-                    ))} */}
                     <FlatList
                     showsVerticalScrollIndicator={false}
                     data={Data}
@@ -193,10 +188,11 @@ const BusesScreen = () => {
                             <SeaterOption
                                 key={index}
                                 name={item1.bus.name}
-                                hours={item.hours}
+                                duration={item1.duration}
                                 arrivalHour={item1.time.arr}
                                 deptHour={item1.time.dept}
-                                price={item1.bus.fare.upperBerth}
+                                priceUpper={item1.bus.fare.upperBerth}
+                                priceLower={item1.bus.fare.lowerBerth}
                                 rating={item1.bus.rating}
                                 seats={item1.bus.seats.total}
                                 desc={item.description}

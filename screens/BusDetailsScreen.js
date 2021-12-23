@@ -9,15 +9,15 @@ import { primary, secondary, textColor } from '../components/Colors'
 const BusDetailsScreen = ({route}) => {
 
     const navigation = useNavigation();
-    const { busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number, Email, gender1, gender2, name, price } = route.params;
+    const { busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number, email, gender1, gender2, name, price } = route.params;
     const [error, setError] = useState(false);
     const [user, setUser]= useState(false);
     const [myName, setMyName] = useState("");
-    const [email, setEmail] = useState("");
+    const [Email, setEmail] = useState("");
     const [message, setMessage]= useState("");
 
     const errorHandler=()=>{
-        if(myName==="" || email===""){
+        if(myName==="" || Email===""){
             setError(true)
         }else{
             setError(false);
@@ -25,26 +25,16 @@ const BusDetailsScreen = ({route}) => {
     }
 
     const submitHandler=()=>{
-        if(!myName || !email)
+        if(!myName || !Email)
         {
             setError(true);
         }else{
-            axios.post("https://buslala-backend.herokuapp.com/api/user/Booking_query", {"Email": email, "Name": myName, "BusName": route.params.name, "Price": route.params.price, "Time": route.params.deptHour})
+            axios.post("https://buslala-backend-api.herokuapp.com/api/user//book_bus/:busId", {"email": email, "Name": myName, "BusName": route.params.name, "Price": route.params.price, "Time": route.params.deptHour})
             .then((res)=>{
                 console.log(res.data);
                 navigation.navigate("Booked Successfully", {"myName": myName});
             })
             .catch((err)=>console.log(err))
-            // sendEmail(email,{
-            //     subject: "Ticket Confirmation Mail",
-            //     cc: "Saxenaarpit52@gmail.com",
-            //     body: `Hello ${myName}! You have booked a seat from Buslala App.
-            //     Please find the details of the Bus Below:
-            //     1. Bus Name: ${route.params.name}
-            //     2. Ticket Price: ${route.params.price}
-            //     3. Timings: from ${route.params.deptHour} to ${route.params.arrivalHour}` 
-            // }).catch(console.error);
-
         }
     }
 
@@ -79,7 +69,7 @@ const BusDetailsScreen = ({route}) => {
                     placeholderTextColor="gray"
                     textAlign="center"
                     onBlur={errorHandler}
-                    value={email}
+                    value={Email}
                     onChangeText={(text)=>setEmail(text)}
                     keyboardType="email-address"
                     />
@@ -99,10 +89,10 @@ const BusDetailsScreen = ({route}) => {
                     keyboardType="default"
                     />
                     <TouchableOpacity disabled={error ? true : false} activeOpacity={0.8} style={styles.button}
-                    onPress={()=> navigation.navigate("TicketSummary",{Name: myName,busName: busName, deptHour: deptHour, 
-                        arivHour: arivHour, fullName1: fullName1, age1: age1, fullName2: fullName2, 
-                        age2: age2, number: number, Email: email, gender1: gender1, gender2: gender2,
-                        price: price})}
+                    onPress={()=> navigation.navigate("TicketSummary",{"Name": myName,"busName": busName, "deptHour": deptHour, 
+                        "arivHour": arivHour, "fullName1": fullName1, "age1": age1, "fullName2": fullName2, 
+                        "age2": age2, "number": number, "email": email, "gender1": gender1, "gender2": gender2,
+                        "price": price})}
                     >
                         <Text style={{color:"white",fontSize:18, fontFamily:RalewayRegular}}>Confirm Booking</Text>
                     </TouchableOpacity>

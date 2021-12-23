@@ -7,12 +7,12 @@ import { RalewayBold, RalewayRegular } from '../assets/fonts/fonts';
 
 const {width} = Dimensions.get("window");
 
-const SeaterOption = ({name, price, hours, rating, desc, seats, deptHour, arrivalHour, src, dest}) => {
+const SeaterOption = ({name, priceLower,priceUpper, duration, rating, desc, seats, deptHour, arrivalHour, src, dest}) => {
 
     const navigation = useNavigation();
 
     const busHandler=()=>{
-        navigation.navigate("SelectedScreen", {"name": name, "price": price, "hours": hours, "deptHour": deptHour, "arrivalHour": arrivalHour, "src": src, "dest": dest})
+        navigation.navigate("SelectedScreen", {"name": name, "priceLower": priceLower, "priceUpper":priceUpper, "duration": duration, "deptHour": deptHour, "arrivalHour": arrivalHour, "src": src, "dest": dest})
     }
 
     return (
@@ -40,12 +40,12 @@ const SeaterOption = ({name, price, hours, rating, desc, seats, deptHour, arriva
                 </View>
             </View>
             <View style={styles.view2}>
-                <Text style={{fontFamily:RalewayBold, fontSize:17, color:"black"}}>₹ {price}</Text>
+                <Text style={{fontFamily:RalewayBold, fontSize:17, color:"black"}}>₹ {priceLower}</Text>
                 <Text style={{color:"gray", fontSize:13, fontFamily:RalewayRegular, marginVertical:5}}>{seats} Seats left</Text>
                 <View style={styles.hours}>
                     <Text style={{fontFamily:RalewayRegular, fontSize:13, color:"black"}}>{deptHour}</Text>
                     <Text style={{color:"black"}}>─</Text>
-                    <Text style={{fontSize:9, color:"gray",fontFamily:RalewayRegular}}>{hours}hrs</Text>
+                    <Text style={{fontSize:9, color:"gray",fontFamily:RalewayRegular,marginHorizontal:2}}>{duration}</Text>
                     <Text style={{color:"black"}}>─</Text>
                     <Text  style={{fontFamily:RalewayRegular, fontSize:13, color:"gray"}}>{arrivalHour}</Text>
                 </View>
