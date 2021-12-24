@@ -18,7 +18,7 @@ const BusDetailsScreen = ({route}) => {
 
     const errorHandler=()=>{
         if(myName==="" || Email===""){
-            setError(true)
+            setError(true);
         }else{
             setError(false);
         }

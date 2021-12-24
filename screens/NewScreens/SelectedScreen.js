@@ -19,7 +19,9 @@ export default function SelectedScreen(){
 
     const navigation = useNavigation();
     const route = useRoute();
-    const { src, dest, name, deptHour, arrivalHour, priceLower, priceUpper, duration } = route.params;
+    const { src, dest, name, deptHour, arrivalHour, priceLower, priceUpper, duration, Data } = route.params;
+    // const newData=[Data];
+    console.log(Data);
 
     const [toggle, setToggle] = useState(false);
     // const [prices, setPrices] = useState();
@@ -60,46 +62,46 @@ export default function SelectedScreen(){
         seat2 === false ? setSelect({...select, seat2: true}) : setSelect({...select, seat2: false});
         selectedSeat2 === false ? setSelectedSeat2(true) : setSelectedSeat2(false)
     };
-    const handleSelect3=()=>{
-        seat3 === false ? setSelect({...select, seat3: true}) : setSelect({...select, seat3: false});
-        selectedSeat3 === false ? setSelectedSeat3(true) : setSelectedSeat3(false)
-    };
-    const handleSelect4=()=>{
-        seat4 === false ? setSelect({...select, seat4: true}) : setSelect({...select, seat4: false});
-        selectedSeat4 === false ? setSelectedSeat4(true) : setSelectedSeat4(false)
-    };
-    const handleSelect5=()=>{
-        seat5 === false ? setSelect({...select, seat5: true}) : setSelect({...select, seat5: false});
-        selectedSeat5 === false ? setSelectedSeat5(true) : setSelectedSeat5(false)
-    };
-    const handleSelect6=()=>{
-        seat6 === false ? setSelect({...select, seat6: true}) : setSelect({...select, seat6: false});
-        selectedSeat6 === false ? setSelectedSeat6(true) : setSelectedSeat6(false)
-    };
-    const handleSelect7=()=>{
-        seat7 === false ? setSelect({...select, seat7: true}) : setSelect({...select, seat7: false});
-        selectedSeat7 === false ? setSelectedSeat7(true) : setSelectedSeat7(false)
-    };
-    const handleSelect8=()=>{
-        seat8 === false ? setSelect({...select, seat8: true}) : setSelect({...select, seat8: false});
-        selectedSeat8 === false ? setSelectedSeat8(true) : setSelectedSeat8(false)
-    };
-    const handleSelect9=()=>{
-        seat9 === false ? setSelect({...select, seat9: true}) : setSelect({...select, seat9: false});
-        selectedSeat9 === false ? setSelectedSeat9(true) : setSelectedSeat9(false)
-    };
-    const handleSelect10=()=>{
-        seat10 === false ? setSelect({...select, seat10: true}) : setSelect({...select, seat10: false});
-        selectedSeat10 === false ? setSelectedSeat10(true) : setSelectedSeat10(false)
-    };
-    const handleSelect11=()=>{
-        seat11 === false ? setSelect({...select, seat11: true}) : setSelect({...select, seat11: false});
-        selectedSeat11 === false ? setSelectedSeat11(true) : setSelectedSeat11(false)
-    };
-    const handleSelect12=()=>{
-        seat12 === false ? setSelect({...select, seat12: true}) : setSelect({...select, seat12: false});
-        selectedSeat12 === false ? setSelectedSeat12(true) : setSelectedSeat12(false)
-    };
+    // const handleSelect3=()=>{
+    //     seat3 === false ? setSelect({...select, seat3: true}) : setSelect({...select, seat3: false});
+    //     selectedSeat3 === false ? setSelectedSeat3(true) : setSelectedSeat3(false)
+    // };
+    // const handleSelect4=()=>{
+    //     seat4 === false ? setSelect({...select, seat4: true}) : setSelect({...select, seat4: false});
+    //     selectedSeat4 === false ? setSelectedSeat4(true) : setSelectedSeat4(false)
+    // };
+    // const handleSelect5=()=>{
+    //     seat5 === false ? setSelect({...select, seat5: true}) : setSelect({...select, seat5: false});
+    //     selectedSeat5 === false ? setSelectedSeat5(true) : setSelectedSeat5(false)
+    // };
+    // const handleSelect6=()=>{
+    //     seat6 === false ? setSelect({...select, seat6: true}) : setSelect({...select, seat6: false});
+    //     selectedSeat6 === false ? setSelectedSeat6(true) : setSelectedSeat6(false)
+    // };
+    // const handleSelect7=()=>{
+    //     seat7 === false ? setSelect({...select, seat7: true}) : setSelect({...select, seat7: false});
+    //     selectedSeat7 === false ? setSelectedSeat7(true) : setSelectedSeat7(false)
+    // };
+    // const handleSelect8=()=>{
+    //     seat8 === false ? setSelect({...select, seat8: true}) : setSelect({...select, seat8: false});
+    //     selectedSeat8 === false ? setSelectedSeat8(true) : setSelectedSeat8(false)
+    // };
+    // const handleSelect9=()=>{
+    //     seat9 === false ? setSelect({...select, seat9: true}) : setSelect({...select, seat9: false});
+    //     selectedSeat9 === false ? setSelectedSeat9(true) : setSelectedSeat9(false)
+    // };
+    // const handleSelect10=()=>{
+    //     seat10 === false ? setSelect({...select, seat10: true}) : setSelect({...select, seat10: false});
+    //     selectedSeat10 === false ? setSelectedSeat10(true) : setSelectedSeat10(false)
+    // };
+    // const handleSelect11=()=>{
+    //     seat11 === false ? setSelect({...select, seat11: true}) : setSelect({...select, seat11: false});
+    //     selectedSeat11 === false ? setSelectedSeat11(true) : setSelectedSeat11(false)
+    // };
+    // const handleSelect12=()=>{
+    //     seat12 === false ? setSelect({...select, seat12: true}) : setSelect({...select, seat12: false});
+    //     selectedSeat12 === false ? setSelectedSeat12(true) : setSelectedSeat12(false)
+    // };
 
     const Upper=()=>(
     // console.log(price),
@@ -127,7 +129,7 @@ export default function SelectedScreen(){
                         }
                     </TouchableOpacity>
                 </View>
-                <View style={{flexDirection:"row"}}>
+                {/* <View style={{flexDirection:"row"}}>
                     <TouchableOpacity 
                         
                         style={[styles.upperView2]}
@@ -235,7 +237,7 @@ export default function SelectedScreen(){
                             seat12 === true ? <Text style={{color:"#000"}}>✓</Text> : null
                         }
                     </TouchableOpacity>
-                </View>
+                </View> */}
             </View>
         </View>
     );
@@ -243,183 +245,42 @@ export default function SelectedScreen(){
     const Lower=()=>(
         <View style={{marginVertical:20}}>
             <View style={styles.lowerSeatContainer}>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity 
-                        style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity 
-                        style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                </View>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity 
-                        style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity 
-                        style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                </View>
+            {
+                Data.map(Data=>(
+                    Data.data.map(data=>(
+                        data.seat_number.lowerBerth.map(lowerBerth=>(
+                            <TouchableOpacity style={styles.lowerSeat} key={lowerBerth.id}>
+                            </TouchableOpacity>
+                        ))
+                    ))
+                ))
+            }
             </View>
-            <View style={styles.lowerSeatContainer}>
+            
+            {/* <View style={styles.lowerSeatContainer}>
                 <View style={{flexDirection:"row"}}>
                     <TouchableOpacity 
                         style={styles.lowerSeat}
-                    ></TouchableOpacity>
+                    >
+                    </TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
                     <TouchableOpacity 
                         style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                </View>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity 
-                        style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity 
-                        style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                </View>
-            </View>
-            <View style={styles.lowerSeatContainer}>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity 
-                        style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity 
-                        style={styles.lowerSeat}
-                    ></TouchableOpacity>
+                    >
+                    </TouchableOpacity>
                 </View>
                 <View style={{flexDirection:"row"}}>
                     <TouchableOpacity 
                         style={styles.lowerSeat}
-                    ></TouchableOpacity>
+                    >
+                    </TouchableOpacity>
                     <View style={{marginHorizontal:10}} />
                     <TouchableOpacity 
                         style={styles.lowerSeat}
-                    ></TouchableOpacity>
+                    >
+                    </TouchableOpacity>
                 </View>
-            </View>
-            <View style={styles.lowerSeatContainer}>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity 
-                        style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity 
-                        style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                </View>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity 
-                        style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity                         
-                        style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                </View>
-            </View>
-            <View style={styles.lowerSeatContainer}>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity 
-                        style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity 
-                        style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                </View>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                </View>
-            </View>
-            <View style={styles.lowerSeatContainer}>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                </View>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                </View>
-            </View>
-            <View style={styles.lowerSeatContainer}>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                </View>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                </View>
-            </View>
-            <View style={styles.lowerSeatContainer}>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                </View>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                </View>
-            </View>
-            <View style={styles.lowerSeatContainer}>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                </View>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                </View>
-            </View>
-            <View style={styles.lowerSeatContainer}>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                </View>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity style={styles.lowerSeat}
-                    ></TouchableOpacity>
-                </View>
-            </View>
+            </View> */}
         </View>
     );
 
@@ -625,14 +486,15 @@ const styles = StyleSheet.create({
         backgroundColor: "#9ea5b0"
     },
     lowerSeatContainer: {
-        flexDirection:"row",
-        justifyContent:"space-around",
+        // flexDirection:"row",
+        // justifyContent:"space-around",
         marginBottom:5
     },
     lowerSeat: {
         backgroundColor:"#9ea5b0",
         height:40,
         width:40,
-        borderRadius:5
+        borderRadius:5,
+        marginBottom:5
     }
 });

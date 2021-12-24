@@ -11,7 +11,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useState } from 'react'
 import { dates } from '../data/dates'
 import SeaterOption from '../components/SeaterOption'
-import { Seats } from '../data/seatData'
+// import { Seats } from '../data/seatData'
 
 const {width} = Dimensions.get("window");
 const {height} = Dimensions.get("window");
@@ -169,7 +169,7 @@ const BusesScreen = () => {
                     showsHorizontalScrollIndicator={false}
                     horizontal={true}
                     alwaysBounceHorizontasl
-                    renderItem={({item, index})=>(
+                    renderItem={({item})=>(
                         <TouchableOpacity activeOpacity={0.8} style={item.active ?  styles.active : styles.timings}
                         onPress={()=>{}}
                         key={item.id}
@@ -183,10 +183,10 @@ const BusesScreen = () => {
                     <FlatList
                     showsVerticalScrollIndicator={false}
                     data={Data}
-                    renderItem={({item,index})=>(
+                    renderItem={({item})=>(
                         item.data.map(item1=>(
                             <SeaterOption
-                                key={index}
+                                key={item1.bus.id}
                                 name={item1.bus.name}
                                 duration={item1.duration}
                                 arrivalHour={item1.time.arr}
@@ -194,10 +194,11 @@ const BusesScreen = () => {
                                 priceUpper={item1.bus.fare.upperBerth}
                                 priceLower={item1.bus.fare.lowerBerth}
                                 rating={item1.bus.rating}
-                                seats={item1.bus.seats.total}
+                                seats={item1.bus.seats.available}
                                 desc={item.description}
                                 src={src}
                                 dest={dest}
+                                Data={Data}
                             />
                         ))
                     )}
