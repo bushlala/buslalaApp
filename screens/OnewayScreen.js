@@ -9,13 +9,14 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { useState } from 'react'
-import DatePicker from 'react-native-datepicker'
+import { useState } from 'react';
+import DatePicker from 'react-native-datepicker';
 
 const LoginScreen = () => {
 
     // const [Data, setData] = useState([]);
     // console.log(Data);
+
 
     const navigation = useNavigation();
     const [isVisible1, setIsVisible1] = useState(false);
@@ -111,30 +112,30 @@ const LoginScreen = () => {
                         onPress={()=>navigation.navigate("Profile")}
                         >
                             <MaterialCommunityIcons
-                            name="account-outline"
-                            size={30}
-                            color="white"
+                                name="account-outline"
+                                size={30}
+                                color="white"
                             />
                         </TouchableOpacity>
                         <View style={{flexDirection:"row",alignItems:"center", justifyContent:"space-between"}}>
                             <TouchableOpacity activeOpacity={0.8} style={styles.btn}
-                            onPress={()=>navigation.navigate("Tickets")}>
+                                onPress={()=>navigation.navigate("Tickets")}>
                                 <AntDesign
-                                name="calendar"
-                                size={30}
-                                color="white"
+                                    name="calendar"
+                                    size={30}
+                                    color="white"
                                 />
                             </TouchableOpacity>
                             <TouchableOpacity activeOpacity={0.8} style={styles.btn}
-                            onPress={()=>navigation.navigate("Notifications")}
+                                onPress={()=>navigation.navigate("Notifications")}
                             >
                                 <View style={{flexDirection:"row", alignItems:"center"}}>
-                                <MaterialIcons
-                                name="notifications-none"
-                                size={30}
-                                color="white"
-                                />
-                                <View style={styles.dot}></View>
+                                    <MaterialIcons
+                                        name="notifications-none"
+                                        size={30}
+                                        color="white"
+                                    />
+                                    <View style={styles.dot}></View>
                                 </View>
                             </TouchableOpacity>
                         </View>

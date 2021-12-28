@@ -15,7 +15,7 @@ const OtpScreen = () => {
     const [error, setError] = useState(false);
     const [OTP, setOTP]= useState("");
     const [otp, setOtp] = useState(false);
-    const [redirect, setRedirect] = useState(false);
+    // const [redirect, setRedirect] = useState(false);
 
     const inputHandler=()=>{
         if(OTP==="" || OTP.length!==6){
@@ -24,25 +24,25 @@ const OtpScreen = () => {
             setError(false);
         }
     };
-    const clickSubmit=()=>{
-        signup({"otp": OTP,"number": number}).then( data => {
-            if(data.error){
-                console.log(data.error);
-                // setRedirect(false);
-            }
-            else{
-                navigation.navigate("OtpVerified", {number: route.params.number})
-                // setRedirect(true);
-                authenticate(data, ()=>{                   
-                    // if(redirect ===true){
-                        console.log("user logged in");
-                    // }else setRedirect(false);
-                })
-            }
-        })
-    };
+    // const clickSubmit=()=>{
+    //     signup({"otp": OTP,"number": number}).then( data => {
+    //         if(data.error){
+    //             console.log(data.error);
+    //             // setRedirect(false);
+    //         }
+    //         else{
+    //             navigation.navigate("OtpVerified", {number: route.params.number})
+    //             // setRedirect(true);
+    //             authenticate(data, ()=>{                   
+    //                 // if(redirect ===true){
+    //                     console.log("user logged in");
+    //                 // }else setRedirect(false);
+    //             })
+    //         }
+    //     })
+    // };
 
-    const verificatioHandler=async(data)=>{
+    const verificatioHandler=async()=>{
 
         axios.post("https://buslala-backend-api.herokuapp.com/api/user/signup/verify", {
             "number": number,
@@ -51,8 +51,14 @@ const OtpScreen = () => {
         .then((response)=>{
             if(response.status === 200){
             console.log("User Registerd Successfully");
-            //AsyncStorage
             setOtp(false);
+            try {
+                const jsonValue = JSON.stringify(response);
+                AsyncStorage.setItem('jwt', jsonValue);
+                console.log(jsonValue);
+              } catch (e) {
+                console.log(e);
+              }
             {OTP && navigation.navigate("OtpVerified", {number: number})}
             }else{
                 Alert.alert("Invalid Otp");

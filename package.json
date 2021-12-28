@@ -21,6 +21,7 @@
     "react-native-datepicker": "^1.7.2",
     "react-native-document-picker": "^7.1.1",
     "react-native-email": "^1.1.0",
+    "react-native-razorpay": "^2.2.8",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.9.0",
     "react-native-select-dropdown": "^1.5.0",

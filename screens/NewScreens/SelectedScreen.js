@@ -19,49 +19,29 @@ export default function SelectedScreen(){
 
     const navigation = useNavigation();
     const route = useRoute();
-    const { src, dest, name, deptHour, arrivalHour, priceLower, priceUpper, duration, Data } = route.params;
+    const { src, dest, name, deptHour, arrivalHour, priceLower, priceUpper, duration, Data, tripId } = route.params;
     // const newData=[Data];
-    console.log(Data);
+    // console.log(tripId);
 
     const [toggle, setToggle] = useState(false);
     // const [prices, setPrices] = useState();
-    const [selectedSeat1, setSelectedSeat1] = useState(false);
-    const [selectedSeat2, setSelectedSeat2] = useState(false);
-    const [selectedSeat3, setSelectedSeat3] = useState(false);
-    const [selectedSeat4, setSelectedSeat4] = useState(false);
-    const [selectedSeat5, setSelectedSeat5] = useState(false);
-    const [selectedSeat6, setSelectedSeat6] = useState(false);
-    const [selectedSeat7, setSelectedSeat7] = useState(false);
-    const [selectedSeat8, setSelectedSeat8] = useState(false);
-    const [selectedSeat9, setSelectedSeat9] = useState(false);
-    const [selectedSeat10, setSelectedSeat10] = useState(false);
-    const [selectedSeat11, setSelectedSeat11] = useState(false);
-    const [selectedSeat12, setSelectedSeat12] = useState(false);
-    const [select, setSelect] = useState({
-        seat1: false,
-        seat2: false,
-        seat3: false,
-        seat4: false,
-        seat5: false,
-        seat6: false,
-        seat7: false,
-        seat8: false,
-        seat9: false,
-        seat10: false,
-        seat11: false,
-        seat12: false
-    });
+    // const [selectedSeat1, setSelectedSeat1] = useState(false);
+    // const [selectedSeat2, setSelectedSeat2] = useState(false);
+    // const [select, setSelect] = useState({
+    //     seat1: false,
+    //     seat2: false,
+    // });
 
-    const { seat1, seat2, seat3, seat4, seat5, seat6, seat7, seat8, seat9, seat10, seat11, seat12 } = select;
+    // const { seat1, seat2, seat3, seat4, seat5, seat6, seat7, seat8, seat9, seat10, seat11, seat12 } = select;
 
-    const handleSelect1=()=>{
-        seat1 === false ? setSelect({...select, seat1: true}) : setSelect({...select, seat1: false});
-        selectedSeat1 === false ? setSelectedSeat1(true) : setSelectedSeat1(false)
-    };
-    const handleSelect2=()=>{
-        seat2 === false ? setSelect({...select, seat2: true}) : setSelect({...select, seat2: false});
-        selectedSeat2 === false ? setSelectedSeat2(true) : setSelectedSeat2(false)
-    };
+    // const handleSelect1=()=>{
+    //     seat1 === false ? setSelect({...select, seat1: true}) : setSelect({...select, seat1: false});
+    //     selectedSeat1 === false ? setSelectedSeat1(true) : setSelectedSeat1(false)
+    // };
+    // const handleSelect2=()=>{
+    //     seat2 === false ? setSelect({...select, seat2: true}) : setSelect({...select, seat2: false});
+    //     selectedSeat2 === false ? setSelectedSeat2(true) : setSelectedSeat2(false)
+    // };
     // const handleSelect3=()=>{
     //     seat3 === false ? setSelect({...select, seat3: true}) : setSelect({...select, seat3: false});
     //     selectedSeat3 === false ? setSelectedSeat3(true) : setSelectedSeat3(false)
@@ -104,10 +84,35 @@ export default function SelectedScreen(){
     // };
 
     const Upper=()=>(
-    // console.log(price),
-    // console.log(select),
         <View style={{marginVertical:20}}>
-            <View style={styles.upperView1}>
+            <View style={{flexDirection:"row",flexWrap:"wrap"}}>
+            {
+                Data.map(Data=>(
+                    Data.data.map((data)=>(
+                        data.seat_number.upperBerth.map(upperBerth=>(
+                            <TouchableOpacity 
+                                style={[styles.upperView2,{backgroundColor: upperBerth.status == 0 ? "#9ea5b0" : "#000"}]} 
+                                key={upperBerth.id}
+                            >         
+                            {
+                                (()=>{
+                                    // var obj = parseJSON(upperBerth);
+                                    var length = Object.keys(upperBerth).length;
+                                    console.log(length);
+                                    for (var i = 0; i < length; i++) {
+                                        var ctr=0;
+                                        for (attr in upperBerth[i]) ctr++;
+                                        console.log('array['+i+']: ' +ctr);
+                                      }
+                                })()
+                            }
+                            </TouchableOpacity>
+                        ))
+                    ))
+                ))
+            }
+            </View>
+            {/* <View style={styles.upperView1}>
                 <View style={{flexDirection:"row"}}>
                     <TouchableOpacity 
                 
@@ -129,116 +134,7 @@ export default function SelectedScreen(){
                         }
                     </TouchableOpacity>
                 </View>
-                {/* <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity 
-                        
-                        style={[styles.upperView2]}
-                        onPress={handleSelect3}
-                    >
-                        {
-                            seat3 === true ? <Text style={{color:"#000"}}>✓</Text> : null
-                        }
-                    </TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity 
-                       
-                        style={[styles.upperView2]}
-                        onPress={handleSelect4}
-                    >
-                        {
-                            seat4 === true ? <Text style={{color:"#000"}}>✓</Text> : null
-                        }
-                    </TouchableOpacity>
-                </View>
-            </View>
-            <View style={styles.upperView1}>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity 
-                
-                        style={[styles.upperView2]}
-                        onPress={handleSelect5}
-                    >
-                        {
-                            seat5 === true ? <Text style={{color:"#000"}}>✓</Text> : null
-                        }
-                    </TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity 
-                       
-                        style={[styles.upperView2]}
-                        onPress={handleSelect6}
-                    >
-                        {
-                            seat6 === true ? <Text style={{color:"#000"}}>✓</Text> : null
-                        }
-                    </TouchableOpacity>
-                </View>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity 
-                        
-                        style={[styles.upperView2]}
-                        onPress={handleSelect7}
-                    >
-                        {
-                            seat7 === true ? <Text style={{color:"#000"}}>✓</Text> : null
-                        }
-                    </TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity 
-                       
-                        style={[styles.upperView2]}
-                        onPress={handleSelect8}
-                    >
-                        {
-                            seat8 === true ? <Text style={{color:"#000"}}>✓</Text> : null
-                        }
-                    </TouchableOpacity>
-                </View>
-            </View>
-            <View style={styles.upperView1}>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity 
-                
-                        style={[styles.upperView2]}
-                        onPress={handleSelect9}
-                    >
-                        {
-                            seat9 === true ? <Text style={{color:"#000"}}>✓</Text> : null
-                        }
-                    </TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity 
-                       
-                        style={[styles.upperView2]}
-                        onPress={handleSelect10}
-                    >
-                        {
-                            seat10 === true ? <Text style={{color:"#000"}}>✓</Text> : null
-                        }
-                    </TouchableOpacity>
-                </View>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity 
-                        
-                        style={[styles.upperView2]}
-                        onPress={handleSelect11}
-                    >
-                        {
-                            seat11 === true ? <Text style={{color:"#000"}}>✓</Text> : null
-                        }
-                    </TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity 
-                       
-                        style={[styles.upperView2]}
-                        onPress={handleSelect12}
-                    >
-                        {
-                            seat12 === true ? <Text style={{color:"#000"}}>✓</Text> : null
-                        }
-                    </TouchableOpacity>
-                </View> */}
-            </View>
+            </View> */}
         </View>
     );
 
@@ -249,7 +145,7 @@ export default function SelectedScreen(){
                 Data.map(Data=>(
                     Data.data.map(data=>(
                         data.seat_number.lowerBerth.map(lowerBerth=>(
-                            <TouchableOpacity style={styles.lowerSeat} key={lowerBerth.id}>
+                            <TouchableOpacity style={[styles.lowerSeat,{backgroundColor: lowerBerth.status == 0 ? "#9ea5b0" : "#000"}]} key={lowerBerth.id}>             
                             </TouchableOpacity>
                         ))
                     ))
@@ -404,7 +300,7 @@ export default function SelectedScreen(){
                         </View>
                     </View>
                     <TouchableOpacity 
-                        onPress={()=>navigation.navigate("UserDetails",{ "src": src, "dest": dest, "name": name, 
+                        onPress={()=>navigation.navigate("UserDetails",{ "src": src, "dest": dest, "name": name, "tripId" : tripId,
                             "deptHour": deptHour, "arivHour": arrivalHour, "priceLower": priceLower,"priceUpper": priceUpper, "duration": duration })}
                         style={{backgroundColor:"#ed6c39",paddingVertical:8,paddingHorizontal:20,borderRadius:10,elevation:5,marginRight:5}}
                     >
@@ -483,7 +379,9 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#9ea5b0"
+        backgroundColor: "#9ea5b0",
+        // marginBottom: 10,
+        marginRight:5,
     },
     lowerSeatContainer: {
         // flexDirection:"row",
@@ -491,7 +389,7 @@ const styles = StyleSheet.create({
         marginBottom:5
     },
     lowerSeat: {
-        backgroundColor:"#9ea5b0",
+        // backgroundColor:"#9ea5b0",
         height:40,
         width:40,
         borderRadius:5,

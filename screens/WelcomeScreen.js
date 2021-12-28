@@ -3,14 +3,25 @@ import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { RalewayLight, RalewayRegular } from '../assets/fonts/fonts'
 import { fontColor, primary, secondary, textColor } from '../components/Colors'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const WelcomeScreen = () => {
 
     const navigation= useNavigation();
+    
+    const isUser=async()=>{
+        try {
+            let userData = await AsyncStorage.getItem('jwt')
+            let data = JSON.parse(userData);
+            return data;
+          } catch(e) {
+            console.log(e);
+          }
+    };
 
-    const isUser=()=>{
-        navigation.navigate("Login");
-    }
+    const getStarted=()=>{
+        isUser(navigation.navigate("Oneway"));
+    };
 
     return (
         <View style={styles.screen}>
@@ -30,7 +41,7 @@ const WelcomeScreen = () => {
                     <Text style={{color:textColor, maxWidth:400, fontSize:18, textAlign:"center", fontFamily:RalewayLight}}>Book your tickets online with your best preferences</Text>
                 </View>
                 <TouchableOpacity activeOpacity={0.8} style={styles.button}
-                onPress={isUser}
+                onPress={getStarted}
                 >
                     <Text style={{color:textColor, fontFamily:RalewayRegular, fontSize:18}}>Get Started</Text>
                 </TouchableOpacity>

@@ -7,16 +7,16 @@ import { RalewayBold, RalewayRegular } from '../assets/fonts/fonts';
 
 const {width} = Dimensions.get("window");
 
-const SeaterOption = ({Data, name, priceLower,priceUpper, duration, rating, desc, seats, deptHour, arrivalHour, src, dest}) => {
-
+const SeaterOption = ({Data, name, priceLower,priceUpper, duration, rating, desc, seats, deptHour, arrivalHour, src, dest, tripID}) => {
+console.log(tripID);
     const navigation = useNavigation();
 
     const busHandler=()=>{
-        navigation.navigate("SelectedScreen", {"Data": Data, "name": name, "priceLower": priceLower, "priceUpper":priceUpper, "duration": duration, "deptHour": deptHour, "arrivalHour": arrivalHour, "src": src, "dest": dest})
+        navigation.navigate("SelectedScreen", {"Data": Data, "name": name, "priceLower": priceLower, "priceUpper":priceUpper, "duration": duration, "deptHour": deptHour, "arrivalHour": arrivalHour, "src": src, "dest": dest,"tripId": tripID})
     }
 
     return (
-        <TouchableOpacity activeOpacity={0.8} style={styles.container}
+        <TouchableOpacity activeOpacity={0.8} style={styles.container} 
             onPress={busHandler}
         >
             <View style={styles.view1}>

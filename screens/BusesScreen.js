@@ -11,12 +11,15 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useState } from 'react'
 import { dates } from '../data/dates'
 import SeaterOption from '../components/SeaterOption'
-// import { Seats } from '../data/seatData'
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const {width} = Dimensions.get("window");
 const {height} = Dimensions.get("window");
 
 const BusesScreen = () => {
+
+    // let token = AsyncStorage.getItem("jwt");
+    // console.log(JSON.parse(token));
 
     const navigation = useNavigation();
     const route = useRoute();
@@ -194,11 +197,12 @@ const BusesScreen = () => {
                                 priceUpper={item1.bus.fare.upperBerth}
                                 priceLower={item1.bus.fare.lowerBerth}
                                 rating={item1.bus.rating}
-                                seats={item1.bus.seats.available}
+                                seats={item1.seats.available}
                                 desc={item.description}
                                 src={src}
                                 dest={dest}
                                 Data={Data}
+                                tripID={item1.tripId}
                             />
                         ))
                     )}

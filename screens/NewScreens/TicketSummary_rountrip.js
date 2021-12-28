@@ -5,6 +5,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 // import Entypo from "react-native-vector-icons/Entypo";
 import { useNavigation } from '@react-navigation/core';
+import axios from "axios";
 
 
 const { width } = Dimensions.get("window");
@@ -13,8 +14,34 @@ const { height } = Dimensions.get("window");
 export default function TicketSummaryScreen({route}){
 
     const navigation = useNavigation();
-    const {Name,busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number, email, gender1, gender2, price} = route.params;
-    // console.log(route.params);
+    const {Name,busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number, email, gender1, gender2, price, tripId} = route.params;
+    console.log(tripId)
+    var postdata={
+        "seat_number1": 14,
+        "seat_number2": 2,
+        "price": 1200,
+        "u1_name": "fullName1",
+        "u1_age": 21,
+        "u1_gender": "gender1",
+        "u2_name": "fullName2",
+        "u2_age": 22,
+        "u2_gender": "gender2",
+        "name": "Name",
+        "ph_number": "number",
+        "email": "email"
+    };
+    
+    const proceed=()=>{
+        axios.post(`https://buslala-backend-api.herokuapp.com/api/user/book/${tripId}`,postdata)
+        .then(res=>{
+            if(res.status==200){
+                console.log(res.data);
+                navigation.navigate("PaymentScreen")
+            }else console.log(res.status);
+        })
+    };
+
+
 
     return(
         <View style={styles.screen}>
@@ -130,7 +157,7 @@ export default function TicketSummaryScreen({route}){
                         <View style={{alignItems:"center"}}>
                             <TouchableOpacity 
                                 style={styles.proceed}
-                                onPress={()=>navigation.navigate("PaymentScreen")}
+                                onPress={proceed}
                             >
                                 <Text style={{color:"#fff",fontSize:16}}>Proceed to Payment</Text>
                             </TouchableOpacity>

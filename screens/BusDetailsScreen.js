@@ -9,7 +9,8 @@ import { primary, secondary, textColor } from '../components/Colors'
 const BusDetailsScreen = ({route}) => {
 
     const navigation = useNavigation();
-    const { busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number, email, gender1, gender2, name, price } = route.params;
+    const { busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number, email, gender1, gender2, name, price, tripId } = route.params;
+    // console.log(tripId);
     const [error, setError] = useState(false);
     const [user, setUser]= useState(false);
     const [myName, setMyName] = useState("");
@@ -91,8 +92,8 @@ const BusDetailsScreen = ({route}) => {
                     <TouchableOpacity disabled={error ? true : false} activeOpacity={0.8} style={styles.button}
                     onPress={()=> navigation.navigate("TicketSummary",{"Name": myName,"busName": busName, "deptHour": deptHour, 
                         "arivHour": arivHour, "fullName1": fullName1, "age1": age1, "fullName2": fullName2, 
-                        "age2": age2, "number": number, "email": email, "gender1": gender1, "gender2": gender2,
-                        "price": price})}
+                        "age2": age2, "number": number, "email": Email, "gender1": gender1, "gender2": gender2,
+                        "price": price, "tripId": tripId})}
                     >
                         <Text style={{color:"white",fontSize:18, fontFamily:RalewayRegular}}>Confirm Booking</Text>
                     </TouchableOpacity>
