@@ -13,7 +13,7 @@ const WelcomeScreen = () => {
         try {
             let userData = await AsyncStorage.getItem('jwt')
             let data = JSON.parse(userData);
-            return data;
+            data != null ? navigation.navigate("Oneway") : navigation.navigate("Login")
           } catch(e) {
             console.log(e);
           }

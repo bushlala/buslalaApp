@@ -36,7 +36,8 @@ export default function TicketSummaryScreen({route}){
         .then(res=>{
             if(res.status==200){
                 console.log(res.data);
-                navigation.navigate("PaymentScreen")
+                let data = res.data;
+                navigation.navigate("PaymentScreen",{data,"name":"Name1","email": "email","number": "1111111111"})
             }else console.log(res.status);
         })
     };
