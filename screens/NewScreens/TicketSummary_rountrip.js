@@ -15,7 +15,7 @@ export default function TicketSummaryScreen({route}){
 
     const navigation = useNavigation();
     const {Name,busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number, email, gender1, gender2, price, tripId} = route.params;
-    console.log(tripId)
+    // console.log(tripId)
     var postdata={
         "seat_number1": 14,
         "seat_number2": 2,

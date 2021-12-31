@@ -21,7 +21,7 @@ export default function SelectedScreen(){
     const route = useRoute();
     const { src, dest, name, deptHour, arrivalHour, priceLower, priceUpper, duration, Data, tripId } = route.params;
     // const newData=[Data];
-    // console.log(tripId);
+    console.log(Data.date);
 
     const [toggle, setToggle] = useState(false);
     // const [prices, setPrices] = useState();

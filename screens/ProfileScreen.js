@@ -1,6 +1,6 @@
 import { useNavigation, useRoute } from '@react-navigation/core'
 import axios from 'axios'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Dimensions, FlatList, Image, KeyboardAvoidingView, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { RalewayBold, RalewayLight, RalewayRegular } from '../assets/fonts/fonts'
 import { fontColor, newColor, primary, secondary, textColor } from '../components/Colors'
@@ -10,12 +10,13 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Feather from "react-native-vector-icons/Feather";
 import Entypo from "react-native-vector-icons/Entypo";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { useState } from 'react'
+import { useState } from 'react';
 import ProfileOptions from '../components/ProfileOptions'
 import DocumentPicker from 'react-native-document-picker'
 import ToggleSwitch from "toggle-switch-react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const {width, height} = Dimensions.get("window")
+const {width, height} = Dimensions.get("window");
 
 const ProfileScreen = () => {
 
@@ -30,6 +31,24 @@ const ProfileScreen = () => {
     const [on2, setOn2] = useState(false);
     const [pdfName, setPdfName] = useState("");
     const [uri, setUri] = useState("");
+    const [userData, setUserData] = useState({
+        first_name:"",
+        last_name:"",
+        number:"",
+        address:"",
+        // certificate:"",
+        email:"",
+        gender:""
+    });
+    const [showUserData, setShowUserData] = useState({
+        first_name:"",
+        last_name:"",
+        number:"",
+        address:"",
+        // certificate:"",
+        email:"",
+        gender:""
+    });
 
 
     const closeHandle=()=>{
@@ -61,7 +80,41 @@ const ProfileScreen = () => {
                 throw error;
             }
         }
-    }
+    };
+
+    
+    const updateProfile=()=>{
+        axios.put("https://buslala-backend-api.herokuapp.com/api/user/profile",userData)
+        .then(res=>{
+            if(res.status==200){
+                setUserData({...userData,first_name: res.data.first_name,last_name:res.data.last_name,number:res.data.number,address:res.data.address,email:res.data.email});
+                // console.log(res.data);
+                // console.log(userData);
+            }
+            else console.log(res.status);
+        })
+        .catch(e=>console.log(e));
+    };
+
+    const showUser=()=>{
+        axios.get("https://buslala-backend-api.herokuapp.com/api/user/profile")
+        .then(res=>{
+            if(res.status==200){
+                // console.log(res.data);
+                const data = res.data;
+                setShowUserData({...showUserData,first_name:data.first_name,last_name: data.last_name,number:data.number,address:data.address,email:data.email,gender:data.gender})
+            }
+            else console.log(res.status);
+        })
+        .catch(e=>{console.log(e)})
+    };
+
+    useEffect(()=>{
+        showUser();
+        // console.log(showUserData);
+    });
+    
+
 
     return (
         <View style={styles.screen}>
@@ -83,78 +136,87 @@ const ProfileScreen = () => {
                             color="white"
                             />
                         </TouchableOpacity>
-                        <View style={{alignItems:"center", marginLeft:10}}>
-                            <Text style={{fontSize:18, fontFamily:RalewayBold, color: "white"}}>Arpit Saxena</Text>
-                            <Text style={{fontSize:13, fontFamily:RalewayRegular, color: "white", marginVertical:5}}>+91 9856485236</Text>
+                        <View style={{alignItems:"center", marginLeft:5}}>
+                            <Text style={{fontSize:18, fontFamily:RalewayBold, color: "white"}}>{showUserData.first_name} {showUserData.last_name}</Text>
+                            <Text style={{fontSize:13, fontFamily:RalewayRegular, color: "white", marginVertical:5}}>+91 {showUserData.number}</Text>
                             <View style={{flexDirection:"row", alignItems:"center"}}>
+                                {showUserData.address == "" ? null :
                                 <Entypo
-                                name="location-pin"
-                                color="white"
-                                size={24}
+                                    name="location-pin"
+                                    color="white"
+                                    size={24}
                                 />
-                                <Text style={{fontSize:13, fontFamily:RalewayRegular, color: "white"}}>Noida, India</Text>
+                                }
+                                <Text style={{fontSize:13, fontFamily:RalewayRegular, color: "white"}}>{showUserData.address}</Text>
                             </View>
                         </View>
-                    </View>
-                    <View style={{flexDirection:"row",alignItems:"center", justifyContent:"space-between"}}>
-                        <TouchableOpacity activeOpacity={0.8} style={styles.btn}
-                        onPress={()=>navigation.navigate("Tickets")}
-                        >
-                            <AntDesign
-                            name="calendar"
-                            size={30}
-                            color="white"
-                            />
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.8} style={styles.btn}
-                        onPress={()=>navigation.navigate("Notifications")}
-                        >
-                            <View style={{flexDirection:"row", alignItems:"center"}}>
-                            <MaterialIcons
-                            name="notifications-none"
-                            size={30}
-                            color="white"
-                            />
-                            <View style={styles.dot}></View>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
+                        <View style={{flexDirection:"row",alignItems:"center", justifyContent:"space-between"}}>
+                            <TouchableOpacity activeOpacity={0.8} style={styles.btn}
+                            onPress={()=>navigation.navigate("Tickets")}
+                            >
+                                <AntDesign
+                                name="calendar"
+                                size={30}
+                                color="white"
+                                />
+                            </TouchableOpacity>
+                            <TouchableOpacity activeOpacity={0.8} style={styles.btn}
+                            onPress={()=>navigation.navigate("Notifications")}
+                            >
+                                <View style={{flexDirection:"row", alignItems:"center"}}>
+                                <MaterialIcons
+                                name="notifications-none"
+                                size={30}
+                                color="white"
+                                />
+                                <View style={styles.dot}></View>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                    </View>                  
                 </View>
             </View>
             <ScrollView style={styles.view2} showsVerticalScrollIndicator={false}>
-                <View style={{alignItems:"center", width:"100%"}}>
+                <View style={{alignItems:"center",marginHorizontal:5}}>
                     <ProfileOptions
                     text="Profile"
+                    iconName="arrowdown"
                     />
                     <ProfileOptions
                     text="Profile Settings"
                     desc="Profile, Address, Language, Security"
                     btn={()=>setIsOpen3(true)}
+                    iconName="arrowright"
                     />
                     <ProfileOptions
                     text="Payment"
                     desc="UPI, Saved Cards"
                     nav={()=>navigation.navigate("PaymentSettings")}
+                    iconName="arrowright"
                     />
                     <ProfileOptions
                     text="My Bookings"
                     desc="Rating, Completed, Cancelled Tickets"
                     nav={()=>navigation.navigate("Bookings")}
+                    iconName="arrowright"
                     />
                     <ProfileOptions
                     text="Cowin Certificate"
                     desc="Add your cowin Certificate"
                     btn={()=>setIsOpen(true)}
+                    iconName="arrowright"
                     />
                     <ProfileOptions
                     text="Call Support"
                     desc="24/7 Service"
                     btn={()=>setIsOpen1(true)}
+                    iconName="arrowright"
                     />
                     <ProfileOptions
                     text="Settings"
                     desc="Deactivate, Modes, Notifications"
                     btn={()=>setIsOpen2(true)}
+                    iconName="arrowright"
                     />
                     <TouchableOpacity style={styles.button} activeOpacity={0.8}>
                         <Text style={{fontFamily:RalewayBold, fontSize:18, color:"white", textAlign:"center"}}>Logout</Text>
@@ -305,36 +367,67 @@ const ProfileScreen = () => {
                                 color="white"
                                 />
                             </TouchableOpacity>
-                            <View style={{alignItems:"center", flexDirection:"row",marginTop:10, backgroundColor:"lightgray", borderRadius:10, padding:5}}>
-                                <FontAwesome
-                                name="check-circle"
-                                size={24}
-                                color={primary}
-                                />
-                                <Text style={{color:primary, fontFamily:RalewayBold, fontSize:13, marginLeft:3}}>Vaccinated</Text>
+                            <View style={{flexDirection:"row",alignItems:"center",marginTop:10,}}>
+                                <View style={{alignItems:"center", flexDirection:"row", backgroundColor:"lightgray",borderRadius:10, padding:5}}>
+                                    <FontAwesome
+                                    name="check-circle"
+                                    size={24}
+                                    color={primary}
+                                    />
+                                    <Text style={{color:primary, fontFamily:RalewayBold, fontSize:13, marginLeft:3}}>Vaccinated</Text>
+                                </View>
+                                <TouchableOpacity style={{right:-20, backgroundColor:"lightgray",borderRadius:10, padding:5}}
+                                    onPress={updateProfile}
+                                >
+                                    <Text style={{fontFamily:RalewayRegular, fontSize:13, color:"red",marginHorizontal:5}}>Update</Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
                         <ScrollView showsVerticalScrollIndicator={false} style={{marginVertical:10}}>
                             <TextInput
-                            placeholder="Your Name"
+                            placeholder={showUserData.first_name}
                             placeholderTextColor="gray"
-                            style={{borderBottomColor:"black", borderBottomWidth:1, padding:3, marginVertical:5}}
+                            style={{borderBottomColor:"black", borderBottomWidth:1, padding:3, marginVertical:5,color:"#000"}}
+                            value={userData.first_name}
+                            onChangeText={(val)=>setUserData({...userData,first_name:val})}
                             />
-                            <View style={{flexDirection:"row",alignItems:"center",justifyContent:"space-between",borderBottomColor:"black", borderBottomWidth:1, padding:3, marginVertical:5}}>
                             <TextInput
-                            placeholder="Your Number"
+                            placeholder={showUserData.last_name}
+                            placeholderTextColor="gray"
+                            style={{borderBottomColor:"black", borderBottomWidth:1, padding:3, marginVertical:5,color:"#000"}}
+                            value={userData.last_name}
+                            onChangeText={(val)=>setUserData({...userData,last_name:val})}
+                            />
+                            <TextInput
+                            placeholder="number"
                             placeholderTextColor="gray"
                             keyboardType="number-pad"
-                            />
-                            <TouchableOpacity activeOpacity={0.8} >
-                                <Text style={{fontFamily:RalewayRegular, fontSize:13, color:"red"}}>Update</Text>
-                            </TouchableOpacity>
-                            </View>
+                            style={{borderBottomColor:"black", borderBottomWidth:1, padding:3, marginVertical:5,color:"#000"}}
+                            value={userData.number}
+                            onChangeText={(val)=>setUserData({...userData,number:val})}
+                            />                            
                             <TextInput
-                            placeholder="Your Address"
+                            placeholder={showUserData.address}
                             placeholderTextColor="gray"
-                            style={{borderBottomColor:"black", borderBottomWidth:1, padding:3, marginVertical:5}}
+                            style={{borderBottomColor:"black", borderBottomWidth:1, padding:3, marginVertical:5,color:"#000"}}
+                            value={userData.address}
+                            onChangeText={(val)=>setUserData({...userData,address:val})}
                             />
+                            <TextInput
+                            placeholder={showUserData.email}
+                            placeholderTextColor="gray"
+                            style={{borderBottomColor:"black", borderBottomWidth:1, padding:3, marginVertical:5,color:"#000"}}
+                            value={userData.email}
+                            onChangeText={(val)=>setUserData({...userData,email:val})}
+                            />
+                            <TextInput
+                            placeholder={showUserData.gender}
+                            placeholderTextColor="gray"
+                            style={{borderBottomColor:"black", borderBottomWidth:1, padding:3, marginVertical:5,color:"#000"}}
+                            value={userData.gender}
+                            onChangeText={(val)=>setUserData({...userData,gender:val})}
+                            />
+                            
                             <Text style={{marginVertical:10, fontSize:15, fontFamily:RalewayBold, color:"black"}}>Verification</Text>
                             <View style={{alignItems:"center", marginVertical:10, width:"100%"}}>
                                 <View style={styles.pdf}>
@@ -425,7 +518,7 @@ const styles = StyleSheet.create({
         padding:8,
         borderRadius:25,
         backgroundColor:newColor,
-        marginLeft:10
+        marginLeft:5
     },
     btn1:{
         padding:20,

@@ -5,7 +5,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import { RalewayBold, RalewayRegular } from '../assets/fonts/fonts';
 
 
-const ProfileOptions = ({text, desc, btn, nav}) => {
+const ProfileOptions = ({text, desc, btn, nav, iconName}) => {
 
     const navigation = useNavigation();
 
@@ -15,12 +15,12 @@ const ProfileOptions = ({text, desc, btn, nav}) => {
         >
             <View>
                 <Text style={{fontFamily:RalewayBold, fontSize:16, marginBottom:5, color:"black"}}>{text}</Text>
-                {desc && <Text style={{fontSize:13, fontFamily:RalewayRegular, color:"gray"}}>{desc}</Text>}
+                {desc && <Text style={{fontSize:12, fontFamily:RalewayRegular, color:"gray"}}>{desc}</Text>}
             </View>
             <AntDesign
-            name="arrowright"
-            size={24}
-            color="black"
+                name={iconName}
+                size={24}
+                color="black"
             />
         </TouchableOpacity>
     )
