@@ -1,7 +1,7 @@
 import { useNavigation, useRoute } from '@react-navigation/core'
 import axios from 'axios'
 import React, { useEffect } from 'react'
-import { Dimensions, FlatList, Image, KeyboardAvoidingView, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, Dimensions, FlatList, Image, KeyboardAvoidingView, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { RalewayBold, RalewayLight, RalewayRegular } from '../assets/fonts/fonts'
 import { fontColor, newColor, primary, secondary, textColor } from '../components/Colors'
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -116,18 +116,33 @@ const ProfileScreen = () => {
         myBookingsApi();
     },[]);
     
+    const customAlert = () =>
+        Alert.alert(
+        "Logging out",
+        "Are you sure?",
+        [
+            {
+            text: "No",
+            onPress: () => console.log("No Pressed"),
+            style: "cancel"
+            },
+            { text: "Yes", onPress: clickLogout }
+        ]
+    );
+
     const clickLogout=async()=>{
         axios.post("https://buslala-backend-api.herokuapp.com/api/user/logout").then(res=>{
             if(res.status === 200){
                 AsyncStorage.removeItem("jwt");
-                setShowUserData({...showUserData,
-                    first_name:"",
-                    last_name:"",
-                    number:"",
-                    address:"",
-                    email:"",
-                    gender:""
-                });
+                navigation.navigate("Login");
+                // setShowUserData({...showUserData,
+                //     first_name:"",
+                //     last_name:"",
+                //     number:"",
+                //     address:"",
+                //     email:"",
+                //     gender:""
+                // });
             }else console.log(res.status);
         })
         .catch(e=>console.log(e))
@@ -250,7 +265,7 @@ const ProfileScreen = () => {
                     // btn={()=>setIsOpen2(true)}
                     iconName="arrowright"
                     />
-                    <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={()=>clickLogout()}>
+                    <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={customAlert}>
                         <Text style={{fontFamily:RalewayBold, fontSize:18, color:"white", textAlign:"center"}}>Logout</Text>
                     </TouchableOpacity>
                 </View>

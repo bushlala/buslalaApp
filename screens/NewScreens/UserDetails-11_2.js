@@ -19,7 +19,7 @@ export default function UserDetails_11_2({route}){
 
     const navigation = useNavigation();
     const { name, src, dest, deptHour, arivHour, price, duration, tripId, seats, date, rDate } = route.params;
-    console.log(rDate)
+    // console.log(rDate);
     const [ values, setValues ] = useState({
         fullName1: "",
         age1: "",
@@ -84,7 +84,7 @@ export default function UserDetails_11_2({route}){
                 "busName": name, "deptHour": deptHour, "arivHour": arivHour, "tripId" : tripId,
                 "fullName1": fullName1, "age1": age1, "fullName2": fullName2, "age2": age2,
                 "number": number, "email": email, "gender1": gender1, "gender2": gender2, 
-                "seats": seats, "price": price, "date": date, "src": src, "dest": dest
+                "seats": seats, "price": price, "date": date, "src": src, "dest": dest, "rDate": rDate
             })
           }
       };

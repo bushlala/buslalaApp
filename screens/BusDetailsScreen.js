@@ -10,6 +10,7 @@ const BusDetailsScreen = ({route}) => {
 
     const navigation = useNavigation();
     const { busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number, email, gender1, gender2, price, tripId, seats, date, src, dest, rDate } = route.params;
+    console.log(rDate);
     const [error, setError] = useState(false);
     const [user, setUser]= useState(false);
     const [myName, setMyName] = useState("");

@@ -37,7 +37,7 @@ const OnewayScreen = () => {
     const [date3, setDate3] = useState(new Date());
     const [srcData, setSrcData] = useState([]);
     const [destData, setDestData] = useState([]);
-    console.log(destData);
+    // console.log(destData);
 
 
     // const inputHandler=()=>{
@@ -114,7 +114,7 @@ const OnewayScreen = () => {
             setError(true);
             setError1(true)
         }else if(deptDate ===""){
-            alert("please provide valid date")
+            alert("please provide valid date");
         }else{
             setError(false);
             setError1(false);
@@ -139,6 +139,7 @@ const OnewayScreen = () => {
         "deptDate": deptDate2, 
         "returnDate": returnDate
     };
+    console.log(roundTripPostData);
 
     const busesHandler1=()=>{
         if(from==="" || to===""){
@@ -168,7 +169,6 @@ const OnewayScreen = () => {
         axios.get("https://buslala-backend-api.herokuapp.com/api/user/source")
         .then(resp=>{
             if(resp.status===200){
-                console.log(resp.status);
                 const Data = resp.data;
                 setSrcData(Data.data);
                 // console.log(srcData);
@@ -180,8 +180,7 @@ const OnewayScreen = () => {
         axios.get("https://buslala-backend-api.herokuapp.com/api/user/destination")
         .then(resp=>{
             if(resp.status===200){
-                console.log(resp.status);
-                const Data = resp.data
+                const Data = resp.data;
                 setDestData(Data.data);
             }else console.log(resp.status);
         })
