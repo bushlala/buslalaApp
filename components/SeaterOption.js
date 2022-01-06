@@ -9,7 +9,7 @@ const {width} = Dimensions.get("window");
 
 const SeaterOption = ({name, priceLower,priceUpper, duration, 
                         rating, desc, seats, deptHour, arrivalHour, 
-                        src, dest, tripID, date
+                        src, dest, tripID, date, rDate
                     }) => {
 
     const navigation = useNavigation();
@@ -18,7 +18,7 @@ const SeaterOption = ({name, priceLower,priceUpper, duration,
         navigation.navigate("SelectedScreen", 
             {"name": name, "priceLower": priceLower, "priceUpper":priceUpper, 
             "duration": duration, "deptHour": deptHour, "arrivalHour": arrivalHour, 
-            "src": src, "dest": dest,"tripId": tripID, "date": date
+            "src": src, "dest": dest,"tripId": tripID, "date": date, "rDate": rDate
         })
     };
 

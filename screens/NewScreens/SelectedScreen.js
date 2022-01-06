@@ -19,8 +19,8 @@ export default function SelectedScreen(){
 
     const navigation = useNavigation();
     const route = useRoute();
-    const { src, dest, name, deptHour, arrivalHour, priceLower, priceUpper, duration, tripId, date } = route.params;
-
+    const { src, dest, name, deptHour, arrivalHour, priceLower, priceUpper, duration, tripId, date, rDate } = route.params;
+    // console.log(date);
     const [toggle, setToggle] = useState(false);
     const [selectUpper, setSelectUpper] = useState("");
     const [selectLower, setSelectLower] = useState("");
@@ -148,7 +148,7 @@ export default function SelectedScreen(){
                 navigation.navigate("UserDetails",{ 
                     "src": src, "dest": dest, "name": name, "tripId" : tripId,
                     "deptHour": deptHour, "arivHour": arrivalHour, "price": toggle === false ? priceLower : priceUpper, 
-                    "duration": duration, "seats": toggle === false ? selectLower : selectUpper 
+                    "duration": duration, "seats": toggle === false ? selectLower : selectUpper, "date": date
                 })
             }
         }else{
@@ -158,7 +158,7 @@ export default function SelectedScreen(){
                 navigation.navigate("UserDetails",{ 
                     "src": src, "dest": dest, "name": name, "tripId" : tripId,
                     "deptHour": deptHour, "arivHour": arrivalHour, "price": toggle === false ? priceLower : priceUpper, 
-                    "duration": duration, "seats": toggle === false ? selectLower : selectUpper, "date": date
+                    "duration": duration, "seats": toggle === false ? selectLower : selectUpper, "date": date, "rDate": rDate
                 })
             }
         }

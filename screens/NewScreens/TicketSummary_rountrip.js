@@ -14,7 +14,7 @@ const { height } = Dimensions.get("window");
 export default function TicketSummaryScreen({route}){
 
     const navigation = useNavigation();
-    const {Name,busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number, email, gender1, gender2, price, tripId, seats, date, src, dest} = route.params;
+    const {Name,busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number, email, gender1, gender2, price, tripId, seats, date, src, dest, rDate} = route.params;
     var postdata={
         "seat_number1": seats,
         "seat_number2": "",
@@ -122,6 +122,12 @@ export default function TicketSummaryScreen({route}){
                             <Text style={{color:"#000",textAlign:"center",fontWeight:"400"}}>Passenger Name: {fullName1}</Text>
                             <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Seat number: {seats}</Text>
                             <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Journey Date: {date}</Text>
+                            {
+                                rDate !== undefined ? 
+                                <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Return Date: {rDate}</Text>
+                                :
+                                null
+                            }
                         </View>
                     </View>
                     <View style={{marginTop:20}}>

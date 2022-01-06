@@ -25,7 +25,8 @@ const BusesScreen = () => {
     const roundTrip = route.params.roundTrip;
     const src = route.params.src;
     const dest = route.params.dest;
-    const date = route.params.Date;
+    const date = route.params.date;
+    const rDate = route.params.rDate;
     const [isOpen, setIsOpen]=useState(false);
     const [click1, setClick1] = useState(false);
     const [click2, setClick2] = useState(false);
@@ -206,6 +207,7 @@ const BusesScreen = () => {
                                 src={src}
                                 dest={dest}                                
                                 date={date}
+                                rDate={rDate}
                             />
                         ))
                     )}

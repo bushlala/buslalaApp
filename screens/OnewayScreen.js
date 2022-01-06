@@ -15,7 +15,7 @@ import { Picker } from '@react-native-picker/picker';
 
 
 
-const LoginScreen = () => {
+const OnewayScreen = () => {
 
 
     const navigation = useNavigation();
@@ -124,7 +124,7 @@ const LoginScreen = () => {
                     navigation.navigate("Buses",
                         {"Data": response.data, "src": from, "dest": to, 
                         "oneWay": isOneWay, "roundTrip": isTwoWay,
-                        "Date": isOneWay ? deptDate : deptDate2
+                        "date": deptDate
                     });
                 }else{
                     console.log("Error");
@@ -155,7 +155,7 @@ const LoginScreen = () => {
                     navigation.navigate("Buses",
                         {"Data": response.data,"src": from,"dest": to,
                         "oneWay": isOneWay,"roundTrip": isTwoWay,
-                        "Date": isTwoWay ? deptDate2 : deptDate
+                        "date": deptDate2,"rDate": returnDate
                     });
                 }else{
                     console.log("Error");
@@ -439,7 +439,7 @@ const LoginScreen = () => {
     )
 }
 
-export default LoginScreen
+export default OnewayScreen;
 
 const styles = StyleSheet.create({
     screen:{

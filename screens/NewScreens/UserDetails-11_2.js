@@ -18,7 +18,8 @@ const {height} = Dimensions.get("window");
 export default function UserDetails_11_2({route}){
 
     const navigation = useNavigation();
-    const { name, src, dest, deptHour, arivHour, price, duration, tripId, seats, date } = route.params;
+    const { name, src, dest, deptHour, arivHour, price, duration, tripId, seats, date, rDate } = route.params;
+    console.log(rDate)
     const [ values, setValues ] = useState({
         fullName1: "",
         age1: "",
