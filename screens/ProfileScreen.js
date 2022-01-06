@@ -31,25 +31,17 @@ const ProfileScreen = () => {
     const [on2, setOn2] = useState(false);
     const [pdfName, setPdfName] = useState("");
     const [uri, setUri] = useState("");
-    const [userData, setUserData] = useState({
-        first_name:"",
-        last_name:"",
-        number:"",
-        address:"",
-        // certificate:"",
-        email:"",
-        gender:""
-    });
+    const [bookingData, setBookingData] = useState([]);
+ 
     const [showUserData, setShowUserData] = useState({
         first_name:"",
         last_name:"",
         number:"",
         address:"",
-        // certificate:"",
         email:"",
         gender:""
     });
-
+    // console.log(showUserData);
 
     const closeHandle=()=>{
         setIsOpen(false);
@@ -82,14 +74,24 @@ const ProfileScreen = () => {
         }
     };
 
+    const postData={
+        first_name: showUserData.first_name,
+        last_name: showUserData.last_name,
+        number: Number(showUserData.number),
+        email: showUserData.email,
+        address: showUserData.address,
+        gender: showUserData.gender
+    };
+    // console.log(postData);
     
     const updateProfile=()=>{
-        axios.put("https://buslala-backend-api.herokuapp.com/api/user/profile",userData)
+        axios.put("https://buslala-backend-api.herokuapp.com/api/user/profile",postData)
         .then(res=>{
             if(res.status==200){
-                setUserData({...userData,first_name: res.data.first_name,last_name:res.data.last_name,number:res.data.number,address:res.data.address,email:res.data.email});
+                // setUserData({...userData,first_name: res.data.first_name,last_name:res.data.last_name,number:res.data.number,address:res.data.address,email:res.data.email});
                 // console.log(res.data);
                 // console.log(userData);
+                alert("Updated successfully");
             }
             else console.log(res.status);
         })
@@ -102,7 +104,7 @@ const ProfileScreen = () => {
             if(res.status==200){
                 // console.log(res.data);
                 const data = res.data;
-                setShowUserData({...showUserData,first_name:data.first_name,last_name: data.last_name,number:data.number,address:data.address,email:data.email,gender:data.gender})
+                setShowUserData({...showUserData,first_name:data.first_name,last_name: data.last_name,number:data.number.toString(),address:data.address,email:data.email,gender:data.gender})
             }
             else console.log(res.status);
         })
@@ -111,9 +113,39 @@ const ProfileScreen = () => {
 
     useEffect(()=>{
         showUser();
-        // console.log(showUserData);
-    });
+        myBookingsApi();
+    },[]);
     
+    const clickLogout=async()=>{
+        axios.post("https://buslala-backend-api.herokuapp.com/api/user/logout").then(res=>{
+            if(res.status === 200){
+                AsyncStorage.removeItem("jwt");
+                setShowUserData({...showUserData,
+                    first_name:"",
+                    last_name:"",
+                    number:"",
+                    address:"",
+                    email:"",
+                    gender:""
+                });
+            }else console.log(res.status);
+        })
+        .catch(e=>console.log(e))
+    };
+    const myBookingsApi=()=>{
+        axios.get("https://buslala-backend-api.herokuapp.com/api/user/booking")
+        .then(res=>{
+            if(res.status===200){
+                // console.log(res.data);
+                const Data = res.data;
+                setBookingData(Data.data);
+            }else console.log(res.status);
+        })
+        .catch(e=>{
+            console.log(e);
+            alert("please try again later");
+        })
+    };
 
 
     return (
@@ -191,19 +223,19 @@ const ProfileScreen = () => {
                     <ProfileOptions
                     text="Payment"
                     desc="UPI, Saved Cards"
-                    nav={()=>navigation.navigate("PaymentSettings")}
+                    // nav={()=>navigation.navigate("PaymentSettings")}
                     iconName="arrowright"
                     />
                     <ProfileOptions
                     text="My Bookings"
                     desc="Rating, Completed, Cancelled Tickets"
-                    nav={()=>navigation.navigate("Bookings")}
+                    // nav={()=>navigation.navigate("Bookings")}
                     iconName="arrowright"
                     />
                     <ProfileOptions
                     text="Cowin Certificate"
                     desc="Add your cowin Certificate"
-                    btn={()=>setIsOpen(true)}
+                    // btn={()=>setIsOpen(true)}
                     iconName="arrowright"
                     />
                     <ProfileOptions
@@ -215,10 +247,10 @@ const ProfileScreen = () => {
                     <ProfileOptions
                     text="Settings"
                     desc="Deactivate, Modes, Notifications"
-                    btn={()=>setIsOpen2(true)}
+                    // btn={()=>setIsOpen2(true)}
                     iconName="arrowright"
                     />
-                    <TouchableOpacity style={styles.button} activeOpacity={0.8}>
+                    <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={()=>clickLogout()}>
                         <Text style={{fontFamily:RalewayBold, fontSize:18, color:"white", textAlign:"center"}}>Logout</Text>
                     </TouchableOpacity>
                 </View>
@@ -384,50 +416,67 @@ const ProfileScreen = () => {
                             </View>
                         </View>
                         <ScrollView showsVerticalScrollIndicator={false} style={{marginVertical:10}}>
-                            <TextInput
-                            placeholder={showUserData.first_name}
-                            placeholderTextColor="gray"
-                            style={{borderBottomColor:"black", borderBottomWidth:1, padding:3, marginVertical:5,color:"#000"}}
-                            value={userData.first_name}
-                            onChangeText={(val)=>setUserData({...userData,first_name:val})}
-                            />
-                            <TextInput
-                            placeholder={showUserData.last_name}
-                            placeholderTextColor="gray"
-                            style={{borderBottomColor:"black", borderBottomWidth:1, padding:3, marginVertical:5,color:"#000"}}
-                            value={userData.last_name}
-                            onChangeText={(val)=>setUserData({...userData,last_name:val})}
-                            />
-                            <TextInput
-                            placeholder="number"
-                            placeholderTextColor="gray"
-                            keyboardType="number-pad"
-                            style={{borderBottomColor:"black", borderBottomWidth:1, padding:3, marginVertical:5,color:"#000"}}
-                            value={userData.number}
-                            onChangeText={(val)=>setUserData({...userData,number:val})}
-                            />                            
-                            <TextInput
-                            placeholder={showUserData.address}
-                            placeholderTextColor="gray"
-                            style={{borderBottomColor:"black", borderBottomWidth:1, padding:3, marginVertical:5,color:"#000"}}
-                            value={userData.address}
-                            onChangeText={(val)=>setUserData({...userData,address:val})}
-                            />
-                            <TextInput
-                            placeholder={showUserData.email}
-                            placeholderTextColor="gray"
-                            style={{borderBottomColor:"black", borderBottomWidth:1, padding:3, marginVertical:5,color:"#000"}}
-                            value={userData.email}
-                            onChangeText={(val)=>setUserData({...userData,email:val})}
-                            />
-                            <TextInput
-                            placeholder={showUserData.gender}
-                            placeholderTextColor="gray"
-                            style={{borderBottomColor:"black", borderBottomWidth:1, padding:3, marginVertical:5,color:"#000"}}
-                            value={userData.gender}
-                            onChangeText={(val)=>setUserData({...userData,gender:val})}
-                            />
-                            
+                            <View style={{flexDirection:"row",alignItems:"center"}}>
+                                <Text style={{color:"#000",marginRight:10}}>First name:</Text>
+                                <TextInput
+                                placeholder={showUserData.first_name}
+                                placeholderTextColor="gray"
+                                style={{borderBottomColor:"black", borderBottomWidth:1, padding:3, marginVertical:5,color:"#000",width:width/2}}
+                                value={showUserData.first_name}
+                                onChangeText={(val)=>setShowUserData({...showUserData,first_name:val})}
+                                />
+                            </View>
+                            <View style={{flexDirection:"row",alignItems:"center"}}>
+                                <Text style={{color:"#000",marginRight:10}}>Last name:</Text>
+                                <TextInput
+                                placeholder={showUserData.last_name}
+                                placeholderTextColor="gray"
+                                style={{borderBottomColor:"black", borderBottomWidth:1, padding:3, marginVertical:5,color:"#000",width:width/2}}
+                                value={showUserData.last_name}
+                                onChangeText={(val)=>setShowUserData({...showUserData,last_name:val})}
+                                />
+                            </View>
+                            <View style={{flexDirection:"row",alignItems:"center"}}>
+                                <Text style={{color:"#000",marginRight:10}}>Ph No:</Text>
+                                <TextInput
+                                placeholder={showUserData.number}
+                                placeholderTextColor="gray"
+                                keyboardType="number-pad"
+                                style={{borderBottomColor:"black", borderBottomWidth:1, padding:3, marginVertical:5,color:"#000",width:width/2}}
+                                value={showUserData.number}
+                                onChangeText={(val)=>setShowUserData({...showUserData,number:val})}
+                                />
+                            </View>  
+                            <View style={{flexDirection:"row",alignItems:"center"}}>
+                                <Text style={{color:"#000",marginRight:10}}>Address:</Text>                          
+                                <TextInput
+                                placeholder={showUserData.address}
+                                placeholderTextColor="gray"
+                                style={{borderBottomColor:"black", borderBottomWidth:1, padding:3, marginVertical:5,color:"#000",width:width/2}}
+                                value={showUserData.address}
+                                onChangeText={(val)=>setShowUserData({...showUserData,address:val})}
+                                />
+                            </View>
+                            <View style={{flexDirection:"row",alignItems:"center"}}>
+                                <Text style={{color:"#000",marginRight:10}}>email:</Text>
+                                <TextInput
+                                placeholder={showUserData.email}
+                                placeholderTextColor="gray"
+                                style={{borderBottomColor:"black", borderBottomWidth:1, padding:3, marginVertical:5,color:"#000",width:width/2}}
+                                value={showUserData.email}
+                                onChangeText={(val)=>setShowUserData({...showUserData,email:val})}
+                                />
+                            </View>
+                            <View style={{flexDirection:"row",alignItems:"center"}}>
+                                <Text style={{color:"#000",marginRight:10}}>Gender:</Text>
+                                <TextInput
+                                placeholder={showUserData.gender}
+                                placeholderTextColor="gray"
+                                style={{borderBottomColor:"black", borderBottomWidth:1, padding:3, marginVertical:5,color:"#000",width:width/2}}
+                                value={showUserData.gender}
+                                onChangeText={(val)=>setShowUserData({...showUserData,gender:val})}
+                                />
+                            </View>
                             <Text style={{marginVertical:10, fontSize:15, fontFamily:RalewayBold, color:"black"}}>Verification</Text>
                             <View style={{alignItems:"center", marginVertical:10, width:"100%"}}>
                                 <View style={styles.pdf}>

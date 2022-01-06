@@ -14,31 +14,34 @@ const { height } = Dimensions.get("window");
 export default function TicketSummaryScreen({route}){
 
     const navigation = useNavigation();
-    const {Name,busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number, email, gender1, gender2, price, tripId} = route.params;
-    // console.log(tripId)
+    const {Name,busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number, email, gender1, gender2, price, tripId, seats, date, src, dest} = route.params;
     var postdata={
-        "seat_number1": 14,
-        "seat_number2": 2,
-        "price": 1200,
-        "u1_name": "fullName1",
-        "u1_age": 21,
-        "u1_gender": "gender1",
-        "u2_name": "fullName2",
-        "u2_age": 22,
-        "u2_gender": "gender2",
-        "name": "Name",
-        "ph_number": "number",
-        "email": "email"
+        "seat_number1": seats,
+        "seat_number2": "",
+        "price": price,
+        "u1_name": fullName1,
+        "u1_age": age1,
+        "u1_gender": gender1,
+        "u2_name": fullName2,
+        "u2_age": age2,
+        "u2_gender": gender2,
+        "name": Name,
+        "ph_number": number,
+        "email": email
     };
     
     const proceed=()=>{
         axios.post(`https://buslala-backend-api.herokuapp.com/api/user/book/${tripId}`,postdata)
         .then(res=>{
             if(res.status==200){
-                console.log(res.data);
-                let data = res.data;
-                navigation.navigate("PaymentScreen",{data,"name":"Name1","email": "email","number": "1111111111"})
+                // console.log(res.data);
+                let Data = res.data;
+                navigation.navigate("PaymentScreen",{Data,"name":Name,"email": email,"number": number, "price": price});
             }else console.log(res.status);
+        })
+        .catch(e=>{
+            alert("please try again later");
+            console.log(e);
         })
     };
 
@@ -102,25 +105,43 @@ export default function TicketSummaryScreen({route}){
             </View>
             <ScrollView style={{marginBottom:0}}>
                 <View style={{marginHorizontal:20}}>
-                    <View style={{elevation:5,alignItems:"center",backgroundColor:"#fff",height:height/4.5,marginTop:15}}></View>
+                    <View style={{elevation:5,backgroundColor:"#fff",borderRadius:10,marginHorizontal:10,marginVertical:10}}>
+                        <View style={{marginVertical:10}}>
+                            <Text style={{color:"#000",textAlign:"center",fontWeight:"500"}}>{busName}</Text>
+                            <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center",marginVertical:5}}>
+                                <View style={{alignItems:"center"}}>
+                                    <Text style={{color:"#000",fontWeight:"500"}}>{src}</Text>
+                                    <Text style={{color:"gray",fontSize:12,fontWeight:"500"}}>{deptHour}</Text>
+                                </View>
+                                <Text style={{color:"#000"}}>--------</Text>
+                                <View style={{alignItems:"center"}}>
+                                    <Text style={{color:"#000",fontWeight:"500"}}>{dest}</Text>
+                                    <Text style={{color:"gray",fontSize:12,fontWeight:"500"}}>{arivHour}</Text>
+                                </View>
+                            </View>
+                            <Text style={{color:"#000",textAlign:"center",fontWeight:"400"}}>Passenger Name: {fullName1}</Text>
+                            <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Seat number: {seats}</Text>
+                            <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Journey Date: {date}</Text>
+                        </View>
+                    </View>
                     <View style={{marginTop:20}}>
                         <Text style={{color:"#000",fontSize:18}}>Personal Details</Text>
                         <View style={{marginTop:10}}>
                             <View style={{flexDirection:"row",justifyContent:"space-between"}}>
                                 <MaterialCommunityIcons name="chair-rolling" color="#000" size={24} />
-                                <Text style={{color:"#e66349"}}>A4</Text>
+                                <Text style={{color:"#e66349"}}>{seats}</Text>
                                 <Text style={{color:"#000"}}>{fullName1}</Text>
                                 <Text style={{color:"#000"}}>{age1}</Text>
                                 <Text style={{color:"#000"}}>{gender1}  </Text>
                             </View>
                             <View style={{borderWidth:0.2,borderColor:"gray",backgroundColor:"gray",marginVertical:10}} />
-                            <View style={{flexDirection:"row",justifyContent:"space-between"}}>
+                            {/* <View style={{flexDirection:"row",justifyContent:"space-between"}}>
                                 <MaterialCommunityIcons name="chair-rolling" color="#000" size={24} />
                                 <Text style={{color:"#e66349"}}>B4</Text>
                                 <Text style={{color:"#000"}}>{fullName2}</Text>
                                 <Text style={{color:"#000"}}>{age2}</Text>
                                 <Text style={{color:"#000"}}>{gender2}</Text>
-                            </View>
+                            </View> */}
                             <View></View>
                         </View>
                     </View>
@@ -142,17 +163,17 @@ export default function TicketSummaryScreen({route}){
                     <View style={{marginTop:20}}>
                         <Text style={{color:"#000",fontSize:18}}>Payment Details</Text>
                         <View style={{marginTop:10}}>
-                            <View style={{flexDirection:"row",justifyContent:"space-between"}}>
+                            {/* <View style={{flexDirection:"row",justifyContent:"space-between"}}>
                                 <Text style={{color:"gray"}}>Ticket Fare</Text>
                                 <Text style={{color:"gray"}}>₹2,020.00</Text>
                             </View>
                             <View style={{flexDirection:"row",justifyContent:"space-between",marginVertical:5}}>
                                 <Text style={{color:"gray"}}>GST</Text>
                                 <Text style={{color:"gray"}}>₹50.00</Text>
-                            </View>
-                            <View style={{flexDirection:"row",justifyContent:"space-between",marginBottom:30}}>
+                            </View> */}
+                            <View style={{flexDirection:"row",justifyContent:"space-between",marginBottom:30,alignItems:"center"}}>
                                 <Text style={{color:"#000"}}>Total pay</Text>
-                                <Text style={{color:"#000"}}>₹2,070.00</Text>
+                                <Text style={{color:"#e66349",fontSize:18,fontWeight:"800"}}>₹{price}</Text>
                             </View>
                         </View>
                         <View style={{alignItems:"center"}}>

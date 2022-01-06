@@ -7,13 +7,20 @@ import { RalewayBold, RalewayRegular } from '../assets/fonts/fonts';
 
 const {width} = Dimensions.get("window");
 
-const SeaterOption = ({Data, name, priceLower,priceUpper, duration, rating, desc, seats, deptHour, arrivalHour, src, dest, tripID}) => {
-console.log(tripID);
+const SeaterOption = ({name, priceLower,priceUpper, duration, 
+                        rating, desc, seats, deptHour, arrivalHour, 
+                        src, dest, tripID, date
+                    }) => {
+
     const navigation = useNavigation();
 
     const busHandler=()=>{
-        navigation.navigate("SelectedScreen", {"Data": Data, "name": name, "priceLower": priceLower, "priceUpper":priceUpper, "duration": duration, "deptHour": deptHour, "arrivalHour": arrivalHour, "src": src, "dest": dest,"tripId": tripID})
-    }
+        navigation.navigate("SelectedScreen", 
+            {"name": name, "priceLower": priceLower, "priceUpper":priceUpper, 
+            "duration": duration, "deptHour": deptHour, "arrivalHour": arrivalHour, 
+            "src": src, "dest": dest,"tripId": tripID, "date": date
+        })
+    };
 
     return (
         <TouchableOpacity activeOpacity={0.8} style={styles.container} 
@@ -52,9 +59,9 @@ console.log(tripID);
             </View>
         </TouchableOpacity>
     )
-}
+};
 
-export default SeaterOption
+export default SeaterOption;
 
 const styles = StyleSheet.create({
     container:{
@@ -86,4 +93,4 @@ const styles = StyleSheet.create({
         alignItems:"center",
         marginTop:20,
     }
-})
+});

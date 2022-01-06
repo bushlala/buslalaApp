@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core'
 import axios from 'axios'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Image, KeyboardAvoidingView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { RalewayBold, RalewayLight, RalewayRegular } from '../assets/fonts/fonts'
 import { fontColor, newColor, primary, secondary, textColor } from '../components/Colors'
@@ -10,18 +10,20 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useState } from 'react';
-import DatePicker from 'react-native-datepicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { Picker } from '@react-native-picker/picker';
+
+
 
 const LoginScreen = () => {
-
-    // const [Data, setData] = useState([]);
-    // console.log(Data);
 
 
     const navigation = useNavigation();
     const [isVisible1, setIsVisible1] = useState(false);
     const [isVisible2, setIsVisible2] = useState(false);
+    const [isVisible3, setIsVisible3] = useState(false);
     const [deptDate, setDeptDate] = useState("");
+    const [deptDate2, setDeptDate2] = useState("");
     const [returnDate, setReturnDate] = useState("");
     const [click, setClick] = useState(false);
     const [from, setFrom] = useState("");
@@ -30,78 +32,168 @@ const LoginScreen = () => {
     const [to, setTo]= useState("");
     const [isOneWay, setIsOneWay] = useState(true);
     const [isTwoWay, setIsTwoWay] = useState(false);
+    const [date1, setDate1] = useState(new Date());
+    const [date2, setDate2] = useState(new Date());
+    const [date3, setDate3] = useState(new Date());
+    const [srcData, setSrcData] = useState([]);
+    const [destData, setDestData] = useState([]);
+    console.log(destData);
 
-    const inputHandler=()=>{
-        if(from===""){
-        setError1(true)}
-        else{
-            setError1(false);
-        }
-    }
 
-    const inputHandler1=()=>{
-        if(to===""){
-        setError1(true)}
-        else{
-            setError1(false);
-        }
-    }
+    // const inputHandler=()=>{
+    //     if(from===""){
+    //     setError1(true)}
+    //     else{
+    //         setError1(false);
+    //     }
+    // };
 
-    const handleConfirm1=(date)=>{
-        setDeptDate(date);
+    // const inputHandler1=()=>{
+    //     if(to===""){
+    //     setError1(true)}
+    //     else{
+    //         setError1(false);
+    //     }
+    // };
+
+    const handleConfirm1=(event,selectedDate)=>{    // ***must have to pass 'event' as a param whether it is used or not, otherwise gives error
+        const currentDate = selectedDate || date1;      
+        setDate1(currentDate);
         setIsVisible1(false);
-    }
+        let tempDate = new Date(currentDate);
+        let year = tempDate.getFullYear();
+        let month = ('0' + (tempDate.getMonth()+1)).slice(-2);     // to get 0 before a single month (i.e 1 -> 01)
+        // let month =tempDate.getMonth()+1; 
+        let day = ('0' + tempDate.getDate()).slice(-2);             // to get 0 before a single day   (i.e 3 -> 03)
+        let fDate = `${year}-${month}-${day}`;
+        setDeptDate(fDate);
+    };
 
-    const handleConfirm2=(date)=>{
-        setReturnDate(date);
+    const handleConfirm2=(event,selectedDate)=>{    // ***must have to pass 'event' as a param whether it is used or not, otherwise gives error
+        const currentDate = selectedDate || date2;      
+        setDate2(currentDate);
         setIsVisible2(false);
-    }
+        let tempDate = new Date(currentDate);
+        let year = tempDate.getFullYear();
+        let month = ('0' + (tempDate.getMonth() + 1)).slice(-2);     // to get 0 before a single month (i.e 1 -> 01)
+        let day = ('0' + tempDate.getDate()).slice(-2);             // to get 0 before a single day   (i.e 3 -> 03)
+        let fDate = `${year}-${month}-${day}`;
+        setDeptDate2(fDate);
+    };
+    const handleConfirm3=(event,selectedDate)=>{    // ***must have to pass 'event' as a param whether it is used or not, otherwise gives error
+        const currentDate = selectedDate || date3;      
+        setDate3(currentDate);
+        setIsVisible3(false);
+        let tempDate = new Date(currentDate);
+        let year = tempDate.getFullYear();
+        let month = ('0' + (tempDate.getMonth() + 1)).slice(-2);     // to get 0 before a single month (i.e 1 -> 01)
+        let day = ('0' + tempDate.getDate()).slice(-2);             // to get 0 before a single day   (i.e 3 -> 03)
+        let fDate = `${year}-${month}-${day}`;
+        setReturnDate(fDate);
+    };
 
     const onewayHandler=()=>{
         setIsOneWay(true);
         setIsTwoWay(false);
-    }
+    };
 
     const twowayHandler=()=>{
         setIsOneWay(false);
         setIsTwoWay(true);
-    }
+    };
+
+    var oneWayPostData = {
+        "source": from, 
+        "destination": to, 
+        "date": deptDate
+    };
+    // console.log(oneWayPostData);
 
     const busesHandler=()=>{
-        if(from==="" || to==="" || deptDate===""){
+        if(from==="" || to===""){
             setError(true);
             setError1(true)
+        }else if(deptDate ===""){
+            alert("please provide valid date")
         }else{
             setError(false);
             setError1(false);
-            axios.post("https://buslala-backend-api.herokuapp.com/api/user/searchOneWayBus",{"source": "place1", "destination": "place2", "date": "2021-12-10"})
+            axios.post("https://buslala-backend-api.herokuapp.com/api/user/searchOneWayBus",oneWayPostData)
             .then((response)=>{
                 if(response.status===200){
-                    console.log(response.data);
-                    navigation.navigate("Buses",{"Data": response.data,"src": from,"dest": to,"oneWay": isOneWay,"roundTrip": isTwoWay});
+                    navigation.navigate("Buses",
+                        {"Data": response.data, "src": from, "dest": to, 
+                        "oneWay": isOneWay, "roundTrip": isTwoWay,
+                        "Date": isOneWay ? deptDate : deptDate2
+                    });
                 }else{
                     console.log("Error");
                 }
             }).catch((err)=>console.log(err));
-    }};
+        }
+    };
+
+    var roundTripPostData = {
+        "source": from, 
+        "destination": to, 
+        "deptDate": deptDate2, 
+        "returnDate": returnDate
+    };
 
     const busesHandler1=()=>{
-        if(from==="" || to==="" || deptDate==="" || returnDate===""){
+        if(from==="" || to===""){
             setError(true);
             setError1(true)
+        }else if(deptDate2 > returnDate || deptDate2==="" || returnDate===""){
+            alert("please provide valid date");
         }else{
             setError(false);
             setError1(false);
-            axios.post("https://buslala-backend-api.herokuapp.com/api/user/roundTrip",{"source": "place1", "destination": "place2", "deptDate": "2021-12-10", "returnDate": "2021-12-11"})
+            axios.post("https://buslala-backend-api.herokuapp.com/api/user/roundTrip",roundTripPostData)
             .then((response)=>{
                 if(response.status===200){
-                    console.log(response.data);
-                    navigation.navigate("Buses",{"Data": response.data,"src": from,"dest": to,"oneWay": isOneWay,"roundTrip": isTwoWay}) 
+                    navigation.navigate("Buses",
+                        {"Data": response.data,"src": from,"dest": to,
+                        "oneWay": isOneWay,"roundTrip": isTwoWay,
+                        "Date": isTwoWay ? deptDate2 : deptDate
+                    });
                 }else{
                     console.log("Error");
                 }
             }).catch((err)=>console.log(err));           
-    }};
+        }
+    };
+
+    const sourceApi=()=>{
+        axios.get("https://buslala-backend-api.herokuapp.com/api/user/source")
+        .then(resp=>{
+            if(resp.status===200){
+                console.log(resp.status);
+                const Data = resp.data;
+                setSrcData(Data.data);
+                // console.log(srcData);
+            }else console.log(resp.status);
+        })
+        .catch(e=>{console.log(e);alert("please try after some time")});
+    };
+    const destApi=()=>{
+        axios.get("https://buslala-backend-api.herokuapp.com/api/user/destination")
+        .then(resp=>{
+            if(resp.status===200){
+                console.log(resp.status);
+                const Data = resp.data
+                setDestData(Data.data);
+            }else console.log(resp.status);
+        })
+        .catch(e=>{
+            console.log(e);
+            alert("please try after some time");
+        });
+    };
+    useEffect(() => {
+        sourceApi();
+        destApi();
+    }, []);
 
     return (
         <View style={styles.screen}>
@@ -160,14 +252,21 @@ const LoginScreen = () => {
                                 size={24}
                                 color="black"
                                 />
-                                <TextInput
-                                placeholder="To"
-                                value={to}
-                                onChangeText={(text)=>setTo(text)}
-                                placeholderTextColor="gray"
-                                onBlur={inputHandler}
-                                style={{marginLeft:10, width:"100%", color:"black"}}
-                                />
+                                <Picker 
+                                    selectedValue={to}
+                                    onValueChange={(val)=>setTo(val)}
+                                    style={{flex:1,color:"#000"}}
+                                    dropdownIconColor="#000"  
+                                >
+                                    <Picker.Item label='From' value="" style={{color:"#000"}} />
+                                    {
+                                        srcData.map(item=>{
+                                            return(
+                                                <Picker.Item label={item.name} value={item.name} key={item._id} />
+                                            )
+                                        })
+                                    }
+                                </Picker>
                             </View>
                             {error1 ? <Text style={{color:"red", fontSize:12}}>Please Enter The Details</Text>:<Text></Text>}
                         </KeyboardAvoidingView> :
@@ -178,14 +277,21 @@ const LoginScreen = () => {
                                 color="black"
                                 size={24}
                                 />
-                                <TextInput
-                                placeholder="From"
-                                placeholderTextColor="gray"
-                                value={from}
-                                onBlur={inputHandler1}
-                                onChangeText={(text)=>setFrom(text)}
-                                style={{marginLeft:10, width:"100%", color:"black"}}
-                                />
+                                <Picker 
+                                    selectedValue={from}
+                                    onValueChange={(val)=>setFrom(val)}
+                                    style={{flex:1,color:"#000"}}
+                                    dropdownIconColor="#000"  
+                                >
+                                    <Picker.Item label='From' value="" style={{color:"#000"}} />
+                                    {
+                                        srcData.map(item=>{
+                                            return(
+                                                <Picker.Item label={item.name} value={item.name} key={item._id} />
+                                            )
+                                        })
+                                    }
+                                </Picker>
                             </View>
                             {error ? <Text style={{color:"red", fontSize:12}}>Please Enter The Details</Text>: <Text></Text>}
                         </KeyboardAvoidingView>}
@@ -205,15 +311,21 @@ const LoginScreen = () => {
                                 color="black"
                                 size={24}
                                 />
-                                <TextInput
-                                placeholder="From"
-                                placeholderTextColor="gray"
-                                onChangeText={(text)=>setFrom(text)}
-                                style={{marginLeft:10, width:"100%"}}
-                                onBlur={inputHandler1}
-                                value={from}
-                                style={{marginLeft:10, width:"100%", color:"black"}}
-                                />
+                                <Picker 
+                                    selectedValue={to}
+                                    onValueChange={(val)=>setTo(val)}
+                                    style={{flex:1,color:"#000"}}
+                                    dropdownIconColor="#000"   
+                                >
+                                    <Picker.Item label='To' value="" style={{color:"#000"}} />
+                                    {
+                                        destData.map(item=>{
+                                            return(
+                                                <Picker.Item label={item.name} value={item.name} key={item._id} />
+                                            )
+                                        })
+                                    }
+                                </Picker>
                             </View>
                             {error ? <Text style={{color:"red", fontSize:12}}>Please Enter The Details</Text>: <Text></Text>}
                         </KeyboardAvoidingView>
@@ -224,14 +336,21 @@ const LoginScreen = () => {
                                 size={24}
                                 color="black"
                                 />
-                                <TextInput
-                                placeholder="To"
-                                placeholderTextColor="gray"
-                                onChangeText={(text)=>setTo(text)}
-                                value={to}
-                                onBlur={inputHandler}
-                                style={{marginLeft:10, width:"100%", color:"black"}}
-                                />
+                                <Picker 
+                                    selectedValue={to}
+                                    onValueChange={(val)=>setTo(val)}
+                                    style={{flex:1,color:"#000"}}
+                                    dropdownIconColor="#000"    
+                                >
+                                    <Picker.Item label='To' value="" style={{color:"#000"}} />
+                                    {
+                                        destData.map(item=>{
+                                            return(
+                                                <Picker.Item label={item.name} value={item.name} key={item._id}/>
+                                            )
+                                        })
+                                    }
+                                </Picker>
                             </View>
                             {error1 ? <Text style={{color:"red", fontSize:12}}>Please Enter The Details</Text>:<Text></Text>}
                         </KeyboardAvoidingView>}
@@ -254,73 +373,58 @@ const LoginScreen = () => {
                             style={{paddingBottom: 3,alignItems:"center", justifyContent:"space-between", flexDirection:"row", borderBottomColor:"black", borderBottomWidth:1}}>
                                 {(deptDate==="") ? <Text style={{fontSize:15, color:"gray", padding:5}}>YYYY-MM-DD</Text>
                                 : <Text style={{fontSize:15, color:"gray", padding:5}}>{deptDate}</Text>}
-                                <DatePicker
-                                mode="date"
-                                onCloseModal={()=>setIsVisible1(false)}
-                                format="YYYY-MM-DD"
-                                hideText={true}
-                                minDate={new Date()}
-                                maxDate="2021-12-31"
-                                onDateChange={handleConfirm1}
-                                cancelBtnText="Cancel"
-                                confirmBtnText="Confirm"
-                                customStyles={{
-                                    dateIcon:{
-                                        marginLeft:100
-                                    }
-                                }}
-                                />
+                                {isVisible1 && (
+                                <DateTimePicker
+                                    testID="dateTimePicker"
+                                    mode={"date"}
+                                    display="calendar"
+                                    value={date1}
+                                    minimumDate={new Date()}
+                                    onTouchCancel={()=>setIsVisible1(false)}
+                                    onChange={handleConfirm1}
+                                />)
+                                }
                             </TouchableOpacity>
                         </View>}
                         { isTwoWay && <View style={styles.dates}>
                             <View style={styles.date}>
                                 <Text style={{color:"black", fontFamily:RalewayBold, fontSize:16, marginBottom:4}}>Departure Date</Text>
                                 <TouchableOpacity activeOpacity={0.8}
-                                onPress={()=>setIsVisible1(true)}
+                                onPress={()=>setIsVisible2(true)}
                                 style={{paddingBottom: 3,alignItems:"center", justifyContent:"space-between", flexDirection:"row", borderBottomColor:"black", borderBottomWidth:1}}>
-                                    {(deptDate==="") ? <Text style={{fontSize:15, color:"gray", padding:5}}>YYYY-MM-DD</Text>
-                                    : <Text style={{fontSize:15, color:"gray", padding:5}}>{deptDate}</Text>}
-                                    <DatePicker
-                                    mode="date"
-                                    onCloseModal={()=>setIsVisible11(false)}
-                                    format="YYYY-MM-DD"
-                                    hideText={true}
-                                    onDateChange={handleConfirm1}
-                                    cancelBtnText="Cancel"
-                                    minDate={new Date()}
-                                    maxDate="2021-12-31"
-                                    confirmBtnText="Confirm"
-                                    customStyles={{
-                                        dateIcon:{
-                                            marginLeft:100
-                                        }
-                                    }}
-                                    />
+                                    {(deptDate2==="") ? <Text style={{fontSize:15, color:"gray", padding:5}}>YYYY-MM-DD</Text>
+                                    : <Text style={{fontSize:15, color:"gray", padding:5}}>{deptDate2}</Text>}
+                                    {isVisible2 && (
+                                        <DateTimePicker
+                                            testID="dateTimePicker"
+                                            mode={"date"}
+                                            display="calendar"
+                                            value={date2}
+                                            minimumDate={new Date()}
+                                            onTouchCancel={()=>setIsVisible2(false)}
+                                            onChange={handleConfirm2}
+                                        />
+                                    )}
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.date}>
                                 <Text style={{color:"black", fontFamily:RalewayBold, fontSize:16, marginBottom:4}}>Return Date</Text>
                                 <TouchableOpacity activeOpacity={0.8}
-                                onPress={()=>setIsVisible2(true)}
+                                onPress={()=>setIsVisible3(true)}
                                 style={{paddingBottom: 3,alignItems:"center", justifyContent:"space-between", flexDirection:"row", borderBottomColor:"black", borderBottomWidth:1}}>
                                     {(returnDate==="") ? <Text style={{fontSize:15, color:"gray", padding:5}}>YYYY-MM-DD</Text>
                                     : <Text style={{fontSize:15, color:"gray", padding:5}}>{returnDate}</Text>}
-                                    <DatePicker
-                                    mode="date"
-                                    onCloseModal={()=>setIsVisible2(false)}
-                                    format="YYYY-MM-DD"
-                                    hideText={true}
-                                    minDate={new Date()}
-                                    maxDate="2021-12-31"
-                                    onDateChange={handleConfirm2}
-                                    cancelBtnText="Cancel"
-                                    confirmBtnText="Confirm"
-                                    customStyles={{
-                                        dateIcon:{
-                                            marginLeft:100
-                                        }
-                                    }}
-                                    />
+                                    {isVisible3 && (
+                                        <DateTimePicker
+                                            testID="dateTimePicker"
+                                            mode={"date"}
+                                            display="calendar"
+                                            value={date3}
+                                            minimumDate={new Date()}
+                                            onTouchCancel={()=>setIsVisible3(false)}
+                                            onChange={handleConfirm3}
+                                        />
+                                    )}
                                 </TouchableOpacity>
                             </View>
                         </View>}
@@ -382,7 +486,7 @@ const styles = StyleSheet.create({
         paddingVertical:10,
         borderRadius:10,
         elevation:5,
-        marginBottom:85
+        marginBottom:100
     },
     heading:{
         flexDirection:"row",

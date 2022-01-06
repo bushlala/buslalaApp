@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, TextInput, Image, Modal, FlatList } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity } from "react-native";
 import ToggleSwitch  from "toggle-switch-react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -8,10 +8,10 @@ import { useNavigation, useRoute } from '@react-navigation/core';
 
 
 import { fontColor, newColor, primary, secondary } from '../../components/Colors';
+import axios from "axios";
 
 
-const { width } = Dimensions.get("window");
-const { height } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 
 
 
@@ -19,166 +19,150 @@ export default function SelectedScreen(){
 
     const navigation = useNavigation();
     const route = useRoute();
-    const { src, dest, name, deptHour, arrivalHour, priceLower, priceUpper, duration, Data, tripId } = route.params;
-    // const newData=[Data];
-    console.log(Data.date);
+    const { src, dest, name, deptHour, arrivalHour, priceLower, priceUpper, duration, tripId, date } = route.params;
 
     const [toggle, setToggle] = useState(false);
-    // const [prices, setPrices] = useState();
-    // const [selectedSeat1, setSelectedSeat1] = useState(false);
-    // const [selectedSeat2, setSelectedSeat2] = useState(false);
-    // const [select, setSelect] = useState({
-    //     seat1: false,
-    //     seat2: false,
-    // });
+    const [selectUpper, setSelectUpper] = useState("");
+    const [selectLower, setSelectLower] = useState("");
+    // const [seatData, setSeatData] = useState([]);
+    const [lowerSeats, setLowerSeats] = useState([]);
+    const [upperSeats, setUpperSeats] = useState([]);
+   
+    const segmentClicked=(index)=>{
+        setSelectUpper(index);        
+    };
+    const segmentClicked1=(index)=>{
+        setSelectLower(index);        
+    };
+    
+    const bookingApi=()=>{
+        axios.get(`https://buslala-backend-api.herokuapp.com/api/user/trip/${tripId}`)
+        .then(res=>{
+            if(res.status===200){
+                const DATA = res.data;
+                const lowerBerth = DATA.trip.seat_number.lowerBerth;
+                const upperBerth = DATA.trip.seat_number.upperBerth;
+                // setSeatData([DATA]);
+                setLowerSeats(lowerBerth);
+                setUpperSeats(upperBerth);
+            }else console.log(res.status);
+        })
+        .catch(e=>{
+            console.log(e);
+            alert("please try again after few minutes");
+        })
+    };
 
-    // const { seat1, seat2, seat3, seat4, seat5, seat6, seat7, seat8, seat9, seat10, seat11, seat12 } = select;
+    useEffect(() => {
+        bookingApi();
+    }, []);
 
-    // const handleSelect1=()=>{
-    //     seat1 === false ? setSelect({...select, seat1: true}) : setSelect({...select, seat1: false});
-    //     selectedSeat1 === false ? setSelectedSeat1(true) : setSelectedSeat1(false)
-    // };
-    // const handleSelect2=()=>{
-    //     seat2 === false ? setSelect({...select, seat2: true}) : setSelect({...select, seat2: false});
-    //     selectedSeat2 === false ? setSelectedSeat2(true) : setSelectedSeat2(false)
-    // };
-    // const handleSelect3=()=>{
-    //     seat3 === false ? setSelect({...select, seat3: true}) : setSelect({...select, seat3: false});
-    //     selectedSeat3 === false ? setSelectedSeat3(true) : setSelectedSeat3(false)
-    // };
-    // const handleSelect4=()=>{
-    //     seat4 === false ? setSelect({...select, seat4: true}) : setSelect({...select, seat4: false});
-    //     selectedSeat4 === false ? setSelectedSeat4(true) : setSelectedSeat4(false)
-    // };
-    // const handleSelect5=()=>{
-    //     seat5 === false ? setSelect({...select, seat5: true}) : setSelect({...select, seat5: false});
-    //     selectedSeat5 === false ? setSelectedSeat5(true) : setSelectedSeat5(false)
-    // };
-    // const handleSelect6=()=>{
-    //     seat6 === false ? setSelect({...select, seat6: true}) : setSelect({...select, seat6: false});
-    //     selectedSeat6 === false ? setSelectedSeat6(true) : setSelectedSeat6(false)
-    // };
-    // const handleSelect7=()=>{
-    //     seat7 === false ? setSelect({...select, seat7: true}) : setSelect({...select, seat7: false});
-    //     selectedSeat7 === false ? setSelectedSeat7(true) : setSelectedSeat7(false)
-    // };
-    // const handleSelect8=()=>{
-    //     seat8 === false ? setSelect({...select, seat8: true}) : setSelect({...select, seat8: false});
-    //     selectedSeat8 === false ? setSelectedSeat8(true) : setSelectedSeat8(false)
-    // };
-    // const handleSelect9=()=>{
-    //     seat9 === false ? setSelect({...select, seat9: true}) : setSelect({...select, seat9: false});
-    //     selectedSeat9 === false ? setSelectedSeat9(true) : setSelectedSeat9(false)
-    // };
-    // const handleSelect10=()=>{
-    //     seat10 === false ? setSelect({...select, seat10: true}) : setSelect({...select, seat10: false});
-    //     selectedSeat10 === false ? setSelectedSeat10(true) : setSelectedSeat10(false)
-    // };
-    // const handleSelect11=()=>{
-    //     seat11 === false ? setSelect({...select, seat11: true}) : setSelect({...select, seat11: false});
-    //     selectedSeat11 === false ? setSelectedSeat11(true) : setSelectedSeat11(false)
-    // };
-    // const handleSelect12=()=>{
-    //     seat12 === false ? setSelect({...select, seat12: true}) : setSelect({...select, seat12: false});
-    //     selectedSeat12 === false ? setSelectedSeat12(true) : setSelectedSeat12(false)
-    // };
+    const UPPER_SEAT = [[],[],[],[]];
+    upperSeats.map((data,id)=>{
+        const comp = (
+            <TouchableOpacity 
+                key={id}
+                style={[styles.upperView2,
+                    {backgroundColor: data.status == 1 ? "#000" 
+                        : selectUpper == data.id ? "blue" : "#9ea5b0" 
+                    }]} 
+                active={selectUpper == data.id}
+                onPress={()=>segmentClicked(data.id)}
+                disabled={data.status == 0 ? false : true}
+            >
+            </TouchableOpacity>
+        );
+        const colNumber = id % 4;
+        UPPER_SEAT[colNumber].push( comp );
+    });
 
     const Upper=()=>(
         <View style={{marginVertical:20}}>
-            <View style={{flexDirection:"row",flexWrap:"wrap"}}>
-            {
-                Data.map(Data=>(
-                    Data.data.map((data)=>(
-                        data.seat_number.upperBerth.map(upperBerth=>(
-                            <TouchableOpacity 
-                                style={[styles.upperView2,{backgroundColor: upperBerth.status == 0 ? "#9ea5b0" : "#000"}]} 
-                                key={upperBerth.id}
-                            >         
-                            {
-                                (()=>{
-                                    // var obj = parseJSON(upperBerth);
-                                    var length = Object.keys(upperBerth).length;
-                                    console.log(length);
-                                    for (var i = 0; i < length; i++) {
-                                        var ctr=0;
-                                        for (attr in upperBerth[i]) ctr++;
-                                        console.log('array['+i+']: ' +ctr);
-                                      }
-                                })()
-                            }
-                            </TouchableOpacity>
-                        ))
-                    ))
-                ))
-            }
-            </View>
-            {/* <View style={styles.upperView1}>
+            <View style={{flexDirection:"row",justifyContent:"space-around"}}>
                 <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity 
-                
-                        style={[styles.upperView2]}
-                        onPress={handleSelect1}
-                    >
-                        {
-                            seat1 === true ? <Text style={{color:"#000"}}>✓</Text> : null
-                        }
-                    </TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity 
-                       
-                        style={[styles.upperView2]}
-                        onPress={handleSelect2}
-                    >
-                        {
-                            seat2 === true ? <Text style={{color:"#000"}}>✓</Text> : null
-                        }
-                    </TouchableOpacity>
+                    <View style={{marginRight:10}}>
+                        {UPPER_SEAT[0]}
+                    </View>
+                    <View>
+                        {UPPER_SEAT[1]}
+                    </View>
                 </View>
-            </View> */}
+                <View style={{flexDirection:"row"}}>
+                    <View style={{marginRight:10}}>
+                        {UPPER_SEAT[2]}
+                    </View>
+                    <View>
+                        {UPPER_SEAT[3]}
+                    </View>
+                </View>
+            </View>
         </View>
     );
 
+    const LOWER_SEAT = [[],[],[],[]];
+    lowerSeats.map((data,id)=>{
+        const comp = (
+            <TouchableOpacity 
+                key={id}
+                style={[styles.lowerSeat,
+                    {backgroundColor: data.status == 1 ? "#000" 
+                        : selectLower == data.id ? "blue" : "#9ea5b0" 
+                    }]} 
+                active={selectLower == data.id}
+                onPress={()=>segmentClicked1(data.id)}
+                disabled={data.status == 0 ? false : true}
+            >
+            </TouchableOpacity>
+        );
+        const colNumber = id % 4;
+        LOWER_SEAT[colNumber].push( comp );
+    });
     const Lower=()=>(
         <View style={{marginVertical:20}}>
-            <View style={styles.lowerSeatContainer}>
-            {
-                Data.map(Data=>(
-                    Data.data.map(data=>(
-                        data.seat_number.lowerBerth.map(lowerBerth=>(
-                            <TouchableOpacity style={[styles.lowerSeat,{backgroundColor: lowerBerth.status == 0 ? "#9ea5b0" : "#000"}]} key={lowerBerth.id}>             
-                            </TouchableOpacity>
-                        ))
-                    ))
-                ))
-            }
+            <View style={{flexDirection:"row",justifyContent:"space-around"}}>
+                <View style={{flexDirection:"row"}}>
+                    <View style={{marginRight:10}}>
+                        {LOWER_SEAT[0]}
+                    </View>
+                    <View>
+                        {LOWER_SEAT[1]}
+                    </View>
+                </View>
+                <View style={{flexDirection:"row"}}>
+                    <View style={{marginRight:10}}>
+                        {LOWER_SEAT[2]}
+                    </View>
+                    <View>
+                        {LOWER_SEAT[3]}
+                    </View>
+                </View>
             </View>
-            
-            {/* <View style={styles.lowerSeatContainer}>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity 
-                        style={styles.lowerSeat}
-                    >
-                    </TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity 
-                        style={styles.lowerSeat}
-                    >
-                    </TouchableOpacity>
-                </View>
-                <View style={{flexDirection:"row"}}>
-                    <TouchableOpacity 
-                        style={styles.lowerSeat}
-                    >
-                    </TouchableOpacity>
-                    <View style={{marginHorizontal:10}} />
-                    <TouchableOpacity 
-                        style={styles.lowerSeat}
-                    >
-                    </TouchableOpacity>
-                </View>
-            </View> */}
         </View>
     );
+
+    const proceed=()=>{
+        if(toggle===false){
+            if(selectLower===""){
+                alert("please select a seat");
+            }else{
+                navigation.navigate("UserDetails",{ 
+                    "src": src, "dest": dest, "name": name, "tripId" : tripId,
+                    "deptHour": deptHour, "arivHour": arrivalHour, "price": toggle === false ? priceLower : priceUpper, 
+                    "duration": duration, "seats": toggle === false ? selectLower : selectUpper 
+                })
+            }
+        }else{
+            if(selectUpper===""){
+                alert("please select a seat");
+            }else{
+                navigation.navigate("UserDetails",{ 
+                    "src": src, "dest": dest, "name": name, "tripId" : tripId,
+                    "deptHour": deptHour, "arivHour": arrivalHour, "price": toggle === false ? priceLower : priceUpper, 
+                    "duration": duration, "seats": toggle === false ? selectLower : selectUpper, "date": date
+                })
+            }
+        }
+    };
 
     return(
         <View style={styles.screen}>
@@ -237,7 +221,7 @@ export default function SelectedScreen(){
                         <View style={{marginLeft:10}}>
                             <Text style={{fontSize:17, color:"black"}}>{name}</Text>
                             <View style={{flexDirection:"row",marginTop:5}}>
-                                <Text style={{color:"gray"}}>22 Oct, Sun</Text>
+                                <Text style={{color:"gray"}}>{date}</Text>
                                 <View style={{borderWidth:0.8,backgroundColor:"#000",marginHorizontal:10}}></View>
                                 <Text style={{color:"gray"}}>{deptHour}</Text>
                             </View>
@@ -290,19 +274,19 @@ export default function SelectedScreen(){
                 <View style={styles.modal}>
                     <View style={{flexDirection:"row",marginLeft:10}}>
                         <View style={{alignItems:"center"}}>
-                            <Text style={{color:"gray"}}>Selected seats</Text>
-                            <Text style={{color:"#000"}}>A4, B4</Text>
+                            <Text style={{color:"gray"}}>Selected seat</Text>
+                            <Text style={{color:"#000"}}>{toggle === false ? selectLower : selectUpper}</Text>
                         </View>
                         <View style={{backgroundColor:"#4a4847",borderWidth:1,marginHorizontal:10,borderColor:"#4a4847"}}></View>
                         <View style={{alignItems:"center"}}>
                             <Text style={{color:"gray"}}>Price</Text>
-                            <Text style={{color:"#000"}}>₹{toggle === false ? priceLower: priceUpper}</Text>
+                            {/* <Text style={{color:"#000"}}>₹{toggle === false ? priceLower: priceUpper}</Text> */}
+                            <Text style={{color:"#000"}}>₹{(toggle === true) ? (selectUpper ? priceUpper : null) : (selectLower ? priceLower : null)}</Text>
                         </View>
                     </View>
                     <TouchableOpacity 
-                        onPress={()=>navigation.navigate("UserDetails",{ "src": src, "dest": dest, "name": name, "tripId" : tripId,
-                            "deptHour": deptHour, "arivHour": arrivalHour, "priceLower": priceLower,"priceUpper": priceUpper, "duration": duration })}
-                        style={{backgroundColor:"#ed6c39",paddingVertical:8,paddingHorizontal:20,borderRadius:10,elevation:5,marginRight:5}}
+                        onPress={proceed}
+                        style={styles.proceedBtn}
                     >
                         <Text style={{color:"#fff",fontSize:20}}>Proceed</Text>
                     </TouchableOpacity>
@@ -379,20 +363,21 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#9ea5b0",
-        // marginBottom: 10,
+        marginBottom: 10,
         marginRight:5,
     },
-    lowerSeatContainer: {
-        // flexDirection:"row",
-        // justifyContent:"space-around",
-        marginBottom:5
-    },
     lowerSeat: {
-        // backgroundColor:"#9ea5b0",
         height:40,
         width:40,
         borderRadius:5,
-        marginBottom:5
+        marginBottom:5,
+    },
+    proceedBtn: {
+        backgroundColor:"#ed6c39",
+        paddingVertical:8,
+        paddingHorizontal:20,
+        borderRadius:10,
+        elevation:5,
+        marginRight:5
     }
 });

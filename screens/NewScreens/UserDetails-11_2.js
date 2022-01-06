@@ -18,8 +18,7 @@ const {height} = Dimensions.get("window");
 export default function UserDetails_11_2({route}){
 
     const navigation = useNavigation();
-    const { name, src, dest, deptHour, arivHour, priceUpper, priceLower, duration, tripId } = route.params;
-    // console.log(tripId);
+    const { name, src, dest, deptHour, arivHour, price, duration, tripId, seats, date } = route.params;
     const [ values, setValues ] = useState({
         fullName1: "",
         age1: "",
@@ -73,6 +72,20 @@ export default function UserDetails_11_2({route}){
             throw err;
           }
         }
+      };
+
+      const proceed=()=>{
+          if(fullName1==="" || age1==="" || gender1==="" || number==="" || email==="" || number.length != 10){
+              alert("please enter all the details");
+          }
+          else{
+            navigation.navigate("BusDetails",{ 
+                "busName": name, "deptHour": deptHour, "arivHour": arivHour, "tripId" : tripId,
+                "fullName1": fullName1, "age1": age1, "fullName2": fullName2, "age2": age2,
+                "number": number, "email": email, "gender1": gender1, "gender2": gender2, 
+                "seats": seats, "price": price, "date": date, "src": src, "dest": dest
+            })
+          }
       };
 
     return(
@@ -132,7 +145,7 @@ export default function UserDetails_11_2({route}){
                         <View style={{marginLeft:10}}>
                             <Text style={{fontSize:17, color:"black"}}>{name}</Text>
                             <View style={{flexDirection:"row",marginTop:5}}>
-                                <Text style={{color:"gray"}}>22 Oct, Sun</Text>
+                                <Text style={{color:"gray"}}>{date}</Text>
                                 <View style={{borderWidth:0.8,backgroundColor:"#000",marginHorizontal:10}}></View>
                                 <Text style={{color:"gray"}}>{deptHour}</Text>
                             </View>
@@ -155,7 +168,7 @@ export default function UserDetails_11_2({route}){
                         <View style={{flexDirection:"row",justifyContent:"center",marginTop:20}}>
                             <Text style={{color:"#000"}}>Person 1</Text>
                             <View style={{borderWidth:0.8,marginHorizontal:20}}></View>
-                            <Text style={{color:"#000"}}>A4</Text>
+                            <Text style={{color:"#000"}}>{seats}</Text>
                         </View>
                         <View style={{elevation:5,width:"100%", backgroundColor:"white", borderRadius:10, padding:10,marginTop:10}}>
                             <TextInput 
@@ -204,10 +217,10 @@ export default function UserDetails_11_2({route}){
                                 />
                             </View>
                         </View>
-                        <View style={{flexDirection:"row",justifyContent:"center",marginTop:20}}>
+                        {/* <View style={{flexDirection:"row",justifyContent:"center",marginTop:20}}>
                             <Text style={{color:"#000"}}>Person 2</Text>
                             <View style={{borderWidth:0.8,marginHorizontal:20,backgroundColor:"#000"}}></View>
-                            <Text style={{color:"#000"}}>B4</Text>
+                            <Text style={{color:"#000"}}>{seats}</Text>
                         </View>
                         <View style={{elevation:5,width:"100%", backgroundColor:"white", borderRadius:10, padding:10,marginTop:10}}>
                             <TextInput 
@@ -255,7 +268,7 @@ export default function UserDetails_11_2({route}){
                                       rowStyle={styles.rowStyle}
                                 />
                             </View>
-                        </View>
+                        </View> */}
                         <Text style={{color:"#000",marginTop:40}}>Contact Detials</Text>
                         <Text style={{color:"gray",marginTop:10}}>Your ticket will be sent here</Text>
                         <View style={{elevation:5, backgroundColor:"white", borderRadius:10, padding:5,marginTop:10}}>
@@ -310,21 +323,17 @@ export default function UserDetails_11_2({route}){
                             <View style={{flexDirection:"row",justifyContent:"space-between"}}>
                                 <View style={{alignItems:"center"}}>
                                     <Text style={{color:"gray"}}>Selected seats</Text>
-                                    <Text style={{color:"#000"}}>A4, B4</Text>
+                                    <Text style={{color:"#000"}}>{seats}</Text>
                                 </View>
                                 <View style={{borderWidth:0.9,borderColor:"#000",backgroundColor:"#000",marginHorizontal:5}} />
                                 <View style={{alignItems:"center"}}>
                                     <Text style={{color:"gray"}}>Price</Text>
-                                    <Text style={{color:"#000"}}>₹2,020</Text>
+                                    <Text style={{color:"#000"}}>₹{price}</Text>
                                 </View>
                             </View>
                             <TouchableOpacity 
                                 style={{elevation:5, backgroundColor:"#ed6c39", borderRadius:10, padding:10, alignItems:"center",marginVertical:10,marginLeft:10}}
-                                onPress={()=>navigation.navigate("BusDetails",{ 
-                                    busName: name, deptHour: deptHour, arivHour: arivHour, tripId : tripId,
-                                    fullName1: fullName1, age1: age1, fullName2: fullName2, 
-                                    age2: age2, number: number, Email: email, gender1: gender1, gender2: gender2
-                                })}
+                                onPress={proceed}
                                 >
                                 <Text style={{color:"#fff",fontSize:18}}>Proceed</Text>
                             </TouchableOpacity>

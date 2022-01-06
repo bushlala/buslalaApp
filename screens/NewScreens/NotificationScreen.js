@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { View, Text, Dimensions, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -12,7 +12,9 @@ import { notificationData } from '../../data/notification';
 const {width} = Dimensions.get("window");
 
 export default function NotificationScreen(){
+
     const navigation = useNavigation();
+    const [isData, setIsData] = useState(false);
 
     return (
         <View style={styles.screen}>
@@ -74,11 +76,12 @@ export default function NotificationScreen(){
                             style={{padding:3}}
                         />
                     </TouchableOpacity>
-                    <Text style={{ fontSize:17, color:"black"}}>(1) Notifications</Text>
+                    <Text style={{ fontSize:17, color:"black"}}>(0) Notifications</Text>
                 </View>
 
                 <ScrollView style={styles.notifications} showsVerticalScrollIndicator={false}>
                     {
+                        isData === true ? 
                         notificationData.map(item=>(
                             <TouchableOpacity activeOpacity={0.8} style={styles.notification} key={item.id}>
                                 <View style={{alignItems:"center"}}>
@@ -98,6 +101,8 @@ export default function NotificationScreen(){
                                 </View>
                             </TouchableOpacity>
                         ))
+                        : 
+                        <Text style={{color:"gray", fontWeight:"bold",textAlign:"center"}}>You have 0 Notification</Text>
                     }
                 </ScrollView>
             </View>
@@ -174,7 +179,7 @@ const styles = StyleSheet.create({
     },
     notifications:{
         marginVertical: 10,
-        width: width,
+        // width: width,
         marginBottom: 230,
     },
     notification:{

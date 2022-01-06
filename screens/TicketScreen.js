@@ -1,6 +1,6 @@
 import { useNavigation, useRoute } from '@react-navigation/core'
 import axios from 'axios'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { RalewayBold, RalewayLight, RalewayRegular } from '../assets/fonts/fonts'
 import { fontColor, newColor, primary, secondary, textColor } from '../components/Colors'
@@ -9,11 +9,33 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
 
-const {width} = Dimensions.get("window");
+const {width,height} = Dimensions.get("window");
 
 const TicketScreen = () => {
 
     const navigation = useNavigation();
+    const [data, setData] = useState([]);
+    const [isData, setIsData] = useState(false);
+    // console.log(isData);
+
+    const ticketApi=()=>{
+        axios.get("https://buslala-backend-api.herokuapp.com/api/user/ticket")
+        .then(res=>{
+            if(res.status===200){
+                const Data = res.data;
+                setData(Data.data);
+                data.length != 0 ? setIsData(true) : setIsData(false);
+            }else console.log(res.status);
+        })
+        .catch(e=>{
+            console.log(e);
+            alert("please try again later");
+        })
+    };
+
+    useEffect(() => {
+        ticketApi();
+    }, []);
 
     return (
         <View style={styles.screen}>
@@ -38,7 +60,9 @@ const TicketScreen = () => {
                             color="white"
                             />
                         </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.8} style={styles.btn}>
+                        <TouchableOpacity activeOpacity={0.8} style={styles.btn}
+                        onPress={()=>navigation.navigate("Notifications")}
+                        >
                             <View style={{flexDirection:"row", alignItems:"center"}}>
                             <MaterialIcons
                             name="notifications-none"
@@ -61,11 +85,34 @@ const TicketScreen = () => {
                         color="black"
                         />
                     </TouchableOpacity>
-                    <Text style={{fontFamily:RalewayBold, fontSize:17, color:"black"}}>Your Tickets</Text>
+                    <Text style={{fontFamily:RalewayBold, fontSize:17, color:"black",marginRight:30}}>Your Tickets</Text>
                 </View>
 
                 <ScrollView style={styles.notifications} showsVerticalScrollIndicator={false}>
-                    
+                    {
+                        isData === true ? 
+                        <View style={{elevation:5,backgroundColor:"#e9f7f7",borderRadius:20,marginHorizontal:10,marginVertical:10}}>
+                            <View style={{marginVertical:10}}>
+                                <Text style={{color:"#000",textAlign:"center",fontWeight:"500"}}>Bus Name</Text>
+                                <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center",marginVertical:5}}>
+                                    <View style={{alignItems:"center"}}>
+                                        <Text style={{color:"#000"}}>From</Text>
+                                        <Text style={{color:"#000",fontSize:12}}>10:00am</Text>
+                                    </View>
+                                    <Text style={{color:"#000"}}>--------</Text>
+                                    <View style={{alignItems:"center"}}>
+                                        <Text style={{color:"#000"}}>To</Text>
+                                        <Text style={{color:"#000",fontSize:12}}>09:00pm</Text>
+                                    </View>
+                                </View>
+                                <Text style={{color:"#000",textAlign:"center",fontWeight:"400"}}>Passenger Name: Name name</Text>
+                                <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Seat number: 12</Text>
+                                <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Ticket number: 012345687788</Text>
+                            </View>
+                        </View> 
+                        :
+                        <Text style={{color:"gray",textAlign:"center",fontWeight:"bold"}}>You have no Tickets</Text>
+                    }
                 </ScrollView>
             </View>
         </View>
@@ -88,9 +135,10 @@ const styles = StyleSheet.create({
         height:"25%",
     },
     view2:{
-        width:width,
+        // width:width,
         marginTop:-10,
-        paddingHorizontal:30,
+        marginHorizontal:20
+        // paddingHorizontal:30,
     },
     box:{
         backgroundColor:"white",
@@ -142,8 +190,7 @@ const styles = StyleSheet.create({
     },
     notifications:{
         marginVertical:10,
-        width:width,
-        marginBottom:150
+        marginBottom:height/3.2
     },
     notification:{
         flexDirection:"row",

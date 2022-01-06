@@ -9,19 +9,16 @@ const WelcomeScreen = () => {
 
     const navigation= useNavigation();
     
-    const isUser=async()=>{
+    const getStarted=async()=>{
         try {
             let userData = await AsyncStorage.getItem('jwt')
             let data = JSON.parse(userData);
-            data != null ? navigation.navigate("Oneway") : navigation.navigate("Login")
+            data != null ? navigation.navigate("Oneway") : navigation.navigate("Login");
           } catch(e) {
             console.log(e);
           }
     };
 
-    const getStarted=()=>{
-        isUser(navigation.navigate("Oneway"));
-    };
 
     return (
         <View style={styles.screen}>

@@ -5,6 +5,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useNavigation } from '@react-navigation/core'
 import RazorpayCheckout from 'react-native-razorpay';
+import axios from "axios";
 // import Entypo from "react-native-vector-icons/Entypo";
 
 
@@ -13,19 +14,19 @@ const { width } = Dimensions.get("window");
 export default function PaymentScreen({route}){
 
     const navigation = useNavigation();
-    const { data, name, email, number } = route.params;
-    // console.log(route.params);
+    const { Data, name, email, number, price } = route.params;
+    console.log(Data);
     
 
     const _razorpay=()=>{
         var options = {
-            description: 'Payment towards seat booking',
-            image: 'https://i.imgur.com/3g7nmJC.png',
+            description: 'Payment of seat booking',
+            image: require('../../assets/logo.png'),
             currency: 'INR',
             key: 'rzp_test_nxRhnTn0h9BeAk',
-            amount: data.amount,
+            amount: Data.amount,
             name: "Buslala",
-            order_id: data.id,//Replace this with an order_id created using Orders API.
+            order_id: Data.id,//Replace this with an order_id created using Orders API.
             prefill: {
               email: email,
               contact: number,
@@ -35,7 +36,19 @@ export default function PaymentScreen({route}){
           }
           RazorpayCheckout.open(options).then( async data => {
             // handle success
-            setPaymentId(data.razorpay_payment_id);
+            // setPaymentId(data.razorpay_payment_id);
+            axios.post("https://buslala-backend-api.herokuapp.com/api/user/verify-payment",{
+                payment_id: data.razorpay_payment_id,
+                order_id: Data.id,
+                signature: data.razorpay_signature,
+                order: Data,
+            }).then(res=>{
+                if(res.status==200){
+                    console.log(res.data);
+                    navigation.navigate("Booked Successfully");
+                }
+                else console.log(res.status);
+            }).catch(e=>console.log(e));
             // alert(`Success: ${data.razorpay_payment_id}`);
           }).catch((error) => {
             // handle failure
@@ -110,7 +123,10 @@ export default function PaymentScreen({route}){
                             <Text style={{color:"#000"}}>Credit Card/Debit Card</Text>
                         </View>
                     </View>
-                    <TouchableOpacity style={{elevation:5,width:"100%", backgroundColor:"white", borderRadius:10, padding:15}}>
+                    <TouchableOpacity 
+                    style={{elevation:5,width:"100%", backgroundColor:"white", borderRadius:10, padding:15}} 
+                    disabled={true}
+                    >
                         <View style={{marginLeft:10}}>
                             <Text style={{color:"#000"}}>Mastercard</Text>
                         </View>
@@ -118,10 +134,13 @@ export default function PaymentScreen({route}){
                             <View style={{backgroundColor:"#4a4d4f",borderRadius:5}}>
                                 <Image source={require("../../assets/icons/mastercard.png")} style={{height:20,width:40,resizeMode:"contain"}} />
                             </View>
-                            <Text style={{color:"#000",marginLeft:10}}>**** **** **** 8589</Text>
+                            <Text style={{color:"#000",marginLeft:10}}>**** **** **** 0000</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{marginTop:5,elevation:5,width:"100%", backgroundColor:"white", borderRadius:10, padding:25, justifyContent:"center",alignItems:"center"}}>
+                    <TouchableOpacity 
+                    style={{marginTop:5,elevation:5,width:"100%", backgroundColor:"white", borderRadius:10, padding:25, justifyContent:"center",alignItems:"center"}}
+                    disabled={true}
+                    >
                         <Text style={{color:"#000"}}>+ Add a New Card</Text>
                     </TouchableOpacity>
                     <View style={{marginTop:20}}>
@@ -141,7 +160,10 @@ export default function PaymentScreen({route}){
                                 </View>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{elevation:5,width:"100%", backgroundColor:"white", borderRadius:10, padding:15,marginVertical:5}}>
+                        <TouchableOpacity 
+                        style={{elevation:5,width:"100%", backgroundColor:"white", borderRadius:10, padding:15,marginVertical:5}}
+                        disabled={true}
+                        >
                             <View style={{flexDirection:"row",alignItems:"center",marginLeft:5}}>
                                 <View>
                                     <Image source={require("../../assets/icons/paytm.png")} style={{height:30,width:40}} />
@@ -152,7 +174,10 @@ export default function PaymentScreen({route}){
                                 </View>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{elevation:5,width:"100%", backgroundColor:"white", borderRadius:10, padding:15,marginBottom:5}}>
+                        <TouchableOpacity 
+                        style={{elevation:5,width:"100%", backgroundColor:"white", borderRadius:10, padding:15,marginBottom:5}}
+                        disabled={true}
+                        >
                             <View style={{flexDirection:"row",alignItems:"center",}}>
                                 <View style={{}}>
                                     <Image source={require("../../assets/icons/phonepe.png")} style={{height:40,width:50,resizeMode:"contain"}} />
@@ -178,9 +203,9 @@ export default function PaymentScreen({route}){
                 elevation:5,
                 marginBottom:10
                 }}
-                onPress={()=>navigation.navigate("Booked Successfully")}
+                onPress={_razorpay}
             >
-                <Text style={{color:"#fff",fontSize:16}}>Pay  ₹2,070</Text>
+                <Text style={{color:"#fff",fontSize:16}}>Pay  ₹{price}</Text>
             </TouchableOpacity>
         </View>
     );

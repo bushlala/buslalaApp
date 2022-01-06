@@ -1,6 +1,6 @@
 import { useNavigation, useRoute } from '@react-navigation/core'
 import axios from 'axios'
-import React from 'react'
+import React, { useState } from 'react'
 import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { RalewayBold, RalewayLight, RalewayRegular } from '../assets/fonts/fonts'
 import { fontColor, newColor, primary, secondary, textColor } from '../components/Colors'
@@ -14,6 +14,7 @@ const {width} = Dimensions.get("window");
 const NotificationScreen = () => {
 
     const navigation = useNavigation();
+    const [isData, setIsData] = useState(false)
 
     return (
         <View style={styles.screen}>
@@ -39,7 +40,9 @@ const NotificationScreen = () => {
                             color="white"
                             />
                         </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.8} style={styles.btn}>
+                        <TouchableOpacity activeOpacity={0.8} style={styles.btn}
+                        onPress={()=>navigation.navigate("Notifications")}
+                        >
                             <View style={{flexDirection:"row", alignItems:"center"}}>
                             <MaterialIcons
                             name="notifications-none"
@@ -64,79 +67,83 @@ const NotificationScreen = () => {
                     </TouchableOpacity>
                     <Text style={{fontFamily:RalewayBold, fontSize:17, color:"black"}}>(1) Notifications</Text>
                 </View>
-
-                <ScrollView style={styles.notifications} showsVerticalScrollIndicator={false}>
-                    <TouchableOpacity activeOpacity={0.8} style={styles.notification}>
-                        <View style={{alignItems:"center"}}>
-                            <View style={{padding:30, borderRadius:40, backgroundColor:"lightgray"}}></View>
-                            <Text style={{fontSize:10, fontFamily:RalewayRegular, color:"gray", marginTop:3}}>3 mins ago</Text>
-                        </View>
-                        <View style={{alignItems:"flex-start", marginHorizontal:20}}>
-                            <Text style={{fontFamily:RalewayBold, fontSize:16, color:"black"}}>Bus Service Name</Text>
-                            <Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}} numberOfLines={2}>We are continuing this service as vaccines are generally available now.</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={0.8} style={styles.notification}>
-                        <View style={{alignItems:"center"}}>
-                            <View style={{padding:30, borderRadius:40, backgroundColor:"lightgray"}}></View>
-                            <Text style={{fontSize:10, fontFamily:RalewayRegular, color:"gray", marginTop:3}}>3 mins ago</Text>
-                        </View>
-                        <View style={{alignItems:"flex-start", marginHorizontal:20}}>
-                            <Text style={{fontFamily:RalewayBold, fontSize:16, color:"black"}}>Bus Service Name</Text>
-                            <Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}} numberOfLines={2}>We are continuing this service as vaccines are generally available now.</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={0.8} style={styles.notification}>
-                        <View style={{alignItems:"center"}}>
-                            <View style={{padding:30, borderRadius:40, backgroundColor:"lightgray"}}></View>
-                            <Text style={{fontSize:10, fontFamily:RalewayRegular, color:"gray", marginTop:3}}>3 mins ago</Text>
-                        </View>
-                        <View style={{alignItems:"flex-start", marginHorizontal:20}}>
-                            <Text style={{fontFamily:RalewayBold, fontSize:16, color:"black"}}>Bus Service Name</Text>
-                            <Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}} numberOfLines={2}>We are continuing this service as vaccines are generally available now.</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={0.8} style={styles.notification}>
-                        <View style={{alignItems:"center"}}>
-                            <View style={{padding:30, borderRadius:40, backgroundColor:"lightgray"}}></View>
-                            <Text style={{fontSize:10, fontFamily:RalewayRegular, color:"gray", marginTop:3}}>3 mins ago</Text>
-                        </View>
-                        <View style={{alignItems:"flex-start", marginHorizontal:20}}>
-                            <Text style={{fontFamily:RalewayBold, fontSize:16, color:"black"}}>Bus Service Name</Text>
-                            <Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}} numberOfLines={2}>We are continuing this service as vaccines are generally available now.</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={0.8} style={styles.notification}>
-                        <View style={{alignItems:"center"}}>
-                            <View style={{padding:30, borderRadius:40, backgroundColor:"lightgray"}}></View>
-                            <Text style={{fontSize:10, fontFamily:RalewayRegular, color:"gray", marginTop:3}}>3 mins ago</Text>
-                        </View>
-                        <View style={{alignItems:"flex-start", marginHorizontal:20}}>
-                            <Text style={{fontFamily:RalewayBold, fontSize:16, color:"black"}}>Bus Service Name</Text>
-                            <Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}} numberOfLines={2}>We are continuing this service as vaccines are generally available now.</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={0.8} style={styles.notification}>
-                        <View style={{alignItems:"center"}}>
-                            <View style={{padding:30, borderRadius:40, backgroundColor:"lightgray"}}></View>
-                            <Text style={{fontSize:10, fontFamily:RalewayRegular, color:"gray", marginTop:3}}>3 mins ago</Text>
-                        </View>
-                        <View style={{alignItems:"flex-start", marginHorizontal:20}}>
-                            <Text style={{fontFamily:RalewayBold, fontSize:16, color:"black"}}>Bus Service Name</Text>
-                            <Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}} numberOfLines={2}>We are continuing this service as vaccines are generally available now.</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={0.8} style={styles.notification}>
-                        <View style={{alignItems:"center"}}>
-                            <View style={{padding:30, borderRadius:40, backgroundColor:"lightgray"}}></View>
-                            <Text style={{fontSize:10, fontFamily:RalewayRegular, color:"gray", marginTop:3}}>3 mins ago</Text>
-                        </View>
-                        <View style={{alignItems:"flex-start", marginHorizontal:20}}>
-                            <Text style={{fontFamily:RalewayBold, fontSize:16, color:"black"}}>Bus Service Name</Text>
-                            <Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}} numberOfLines={2}>We are continuing this service as vaccines are generally available now.</Text>
-                        </View>
-                    </TouchableOpacity>
-                </ScrollView>
+                {
+                    isData === true ?
+                    <ScrollView style={styles.notifications} showsVerticalScrollIndicator={false}>
+                        <TouchableOpacity activeOpacity={0.8} style={styles.notification}>
+                            <View style={{alignItems:"center"}}>
+                                <View style={{padding:30, borderRadius:40, backgroundColor:"lightgray"}}></View>
+                                <Text style={{fontSize:10, fontFamily:RalewayRegular, color:"gray", marginTop:3}}>3 mins ago</Text>
+                            </View>
+                            <View style={{alignItems:"flex-start", marginHorizontal:20}}>
+                                <Text style={{fontFamily:RalewayBold, fontSize:16, color:"black"}}>Bus Service Name</Text>
+                                <Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}} numberOfLines={2}>We are continuing this service as vaccines are generally available now.</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity activeOpacity={0.8} style={styles.notification}>
+                            <View style={{alignItems:"center"}}>
+                                <View style={{padding:30, borderRadius:40, backgroundColor:"lightgray"}}></View>
+                                <Text style={{fontSize:10, fontFamily:RalewayRegular, color:"gray", marginTop:3}}>3 mins ago</Text>
+                            </View>
+                            <View style={{alignItems:"flex-start", marginHorizontal:20}}>
+                                <Text style={{fontFamily:RalewayBold, fontSize:16, color:"black"}}>Bus Service Name</Text>
+                                <Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}} numberOfLines={2}>We are continuing this service as vaccines are generally available now.</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity activeOpacity={0.8} style={styles.notification}>
+                            <View style={{alignItems:"center"}}>
+                                <View style={{padding:30, borderRadius:40, backgroundColor:"lightgray"}}></View>
+                                <Text style={{fontSize:10, fontFamily:RalewayRegular, color:"gray", marginTop:3}}>3 mins ago</Text>
+                            </View>
+                            <View style={{alignItems:"flex-start", marginHorizontal:20}}>
+                                <Text style={{fontFamily:RalewayBold, fontSize:16, color:"black"}}>Bus Service Name</Text>
+                                <Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}} numberOfLines={2}>We are continuing this service as vaccines are generally available now.</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity activeOpacity={0.8} style={styles.notification}>
+                            <View style={{alignItems:"center"}}>
+                                <View style={{padding:30, borderRadius:40, backgroundColor:"lightgray"}}></View>
+                                <Text style={{fontSize:10, fontFamily:RalewayRegular, color:"gray", marginTop:3}}>3 mins ago</Text>
+                            </View>
+                            <View style={{alignItems:"flex-start", marginHorizontal:20}}>
+                                <Text style={{fontFamily:RalewayBold, fontSize:16, color:"black"}}>Bus Service Name</Text>
+                                <Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}} numberOfLines={2}>We are continuing this service as vaccines are generally available now.</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity activeOpacity={0.8} style={styles.notification}>
+                            <View style={{alignItems:"center"}}>
+                                <View style={{padding:30, borderRadius:40, backgroundColor:"lightgray"}}></View>
+                                <Text style={{fontSize:10, fontFamily:RalewayRegular, color:"gray", marginTop:3}}>3 mins ago</Text>
+                            </View>
+                            <View style={{alignItems:"flex-start", marginHorizontal:20}}>
+                                <Text style={{fontFamily:RalewayBold, fontSize:16, color:"black"}}>Bus Service Name</Text>
+                                <Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}} numberOfLines={2}>We are continuing this service as vaccines are generally available now.</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity activeOpacity={0.8} style={styles.notification}>
+                            <View style={{alignItems:"center"}}>
+                                <View style={{padding:30, borderRadius:40, backgroundColor:"lightgray"}}></View>
+                                <Text style={{fontSize:10, fontFamily:RalewayRegular, color:"gray", marginTop:3}}>3 mins ago</Text>
+                            </View>
+                            <View style={{alignItems:"flex-start", marginHorizontal:20}}>
+                                <Text style={{fontFamily:RalewayBold, fontSize:16, color:"black"}}>Bus Service Name</Text>
+                                <Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}} numberOfLines={2}>We are continuing this service as vaccines are generally available now.</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity activeOpacity={0.8} style={styles.notification}>
+                            <View style={{alignItems:"center"}}>
+                                <View style={{padding:30, borderRadius:40, backgroundColor:"lightgray"}}></View>
+                                <Text style={{fontSize:10, fontFamily:RalewayRegular, color:"gray", marginTop:3}}>3 mins ago</Text>
+                            </View>
+                            <View style={{alignItems:"flex-start", marginHorizontal:20}}>
+                                <Text style={{fontFamily:RalewayBold, fontSize:16, color:"black"}}>Bus Service Name</Text>
+                                <Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}} numberOfLines={2}>We are continuing this service as vaccines are generally available now.</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </ScrollView>
+                    :
+                    null
+                }
             </View>
         </View>
     )

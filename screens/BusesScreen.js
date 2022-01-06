@@ -11,24 +11,21 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useState } from 'react'
 import { dates } from '../data/dates'
 import SeaterOption from '../components/SeaterOption'
-import AsyncStorage from "@react-native-async-storage/async-storage";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const {width} = Dimensions.get("window");
 const {height} = Dimensions.get("window");
 
 const BusesScreen = () => {
 
-    // let token = AsyncStorage.getItem("jwt");
-    // console.log(JSON.parse(token));
-
     const navigation = useNavigation();
     const route = useRoute();
     const Data = [route.params.Data];
-    // console.log(Data);
     const oneway = route.params.oneWay;
     const roundTrip = route.params.roundTrip;
     const src = route.params.src;
     const dest = route.params.dest;
+    const date = route.params.Date;
     const [isOpen, setIsOpen]=useState(false);
     const [click1, setClick1] = useState(false);
     const [click2, setClick2] = useState(false);
@@ -57,43 +54,43 @@ const BusesScreen = () => {
         setClick1(false);
         setClick2(true);
         setClick3(false);
-        setClick4(false)
+        setClick4(false);
     }
     const clickHandler3=()=>{
         setClick1(false);
         setClick2(false);
         setClick3(true);
-        setClick4(false)
+        setClick4(false);
     }
     const clickHandler4=()=>{
         setClick1(false);
         setClick2(false);
         setClick3(false);
-        setClick4(true)
+        setClick4(true);
     }
     const clickHandler5=()=>{
         setClick5(true);
         setClick6(false);
         setClick7(false);
-        setClick8(false)
+        setClick8(false);
     }
     const clickHandler6=()=>{
         setClick5(false);
         setClick6(true);
         setClick7(false);
-        setClick8(false)
+        setClick8(false);
     }
     const clickHandler7=()=>{
         setClick5(false);
         setClick6(false);
         setClick7(true);
-        setClick8(false)
+        setClick8(false);
     }
     const clickHandler8=()=>{
         setClick5(false);
         setClick6(false);
         setClick7(false);
-        setClick8(true)
+        setClick8(true);
     }
 
 
@@ -167,7 +164,7 @@ const BusesScreen = () => {
                     />
                 </TouchableOpacity>
                 <View style={styles.timingsContainer}>
-                    <FlatList
+                    {/* <FlatList
                     data={dates}
                     showsHorizontalScrollIndicator={false}
                     horizontal={true}
@@ -180,7 +177,13 @@ const BusesScreen = () => {
                             <Text style={item.active ? styles.activeText : styles.activeTextOff}>{item.date}</Text>
                         </TouchableOpacity>
                     )}
-                    />
+                    /> */}
+                    <TouchableOpacity activeOpacity={0.8} style={styles.active}
+                        onPress={()=>{}}
+                    >
+                        <Text style={styles.activeText}>{date}</Text>
+                    </TouchableOpacity>
+
                 </View>
                 <View style={styles.options}>
                     <FlatList
@@ -189,7 +192,7 @@ const BusesScreen = () => {
                     renderItem={({item})=>(
                         item.data.map(item1=>(
                             <SeaterOption
-                                key={item1.bus.id}
+                                key={item1.tripId}
                                 name={item1.bus.name}
                                 duration={item1.duration}
                                 arrivalHour={item1.time.arr}
@@ -199,10 +202,10 @@ const BusesScreen = () => {
                                 rating={item1.bus.rating}
                                 seats={item1.seats.available}
                                 desc={item.description}
-                                src={src}
-                                dest={dest}
-                                Data={Data}
                                 tripID={item1.tripId}
+                                src={src}
+                                dest={dest}                                
+                                date={date}
                             />
                         ))
                     )}
@@ -210,7 +213,7 @@ const BusesScreen = () => {
                 </View>
             </View>
             <TouchableOpacity activeOpacity={0.8} style={styles.filter}
-            onPress={()=>setIsOpen(true)}
+            // onPress={()=>setIsOpen(true)}
             >
                 <MaterialCommunityIcons
                 name="filter-plus"
@@ -458,7 +461,7 @@ const styles = StyleSheet.create({
     options:{
         alignItems:"center",
         width:width,
-        // marginBottom:40
+        marginBottom:height/1.7
     },
     filter:{
         backgroundColor:primary,
