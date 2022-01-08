@@ -7,24 +7,46 @@ import { fontColor, newColor, primary, secondary, textColor } from '../component
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
-import Entypo from "react-native-vector-icons/Entypo";
+// import Entypo from "react-native-vector-icons/Entypo";
+import { useTheme } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const {width,height} = Dimensions.get("window");
 
 const TicketScreen = () => {
 
     const navigation = useNavigation();
+    const colors = useTheme();
     const [data, setData] = useState([]);
     const [isData, setIsData] = useState(false);
+    // console.log(data);
+    const[token, setToken] = useState("");
     // console.log(isData);
 
+
+    const getData=()=>{
+        AsyncStorage.getItem("jwt").then(res=>{
+            if(res!=null){
+                const value = JSON.parse(res);
+                setToken(value.data.token);
+            }
+        })
+    };
+    let axiosConfig = {
+        headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            "Authorization": token,
+        }
+    };
+
     const ticketApi=()=>{
-        axios.get("https://buslala-backend-api.herokuapp.com/api/user/ticket")
+        axios.get("https://buslala-backend-api.herokuapp.com/api/user/booking",axiosConfig)
         .then(res=>{
             if(res.status===200){
                 const Data = res.data;
+                console.log(res.status);
                 setData(Data.data);
-                data.length != 0 ? setIsData(true) : setIsData(false);
+                // data.length != 0 ? setIsData(true) : setIsData(false);
             }else console.log(res.status);
         })
         .catch(e=>{
@@ -32,10 +54,15 @@ const TicketScreen = () => {
             alert("please try again later");
         })
     };
-
+    
+    // const checkData=()=>{
+    //     data.length !== 0 ? setIsData(true) : setIsData(false)
+    // }
     useEffect(() => {
         ticketApi();
-    }, []);
+        getData();
+        // checkData();
+    },[]);
 
     return (
         <View style={styles.screen}>
@@ -77,12 +104,15 @@ const TicketScreen = () => {
             </View>
             <View style={styles.view2}>
                 <View style={{flexDirection:"row",elevation:5,alignItems:"center", width:"100%", backgroundColor:"white", justifyContent:"space-between", borderRadius:10, padding:10}}>
-                    <TouchableOpacity activeOpacity={0.8} style={{}}
-                    onPress={()=>navigation.goBack()}>
+                    <TouchableOpacity 
+                        style={{backgroundColor:"#fff",elevation:5,borderRadius:5}}
+                        onPress={()=>navigation.goBack()}
+                    >
                         <AntDesign
-                        name="arrowleft"
-                        size={24}
-                        color="black"
+                            name="arrowleft"
+                            size={24}
+                            color="black"
+                            style={{padding:3}}
                         />
                     </TouchableOpacity>
                     <Text style={{fontFamily:RalewayBold, fontSize:17, color:"black",marginRight:30}}>Your Tickets</Text>
@@ -90,28 +120,30 @@ const TicketScreen = () => {
 
                 <ScrollView style={styles.notifications} showsVerticalScrollIndicator={false}>
                     {
-                        isData === true ? 
-                        <View style={{elevation:5,backgroundColor:"#e9f7f7",borderRadius:20,marginHorizontal:10,marginVertical:10}}>
-                            <View style={{marginVertical:10}}>
-                                <Text style={{color:"#000",textAlign:"center",fontWeight:"500"}}>Bus Name</Text>
-                                <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center",marginVertical:5}}>
-                                    <View style={{alignItems:"center"}}>
-                                        <Text style={{color:"#000"}}>From</Text>
-                                        <Text style={{color:"#000",fontSize:12}}>10:00am</Text>
+                        // isData === true ? 
+                        data.map((item,index)=>(
+                            <View style={{elevation:5,backgroundColor:"#e9f7f7",borderRadius:20,marginHorizontal:10,marginVertical:10}} key={index}>
+                                <View style={{marginVertical:10}}>
+                                    <Text style={{color:"#000",textAlign:"center",fontWeight:"500"}}>{item.bus}</Text>
+                                    <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center",marginVertical:5}}>
+                                        <View style={{alignItems:"center"}}>
+                                            <Text style={{color:"#000"}}>{item.source}</Text>
+                                            <Text style={{color:"#000",fontSize:12}}>10:00am</Text>
+                                        </View>
+                                        <Text style={{color:"#000"}}>--------</Text>
+                                        <View style={{alignItems:"center"}}>
+                                            <Text style={{color:"#000"}}>{item.destination}</Text>
+                                            <Text style={{color:"#000",fontSize:12}}>09:00pm</Text>
+                                        </View>
                                     </View>
-                                    <Text style={{color:"#000"}}>--------</Text>
-                                    <View style={{alignItems:"center"}}>
-                                        <Text style={{color:"#000"}}>To</Text>
-                                        <Text style={{color:"#000",fontSize:12}}>09:00pm</Text>
-                                    </View>
+                                    <Text style={{color:"#000",textAlign:"center",fontWeight:"400"}}>Passenger Name: {item.u1_name}</Text>
+                                    <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Seat number: {item.seat_number1}</Text>
+                                    {/* <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Ticket number: 012345687788</Text> */}
                                 </View>
-                                <Text style={{color:"#000",textAlign:"center",fontWeight:"400"}}>Passenger Name: Name name</Text>
-                                <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Seat number: 12</Text>
-                                <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Ticket number: 012345687788</Text>
-                            </View>
-                        </View> 
-                        :
-                        <Text style={{color:"gray",textAlign:"center",fontWeight:"bold"}}>You have no Tickets</Text>
+                            </View> 
+                        ))
+                        // :
+                        // <Text style={{color:"gray",textAlign:"center",fontWeight:"bold"}}>You have no Tickets</Text>
                     }
                 </ScrollView>
             </View>
@@ -124,7 +156,7 @@ export default TicketScreen
 const styles = StyleSheet.create({
     screen:{
         flex:1,
-        backgroundColor: "white",
+        // backgroundColor: "white",
         width:width
     },
     view:{

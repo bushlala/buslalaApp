@@ -5,6 +5,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useNavigation, useRoute } from '@react-navigation/core';
+import { useTheme } from "@react-navigation/native";
 
 
 import { fontColor, newColor, primary, secondary } from '../../components/Colors';
@@ -18,6 +19,7 @@ const { width, height } = Dimensions.get("window");
 export default function SelectedScreen(){
 
     const navigation = useNavigation();
+    const colors = useTheme();
     const route = useRoute();
     const { src, dest, name, deptHour, arrivalHour, priceLower, priceUpper, duration, tripId, date, rDate } = route.params;
     // console.log(rDate);
@@ -256,14 +258,14 @@ export default function SelectedScreen(){
                             </View>
                         </View>
                         <View style={{flexDirection:"row",marginTop:10}}>
-                            <Text style={{color:toggle === false ? "#e66349" : "#000",marginRight:10}}>Lower</Text>
+                            <Text style={{color:toggle === false ? "#e66349" : "gray",marginRight:10}}>Lower</Text>
                                 <ToggleSwitch isOn={toggle}
                                     onColor="#e66349"
                                     offColor="#e66349"                          
                                     size="medium"
                                     onToggle={() =>{toggle === false ? setToggle(true) : setToggle(false)}}
                                 />
-                            <Text style={{color:toggle === false ? "#000" : "#e66349",marginRight:10,marginLeft:10}}>Upper</Text>
+                            <Text style={{color:toggle === false ? "gray" : "#e66349",marginRight:10,marginLeft:10}}>Upper</Text>
                         </View>
                     </View> 
                     <View style={styles.circle}>
@@ -299,7 +301,7 @@ export default function SelectedScreen(){
 const styles = StyleSheet.create({
     screen:{
         flex: 1,
-        backgroundColor: "#edf5f7",
+        // backgroundColor: "#edf5f7",
         width: width
     },
     view:{
@@ -344,7 +346,7 @@ const styles = StyleSheet.create({
     },
     modal: {
         elevation: 5,
-        backgroundColor: "#fff",
+        backgroundColor: "#edf5f7",
         width: "100%",
         borderRadius: 10,
         marginTop: -110,

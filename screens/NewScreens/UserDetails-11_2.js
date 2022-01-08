@@ -6,6 +6,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import { useNavigation } from '@react-navigation/core';
 import DocumentPicker from 'react-native-document-picker';
 import SelectDropdown from 'react-native-select-dropdown';
+import { useTheme } from "@react-navigation/native";
 
 import { fontColor, newColor, primary, secondary } from '../../components/Colors';
 
@@ -18,6 +19,7 @@ const {height} = Dimensions.get("window");
 export default function UserDetails_11_2({route}){
 
     const navigation = useNavigation();
+    const colors = useTheme();
     const { name, src, dest, deptHour, arivHour, price, duration, tripId, seats, date, rDate } = route.params;
     // console.log(rDate);
     const [ values, setValues ] = useState({
@@ -43,10 +45,9 @@ export default function UserDetails_11_2({route}){
         select2 === false ? setSelect2(true) : setSelect2(false);
     }
     const selectFile = async () => {
-        //Opening Document Picker for selection of one file
         try {
           const res = await DocumentPicker.pick({
-            type: [DocumentPicker.types.images,DocumentPicker.types.pdf],
+            type: DocumentPicker.types.pdf,
             //There can me more options as well
             // DocumentPicker.types.allFiles
             // DocumentPicker.types.images
@@ -69,7 +70,7 @@ export default function UserDetails_11_2({route}){
             alert('Canceled');
           } else {
             //For Unknown Error
-            alert('Unknown Error: ' + JSON.stringify(err));
+            // console.log('Unknown Error: ' + JSON.stringify(err));
             throw err;
           }
         }
@@ -165,11 +166,11 @@ export default function UserDetails_11_2({route}){
             <View style={{paddingHorizontal:30,marginBottom:0}}>
             <ScrollView style={{}} showsVerticalScrollIndicator={false}>
                     <View style={{marginHorizontal:5}}>
-                        <Text style={{color:"#000",marginTop:40}}>Personal Detials</Text>
+                        <Text style={{color:colors.colors.text,marginTop:40}}>Personal Detials</Text>
                         <View style={{flexDirection:"row",justifyContent:"center",marginTop:20}}>
-                            <Text style={{color:"#000"}}>Person 1</Text>
-                            <View style={{borderWidth:0.8,marginHorizontal:20}}></View>
-                            <Text style={{color:"#000"}}>{seats}</Text>
+                            <Text style={{color:colors.colors.text}}>Person 1</Text>
+                            <View style={{borderWidth:0.8,marginHorizontal:20,borderColor:colors.colors.text}}></View>
+                            <Text style={{color:colors.colors.text}}>{seats}</Text>
                         </View>
                         <View style={{elevation:5,width:"100%", backgroundColor:"white", borderRadius:10, padding:10,marginTop:10}}>
                             <TextInput 
@@ -270,7 +271,7 @@ export default function UserDetails_11_2({route}){
                                 />
                             </View>
                         </View> */}
-                        <Text style={{color:"#000",marginTop:40}}>Contact Detials</Text>
+                        <Text style={{color:colors.colors.text,marginTop:40}}>Contact Detials</Text>
                         <Text style={{color:"gray",marginTop:10}}>Your ticket will be sent here</Text>
                         <View style={{elevation:5, backgroundColor:"white", borderRadius:10, padding:5,marginTop:10}}>
                             <TextInput 
@@ -293,7 +294,7 @@ export default function UserDetails_11_2({route}){
                             <TouchableOpacity style={{flexDirection:"row",alignItems:"center"}} 
                                 onPress={optionalClick1}
                             >
-                                <MaterialCommunityIcons name={select1===true?"check-box-outline":"crop-square"} color={"#000"} size={22} />
+                                <MaterialCommunityIcons name={select1===true?"check-box-outline":"crop-square"} color={"gray"} size={22} />
                                 <Text style={{color:"#66645f",marginLeft:10}}>Upload ID Proof (Optional)</Text>
                             </TouchableOpacity>
                         </View>
@@ -301,7 +302,7 @@ export default function UserDetails_11_2({route}){
                             <TouchableOpacity style={{flexDirection:"row",alignItems:"center"}} 
                                 onPress={optionalClick2}
                             >
-                                <MaterialCommunityIcons name={select2===true?"check-box-outline":"crop-square"} color={"#000"} size={22} />
+                                <MaterialCommunityIcons name={select2===true?"check-box-outline":"crop-square"} color={"gray"} size={22} />
                                 <Text style={{color:"#66645f",marginLeft:10}}>Upload Cowin Certificate (Optional)</Text>
                             </TouchableOpacity>
                         </View>
@@ -349,7 +350,7 @@ export default function UserDetails_11_2({route}){
 const styles = StyleSheet.create({
     screen:{
         flex: 1,
-        backgroundColor: "#edf5f7",
+        // backgroundColor: "#fff",
         width: width
     },
     view:{

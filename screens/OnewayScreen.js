@@ -12,10 +12,13 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useState } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
+import { useTheme } from "@react-navigation/native";
 
 
 
 const OnewayScreen = () => {
+
+    const colors = useTheme();
 
 
     const navigation = useNavigation();
@@ -37,6 +40,7 @@ const OnewayScreen = () => {
     const [date3, setDate3] = useState(new Date());
     const [srcData, setSrcData] = useState([]);
     const [destData, setDestData] = useState([]);
+    
     // console.log(destData);
 
 
@@ -369,7 +373,7 @@ const OnewayScreen = () => {
                             <Text style={{color:"black", fontFamily:RalewayBold, fontSize:16, marginBottom:4}}>Departure Date</Text>
                             <TouchableOpacity activeOpacity={0.8}
                             onPress={()=>setIsVisible1(true)}
-                            style={{paddingBottom: 3,alignItems:"center", justifyContent:"space-between", flexDirection:"row", borderBottomColor:"black", borderBottomWidth:1}}>
+                            style={{paddingBottom: 3,alignItems:"center", justifyContent:"space-between", flexDirection:"row", borderBottomColor:colors.colors.text, borderBottomWidth:1}}>
                                 {(deptDate==="") ? <Text style={{fontSize:15, color:"gray", padding:5}}>YYYY-MM-DD</Text>
                                 : <Text style={{fontSize:15, color:"gray", padding:5}}>{deptDate}</Text>}
                                 {isVisible1 && (
@@ -390,7 +394,7 @@ const OnewayScreen = () => {
                                 <Text style={{color:"black", fontFamily:RalewayBold, fontSize:16, marginBottom:4}}>Departure Date</Text>
                                 <TouchableOpacity activeOpacity={0.8}
                                 onPress={()=>setIsVisible2(true)}
-                                style={{paddingBottom: 3,alignItems:"center", justifyContent:"space-between", flexDirection:"row", borderBottomColor:"black", borderBottomWidth:1}}>
+                                style={{paddingBottom: 3,alignItems:"center", justifyContent:"space-between", flexDirection:"row",borderBottomColor:colors.colors.text, borderBottomWidth:1}}>
                                     {(deptDate2==="") ? <Text style={{fontSize:15, color:"gray", padding:5}}>YYYY-MM-DD</Text>
                                     : <Text style={{fontSize:15, color:"gray", padding:5}}>{deptDate2}</Text>}
                                     {isVisible2 && (
@@ -410,7 +414,7 @@ const OnewayScreen = () => {
                                 <Text style={{color:"black", fontFamily:RalewayBold, fontSize:16, marginBottom:4}}>Return Date</Text>
                                 <TouchableOpacity activeOpacity={0.8}
                                 onPress={()=>setIsVisible3(true)}
-                                style={{paddingBottom: 3,alignItems:"center", justifyContent:"space-between", flexDirection:"row", borderBottomColor:"black", borderBottomWidth:1}}>
+                                style={{paddingBottom: 3,alignItems:"center", justifyContent:"space-between", flexDirection:"row", borderBottomColor:colors.colors.text, borderBottomWidth:1}}>
                                     {(returnDate==="") ? <Text style={{fontSize:15, color:"gray", padding:5}}>YYYY-MM-DD</Text>
                                     : <Text style={{fontSize:15, color:"gray", padding:5}}>{returnDate}</Text>}
                                     {isVisible3 && (
@@ -443,7 +447,7 @@ export default OnewayScreen;
 const styles = StyleSheet.create({
     screen:{
         flex:1,
-        backgroundColor: "white",
+        // backgroundColor: "white",
     },
     view:{
         backgroundColor: primary,

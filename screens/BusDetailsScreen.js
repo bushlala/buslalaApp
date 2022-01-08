@@ -3,20 +3,23 @@ import axios from 'axios'
 import React, { useState } from 'react'
 import { Alert, Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { RalewayBold, RalewayLight, RalewayRegular } from '../assets/fonts/fonts'
-import { primary, secondary, textColor } from '../components/Colors'
-// import sendEmail from "react-native-email";
+import { primary, secondary, textColor } from '../components/Colors';
+import { useTheme } from "@react-navigation/native";
+
 
 const BusDetailsScreen = ({route}) => {
 
     const navigation = useNavigation();
-    const { busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number, email, gender1, gender2, price, tripId, seats, date, src, dest, rDate } = route.params;
-    console.log(rDate);
+    const colors = useTheme();
+    const { busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number, email, 
+            gender1, gender2, price, tripId, seats, date, src, dest, rDate } = route.params;
+    // console.log(rDate);
     const [error, setError] = useState(false);
     const [user, setUser]= useState(false);
     const [myName, setMyName] = useState("");
     const [Email, setEmail] = useState("");
     const [message, setMessage]= useState("");
-    console.log(email);
+    // console.log(email);
 
     const errorHandler=()=>{
         if(Email==="" || myName===""){
@@ -125,7 +128,7 @@ export default BusDetailsScreen
 const styles = StyleSheet.create({
     screen:{
         flex:1,
-        backgroundColor: primary,
+        // backgroundColor: primary,
     },
     view2:{
         width:"100%",

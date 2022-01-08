@@ -4,6 +4,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useNavigation } from '@react-navigation/core'
+import { useTheme } from "@react-navigation/native";
 
 
 import { fontColor, newColor, primary, secondary } from '../../components/Colors';
@@ -14,6 +15,7 @@ const {width} = Dimensions.get("window");
 export default function NotificationScreen(){
 
     const navigation = useNavigation();
+    const colors = useTheme();
     const [isData, setIsData] = useState(false);
 
     return (
@@ -114,7 +116,7 @@ export default function NotificationScreen(){
 const styles = StyleSheet.create({
     screen:{
         flex:  1,
-        backgroundColor: "white",
+        // backgroundColor: "white",
         width: width
     },
     view:{

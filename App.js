@@ -1,6 +1,7 @@
-import React from 'react';
-import {NavigationContainer} from "@react-navigation/native";
+import React, { useEffect, useState } from 'react';
+import {NavigationContainer,DefaultTheme,DarkTheme} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
+import { EventRegister } from 'react-native-event-listeners'; 
 
 
 import WelcomeScreen from './screens/WelcomeScreen';
@@ -28,8 +29,21 @@ const Stack = createNativeStackNavigator();
 
 
 const App = () => {
+
+  const [darkApp, setDarkApp] = useState(false);
+  const appTheme = darkApp ? DarkTheme : DefaultTheme; 
+  useEffect(()=>{
+       let eventListener  = EventRegister.addEventListener('changeThemeEvent',
+               (data) => {
+                     setDarkApp(data);
+              })
+         return()=>{
+                EventRegister.removeEventListener(eventListener);
+         };
+  },[]);
+
   return (
-      <NavigationContainer>
+      <NavigationContainer theme={appTheme}>
         <Stack.Navigator initialRouteName="Welcome" screenOptions={{
           headerShown:false,
         }}>

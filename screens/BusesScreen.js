@@ -8,9 +8,10 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { useState } from 'react'
-import { dates } from '../data/dates'
-import SeaterOption from '../components/SeaterOption'
+import { useState } from 'react';
+import SeaterOption from '../components/SeaterOption';
+import { useTheme } from "@react-navigation/native";
+
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const {width} = Dimensions.get("window");
@@ -19,6 +20,7 @@ const {height} = Dimensions.get("window");
 const BusesScreen = () => {
 
     const navigation = useNavigation();
+    const colors = useTheme();
     const route = useRoute();
     const Data = [route.params.Data];
     const oneway = route.params.oneWay;
@@ -135,8 +137,9 @@ const BusesScreen = () => {
             </View>
             <View style={styles.view2}>
                 <TouchableOpacity activeOpacity={0.8} style={styles.destination}>
-                    <TouchableOpacity activeOpacity={0.8}
-                    onPress={()=>navigation.goBack()}
+                    <TouchableOpacity 
+                        style={{backgroundColor:"#fff",elevation:5,borderRadius:5}}
+                        onPress={()=>navigation.goBack()}
                     >
                     <Ionicons
                     name="arrow-back"
@@ -336,7 +339,7 @@ export default BusesScreen
 const styles = StyleSheet.create({
     screen:{
         flex:1,
-        backgroundColor: "white",
+        // backgroundColor: "white",
     },
     view:{
         backgroundColor: primary,

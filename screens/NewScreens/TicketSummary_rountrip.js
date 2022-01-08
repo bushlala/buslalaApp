@@ -3,8 +3,8 @@ import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Image, ScrollView
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
-// import Entypo from "react-native-vector-icons/Entypo";
 import { useNavigation } from '@react-navigation/core';
+import { useTheme } from "@react-navigation/native";
 import axios from "axios";
 
 
@@ -14,7 +14,9 @@ const { height } = Dimensions.get("window");
 export default function TicketSummaryScreen({route}){
 
     const navigation = useNavigation();
-    const {Name,busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number, email, gender1, gender2, price, tripId, seats, date, src, dest, rDate} = route.params;
+    const colors = useTheme();
+    const {Name,busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number,
+             email, gender1, gender2, price, tripId, seats, date, src, dest, rDate} = route.params;
     console.log(rDate);
     var postdata={
         "seat_number1": seats,
@@ -132,14 +134,14 @@ export default function TicketSummaryScreen({route}){
                         </View>
                     </View>
                     <View style={{marginTop:20}}>
-                        <Text style={{color:"#000",fontSize:18}}>Personal Details</Text>
+                        <Text style={{color:colors.colors.text,fontSize:18}}>Personal Details</Text>
                         <View style={{marginTop:10}}>
                             <View style={{flexDirection:"row",justifyContent:"space-between"}}>
-                                <MaterialCommunityIcons name="chair-rolling" color="#000" size={24} />
+                                <MaterialCommunityIcons name="chair-rolling" color={colors.colors.text} size={24} />
                                 <Text style={{color:"#e66349"}}>{seats}</Text>
-                                <Text style={{color:"#000"}}>{fullName1}</Text>
-                                <Text style={{color:"#000"}}>{age1}</Text>
-                                <Text style={{color:"#000"}}>{gender1}  </Text>
+                                <Text style={{color:colors.colors.text}}>{fullName1}</Text>
+                                <Text style={{color:colors.colors.text}}>{age1}</Text>
+                                <Text style={{color:colors.colors.text}}>{gender1}  </Text>
                             </View>
                             <View style={{borderWidth:0.2,borderColor:"gray",backgroundColor:"gray",marginVertical:10}} />
                             {/* <View style={{flexDirection:"row",justifyContent:"space-between"}}>
@@ -153,22 +155,22 @@ export default function TicketSummaryScreen({route}){
                         </View>
                     </View>
                     <View style={{marginTop:20}}>
-                        <Text style={{color:"#000",fontSize:18}}>Contact Details</Text>
+                        <Text style={{color:colors.colors.text,fontSize:18}}>Contact Details</Text>
                         <View style={{marginTop:10}}>
                             <View style={{flexDirection:"row"}}>
                                 <Text style={{color:"gray"}}>Phone number - </Text>
-                                <Text style={{color:"#000"}}>{number}</Text>
+                                <Text style={{color:colors.colors.text}}>{number}</Text>
                             </View>
                             <View style={{borderWidth:0.2,borderColor:"gray",backgroundColor:"gray",marginVertical:10}} />
                             <View style={{flexDirection:"row"}}>
                                 <Text style={{color:"gray"}}>Email - </Text>
-                                <Text style={{color:"#000"}}>{email}</Text>
+                                <Text style={{color:colors.colors.text}}>{email}</Text>
                             </View>
                             <View></View>
                         </View>
                     </View>
                     <View style={{marginTop:20}}>
-                        <Text style={{color:"#000",fontSize:18}}>Payment Details</Text>
+                        <Text style={{color:colors.colors.text,fontSize:18}}>Payment Details</Text>
                         <View style={{marginTop:10}}>
                             {/* <View style={{flexDirection:"row",justifyContent:"space-between"}}>
                                 <Text style={{color:"gray"}}>Ticket Fare</Text>
@@ -179,7 +181,7 @@ export default function TicketSummaryScreen({route}){
                                 <Text style={{color:"gray"}}>₹50.00</Text>
                             </View> */}
                             <View style={{flexDirection:"row",justifyContent:"space-between",marginBottom:30,alignItems:"center"}}>
-                                <Text style={{color:"#000"}}>Total pay</Text>
+                                <Text style={{color:colors.colors.text}}>Total pay</Text>
                                 <Text style={{color:"#e66349",fontSize:18,fontWeight:"800"}}>₹{price}</Text>
                             </View>
                         </View>
@@ -201,7 +203,7 @@ export default function TicketSummaryScreen({route}){
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
-        backgroundColor: "#edf5f7",
+        // backgroundColor: "#edf5f7",
         width: width
     },
     container: {

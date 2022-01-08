@@ -1,6 +1,6 @@
-import { useNavigation, useRoute } from '@react-navigation/core'
-import axios from 'axios'
-import React, { useEffect } from 'react'
+import { useNavigation, useRoute } from '@react-navigation/core';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Alert, Dimensions, FlatList, Image, KeyboardAvoidingView, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { RalewayBold, RalewayLight, RalewayRegular } from '../assets/fonts/fonts'
 import { fontColor, newColor, primary, secondary, textColor } from '../components/Colors'
@@ -10,29 +10,41 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Feather from "react-native-vector-icons/Feather";
 import Entypo from "react-native-vector-icons/Entypo";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { useState } from 'react';
-import ProfileOptions from '../components/ProfileOptions'
-import DocumentPicker from 'react-native-document-picker'
+import ProfileOptions from '../components/ProfileOptions';
+import DocumentPicker from 'react-native-document-picker';
 import ToggleSwitch from "toggle-switch-react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// import { EventRegister } from 'react-native-event-listeners';
+import { useTheme } from "@react-navigation/native";
+// import storage from "@react-native-firebase/storage";
+// import firestore from '@react-native-firebase/firestore';
 
+ 
 const {width, height} = Dimensions.get("window");
 
 const ProfileScreen = () => {
 
+    // const FireBaseStorage = storage();
+
     const navigation = useNavigation();
     const route = useRoute();
+    const { colors } = useTheme();
+
     const [isOpen, setIsOpen]=useState(false);
     const [isOpen1, setIsOpen1]=useState(false);
     const [isOpen2, setIsOpen2]=useState(false);
     const [isOpen3, setIsOpen3] = useState(false);
     const [on, setOn] = useState(false);
-    const [on1, setOn1] = useState(false);
+    // const [on1, setOn1] = useState(false);
     const [on2, setOn2] = useState(false);
     const [pdfName, setPdfName] = useState("");
-    const [uri, setUri] = useState("");
+    // const [uri, setUri] = useState("");
     const [bookingData, setBookingData] = useState([]);
- 
+    const [idProof, setIdProof] = useState(null);
+    const [ darkMode, setDarkMode ] = useState(false);
+    const[token, setToken] = useState("");
+    // console.log(darkMode);
+
     const [showUserData, setShowUserData] = useState({
         first_name:"",
         last_name:"",
@@ -54,7 +66,76 @@ const ProfileScreen = () => {
     }
     const closeHandle3=()=>{
         setIsOpen3(false);
+    };
+
+    // const upMode=()=>{
+    //     try{
+    //         AsyncStorage.setItem("val",JSON.stringify(darkMode));
+    //     }
+    //     catch(err){
+    //         console.log(err);
+    //     }
+    // };
+    // const catchMode=async()=>{
+    //     try {
+    //         AsyncStorage.getItem("val").then(val=>{
+    //             console.log(val);
+    //             if(val=="true"){
+    //                 setDarkMode(true);
+    //             } else(setDarkMode(false))
+    //         })
+    //         // const value = await AsyncStorage.getItem("val");
+    //         // if(value !== null) {
+    //         //   setDarkMode(value);
+    //         // }
+    //     } catch(e) {
+    //     console.log(e);
+    //     }
+    // };
+
+    const getData=()=>{
+        AsyncStorage.getItem("jwt").then(res=>{
+            if(res!=null){
+                const value = JSON.parse(res);
+                setToken(value.data.token);
+            }
+        })
+    };
+    let axiosConfig = {
+        headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            "Authorization": token,
+        }
+    };
+
+    const deactiveAcc=()=>{
+        axios.get("https://buslala-backend-api.herokuapp.com/api/user/delete",axiosConfig).then(res=>{
+            if(res.status===200){
+                AsyncStorage.removeItem("jwt");
+                navigation.navigate("Login");
+            }
+            else{
+                console.log(res.status);
+            }
+        })
+        .catch(e=>console.log(e));
+    };
+
+    const deleteUserAlert=()=>{
+        Alert.alert(
+            "Deactive your account",
+            "Are you sure?",
+            [
+                {
+                text: "No",
+                onPress: () => console.log("No Pressed"),
+                style: "cancel"
+                },
+                { text: "Yes", onPress: deactiveAcc }
+            ]
+        );
     }
+
 
 
     const pdfHandler=async()=>{
@@ -62,17 +143,23 @@ const ProfileScreen = () => {
             const res = await DocumentPicker.pick({
                 type: DocumentPicker.types.pdf,
             });
-            console.log(
-                res[1]
-            )    
+            res.map(item=>(setIdProof(item.uri),setPdfName(item.name)));   
         } catch (error) {
             if(DocumentPicker.isCancel(error)){
-
+                alert('Canceled');
             }else{
                 throw error;
             }
         }
     };
+
+    // const uploadPDF=()=>{
+    //     if( idProof == null ) {
+    //         return null;
+    //     }
+    //     const uploadUri = idProof;
+    //     let filename = uploadUri.substring(uploadUri.lastIndexOf('/') + 1);
+    // }
 
     const postData={
         first_name: showUserData.first_name,
@@ -85,12 +172,10 @@ const ProfileScreen = () => {
     // console.log(postData);
     
     const updateProfile=()=>{
+        // const pdfURL = await uploadPDF();
         axios.put("https://buslala-backend-api.herokuapp.com/api/user/profile",postData)
         .then(res=>{
             if(res.status==200){
-                // setUserData({...userData,first_name: res.data.first_name,last_name:res.data.last_name,number:res.data.number,address:res.data.address,email:res.data.email});
-                // console.log(res.data);
-                // console.log(userData);
                 alert("Updated successfully");
             }
             else console.log(res.status);
@@ -114,9 +199,12 @@ const ProfileScreen = () => {
     useEffect(()=>{
         showUser();
         myBookingsApi();
+        getData();
+        // upMode();
+        // catchMode();
     },[]);
     
-    const customAlert = () =>
+    const logOutAlert = () =>
         Alert.alert(
         "Logging out",
         "Are you sure?",
@@ -129,20 +217,25 @@ const ProfileScreen = () => {
             { text: "Yes", onPress: clickLogout }
         ]
     );
+    const updateAlert = () =>
+        Alert.alert(
+        "Update profile data",
+        "Are you sure?",
+        [
+            {
+            text: "No",
+            onPress: () => console.log("No Pressed"),
+            style: "cancel"
+            },
+            { text: "Yes", onPress: updateProfile }
+        ]
+    );
 
     const clickLogout=async()=>{
         axios.post("https://buslala-backend-api.herokuapp.com/api/user/logout").then(res=>{
             if(res.status === 200){
                 AsyncStorage.removeItem("jwt");
                 navigation.navigate("Login");
-                // setShowUserData({...showUserData,
-                //     first_name:"",
-                //     last_name:"",
-                //     number:"",
-                //     address:"",
-                //     email:"",
-                //     gender:""
-                // });
             }else console.log(res.status);
         })
         .catch(e=>console.log(e))
@@ -184,7 +277,7 @@ const ProfileScreen = () => {
                             />
                         </TouchableOpacity>
                         <View style={{alignItems:"center", marginLeft:5}}>
-                            <Text style={{fontSize:18, fontFamily:RalewayBold, color: "white"}}>{showUserData.first_name} {showUserData.last_name}</Text>
+                            <Text style={{fontSize:18, fontFamily:RalewayBold, color: "white"}}>{showUserData.first_name}</Text>
                             <Text style={{fontSize:13, fontFamily:RalewayRegular, color: "white", marginVertical:5}}>+91 {showUserData.number}</Text>
                             <View style={{flexDirection:"row", alignItems:"center"}}>
                                 {showUserData.address == "" ? null :
@@ -238,34 +331,34 @@ const ProfileScreen = () => {
                     <ProfileOptions
                     text="Payment"
                     desc="UPI, Saved Cards"
-                    // nav={()=>navigation.navigate("PaymentSettings")}
+                    nav={()=>navigation.navigate("PaymentSettings")}
                     iconName="arrowright"
                     />
                     <ProfileOptions
                     text="My Bookings"
                     desc="Rating, Completed, Cancelled Tickets"
-                    // nav={()=>navigation.navigate("Bookings")}
+                    nav={()=>navigation.navigate("Bookings",{"first_name": showUserData.first_name,"number": showUserData.number,"address": showUserData.address})}
                     iconName="arrowright"
                     />
-                    <ProfileOptions
+                    {/* <ProfileOptions
                     text="Cowin Certificate"
                     desc="Add your cowin Certificate"
-                    // btn={()=>setIsOpen(true)}
+                    btn={()=>setIsOpen(true)}
                     iconName="arrowright"
-                    />
+                    /> */}
                     <ProfileOptions
                     text="Call Support"
                     desc="24/7 Service"
                     btn={()=>setIsOpen1(true)}
                     iconName="arrowright"
                     />
-                    <ProfileOptions
+                    {/* <ProfileOptions
                     text="Settings"
                     desc="Deactivate, Modes, Notifications"
-                    // btn={()=>setIsOpen2(true)}
+                    btn={()=>setIsOpen2(true)}
                     iconName="arrowright"
-                    />
-                    <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={customAlert}>
+                    /> */}
+                    <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={logOutAlert}>
                         <Text style={{fontFamily:RalewayBold, fontSize:18, color:"white", textAlign:"center"}}>Logout</Text>
                     </TouchableOpacity>
                 </View>
@@ -334,7 +427,7 @@ const ProfileScreen = () => {
                             <Text style={{fontFamily:RalewayRegular, fontSize:15, color:"black"}}>24/7 Help Support</Text>
                         </View>
                         <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-                            <Text style={{fontSize:15, fontFamily:RalewayBold, color:"white", textAlign:"center"}}>Call +91 9658236500</Text>
+                            <Text style={{fontSize:15, fontFamily:RalewayBold, color:"white", textAlign:"center"}}>Call 333</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -346,46 +439,49 @@ const ProfileScreen = () => {
             visible={isOpen2}>
                 <View style={{alignItems:"center", marginHorizontal:20, width:"90%", flex:1, justifyContent:"flex-end"}}>
                     <View style={styles.modal}>
-                    <View style={{flexDirection:"row",alignItems:"center",justifyContent:"space-between", width:"100%"}}>
-                        <Text style={{fontSize:15, fontFamily:RalewayBold, color:"black"}}>Settings</Text>
-                        <TouchableOpacity activeOpacity={0.8} onPress={closeHandle2}>
-                        <AntDesign
-                        name="close"
-                        size={24}
-                        color="black"
-                        />
-                        </TouchableOpacity>
-                    </View>
-                        <View style={{flexDirection:"row",alignItems:"center",justifyContent:"space-between", width:"100%", borderBottomColor:"gray", borderBottomWidth:1, paddingVertical:10}}>
-                            <Text style={{fontSize:15, fontFamily:RalewayBold, color:"black"}}>Deactivate account</Text>
-                            <ToggleSwitch
-                            isOn={on}
-                            onColor="red"
-                            offColor="gray"
-                            size="small"
-                            onToggle={()=>setOn(!on)}
+                        <View style={{flexDirection:"row",alignItems:"center",justifyContent:"space-between", width:"100%"}}>
+                            <Text style={{fontSize:15, fontFamily:RalewayBold, color:"black"}}>Settings</Text>
+                            <TouchableOpacity activeOpacity={0.8} onPress={closeHandle2}>
+                            <AntDesign
+                            name="close"
+                            size={24}
+                            color="black"
                             />
+                            </TouchableOpacity>
                         </View>
-                        <View style={{flexDirection:"row",alignItems:"center",justifyContent:"space-between", width:"100%",  borderBottomColor:"gray", borderBottomWidth:1, paddingVertical:10}}>
-                            <Text style={{fontSize:15, fontFamily:RalewayBold, color:"black"}}>Modes: Day</Text>
-                            <ToggleSwitch
-                            isOn={on1}
-                            onColor="red"
-                            offColor="gray"
-                            size="small"
-                            onToggle={()=>setOn1(!on1)}
-                            />
-                        </View>
-                        <View style={{flexDirection:"row",alignItems:"center",justifyContent:"space-between", width:"100%",  borderBottomColor:"gray", borderBottomWidth:1, paddingVertical:10}}>
-                            <Text style={{fontSize:15, fontFamily:RalewayBold, color:"black"}}>Notifications</Text>
-                            <ToggleSwitch
-                            isOn={on2}
-                            onColor="red"
-                            offColor="gray"
-                            size="small"
-                            onToggle={()=>setOn2(!on2)}
-                            />
-                        </View>
+                            <View style={{flexDirection:"row",alignItems:"center",justifyContent:"space-between", width:"100%", borderBottomColor:"gray", borderBottomWidth:1, paddingVertical:10}}>
+                                <Text style={{fontSize:15, fontFamily:RalewayBold, color:"black"}}>Deactivate account</Text>
+                                <ToggleSwitch
+                                isOn={on}
+                                onColor="red"
+                                offColor="gray"
+                                size="small"
+                                onToggle={()=>setOn(!on)}
+                                />
+                            </View>
+                            {/* <View style={{flexDirection:"row",alignItems:"center",justifyContent:"space-between", width:"100%",  borderBottomColor:"gray", borderBottomWidth:1, paddingVertical:10}}>
+                                <Text style={{fontSize:15, fontFamily:RalewayBold, color:"#000"}}>Modes: {!darkMode?"Day":"Night"}</Text>
+                                <ToggleSwitch
+                                isOn={darkMode}
+                                onColor="red"
+                                offColor="gray"
+                                size="small"
+                                onToggle={(val)=>{
+                                    setDarkMode(val);
+                                    EventRegister.emit("changeThemeEvent",val);
+                                }}
+                                />
+                            </View> */}
+                            {/* <View style={{flexDirection:"row",alignItems:"center",justifyContent:"space-between", width:"100%",  borderBottomColor:"gray", borderBottomWidth:1, paddingVertical:10}}>
+                                <Text style={{fontSize:15, fontFamily:RalewayBold, color:"black"}}>Notifications</Text>
+                                <ToggleSwitch
+                                isOn={on2}
+                                onColor="red"
+                                offColor="gray"
+                                size="small"
+                                onToggle={()=>setOn2(!on2)}
+                                />
+                            </View> */}
                     </View>
                 </View>
             </Modal>
@@ -423,11 +519,11 @@ const ProfileScreen = () => {
                                     />
                                     <Text style={{color:primary, fontFamily:RalewayBold, fontSize:13, marginLeft:3}}>Vaccinated</Text>
                                 </View>
-                                <TouchableOpacity style={{right:-20, backgroundColor:"lightgray",borderRadius:10, padding:5}}
-                                    onPress={updateProfile}
+                                {/* <TouchableOpacity style={{right:-20, backgroundColor:"lightgray",borderRadius:10, padding:5}}
+                                    onPress={updateAlert}
                                 >
                                     <Text style={{fontFamily:RalewayRegular, fontSize:13, color:"red",marginHorizontal:5}}>Update</Text>
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
                             </View>
                         </View>
                         <ScrollView showsVerticalScrollIndicator={false} style={{marginVertical:10}}>
@@ -492,7 +588,7 @@ const ProfileScreen = () => {
                                 onChangeText={(val)=>setShowUserData({...showUserData,gender:val})}
                                 />
                             </View>
-                            <Text style={{marginVertical:10, fontSize:15, fontFamily:RalewayBold, color:"black"}}>Verification</Text>
+                            {/* <Text style={{marginVertical:10, fontSize:15, fontFamily:RalewayBold, color:"black"}}>Verification</Text>
                             <View style={{alignItems:"center", marginVertical:10, width:"100%"}}>
                                 <View style={styles.pdf}>
                                     {(!pdfName) ? <Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}}>Cowin.pdf</Text>:<Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}}>{pdfName}</Text>}
@@ -509,8 +605,8 @@ const ProfileScreen = () => {
                             <TouchableOpacity style={styles.button} activeOpacity={0.8}
                             onPress={pdfHandler}>
                                 <Text style={{fontSize:15, fontFamily:RalewayBold, color:"white", textAlign:"center"}}>+ Add file</Text>
-                            </TouchableOpacity>
-                            <View style={{borderBottomWidth:1, borderBottomColor:"gray", padding:5,marginVertical:10, flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
+                            </TouchableOpacity> */}
+                            {/* <View style={{borderBottomWidth:1, borderBottomColor:"gray", padding:5,marginVertical:10, flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
                                 <Text style={{fontSize:16, fontFamily:RalewayBold, color:"black"}}>Language</Text>
                                 <View style={{flexDirection:"row",alignItems:"center"}}>
                                     <Text style={{marginRight:5,fontFamily:RalewayRegular, fontSize:15, color:"black"}}>ENGLISH</Text>
@@ -522,7 +618,11 @@ const ProfileScreen = () => {
                                         />
                                     </TouchableOpacity>
                                 </View>
-                            </View>
+                            </View> */}
+                            <TouchableOpacity style={styles.button} activeOpacity={0.8}
+                            onPress={updateAlert}>
+                                <Text style={{fontSize:15, fontFamily:RalewayBold, color:"white", textAlign:"center"}}>Update</Text>
+                            </TouchableOpacity>
                         </ScrollView>
                     </View>
                 </View>
@@ -536,7 +636,7 @@ export default ProfileScreen
 const styles = StyleSheet.create({
     screen:{
         flex:1,
-        backgroundColor: "white",
+        // backgroundColor: "white",
     },
     view:{
         backgroundColor: primary,
@@ -569,7 +669,8 @@ const styles = StyleSheet.create({
         elevation:5,
         marginBottom:10,
         alignSelf:"center",
-        width:"65%"
+        width:"65%",
+        marginTop:20
     },
     heading:{
         flexDirection:"row",
@@ -606,7 +707,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius:10,
         borderTopRightRadius:10,
         marginHorizontal:20,
-        maxHeight: 300,
+        maxHeight: height/2.8,
         elevation:5,
         padding:20,
         alignItems:"center",

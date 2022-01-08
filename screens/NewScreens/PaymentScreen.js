@@ -6,6 +6,8 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import { useNavigation } from '@react-navigation/core'
 import RazorpayCheckout from 'react-native-razorpay';
 import axios from "axios";
+import { useTheme } from "@react-navigation/native";
+
 // import Entypo from "react-native-vector-icons/Entypo";
 
 
@@ -14,6 +16,7 @@ const { width } = Dimensions.get("window");
 export default function PaymentScreen({route}){
 
     const navigation = useNavigation();
+    const colors = useTheme();
     const { Data, name, email, number, price } = route.params;
     console.log(Data);
     
@@ -45,7 +48,7 @@ export default function PaymentScreen({route}){
             }).then(res=>{
                 if(res.status==200){
                     console.log(res.data);
-                    navigation.navigate("Booked Successfully");
+                    navigation.navigate("Booked Successfully",name);
                 }
                 else console.log(res.status);
             }).catch(e=>console.log(e));
@@ -117,10 +120,10 @@ export default function PaymentScreen({route}){
                 <View style={{marginHorizontal:20,marginBottom:20}}>
                     <View style={{marginLeft:10,marginTop:20,marginBottom:5}}>
                         <View style={{}}>
-                            <Text style={{color:"#000"}}>Select Payment Methods</Text>
+                            <Text style={{color:colors.colors.text}}>Select Payment Methods</Text>
                         </View>
                         <View style={{marginTop:5}}>
-                            <Text style={{color:"#000"}}>Credit Card/Debit Card</Text>
+                            <Text style={{color:colors.colors.text}}>Credit Card/Debit Card</Text>
                         </View>
                     </View>
                     <TouchableOpacity 
@@ -145,7 +148,7 @@ export default function PaymentScreen({route}){
                     </TouchableOpacity>
                     <View style={{marginTop:20}}>
                         <View style={{marginLeft:10,marginBottom:10}}>
-                            <Text style={{color:"#000"}}>Other Methods</Text>
+                            <Text style={{color:colors.colors.text}}>Other Methods</Text>
                         </View>
                         <TouchableOpacity style={{elevation:5,width:"100%", backgroundColor:"white", borderRadius:10, padding:15}}
                             onPress={_razorpay}
@@ -214,7 +217,7 @@ export default function PaymentScreen({route}){
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
-        backgroundColor: "#edf5f7",
+        // backgroundColor: "#edf5f7",
         width: width
     },
     container: {

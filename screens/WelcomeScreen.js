@@ -4,10 +4,12 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { RalewayLight, RalewayRegular } from '../assets/fonts/fonts'
 import { fontColor, primary, secondary, textColor } from '../components/Colors'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTheme } from "@react-navigation/native";
 
 const WelcomeScreen = () => {
 
     const navigation= useNavigation();
+    const colors = useTheme();
     
     const getStarted=async()=>{
         try {

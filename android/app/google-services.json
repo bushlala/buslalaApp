@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "13501620121",
+    "project_id": "buslala-27713",
+    "storage_bucket": "buslala-27713.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:13501620121:android:66aec938644e85b5fc3d08",
+        "android_client_info": {
+          "package_name": "com.buslala"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "13501620121-enqesbe74o9eg5ap434nugu403apuk13.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYL12BT69mhf7kWMYmyqcrmL48tr397RE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "13501620121-enqesbe74o9eg5ap434nugu403apuk13.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
