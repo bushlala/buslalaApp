@@ -11,7 +11,7 @@ import Feather from "react-native-vector-icons/Feather";
 import Entypo from "react-native-vector-icons/Entypo";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import ProfileOptions from '../components/ProfileOptions';
-import DocumentPicker from 'react-native-document-picker';
+// import DocumentPicker from 'react-native-document-picker';
 import ToggleSwitch from "toggle-switch-react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import { EventRegister } from 'react-native-event-listeners';
@@ -138,28 +138,21 @@ const ProfileScreen = () => {
 
 
 
-    const pdfHandler=async()=>{
-        try {
-            const res = await DocumentPicker.pick({
-                type: DocumentPicker.types.pdf,
-            });
-            res.map(item=>(setIdProof(item.uri),setPdfName(item.name)));   
-        } catch (error) {
-            if(DocumentPicker.isCancel(error)){
-                alert('Canceled');
-            }else{
-                throw error;
-            }
-        }
-    };
-
-    // const uploadPDF=()=>{
-    //     if( idProof == null ) {
-    //         return null;
+    // const pdfHandler=async()=>{
+    //     try {
+    //         const res = await DocumentPicker.pick({
+    //             type: DocumentPicker.types.pdf,
+    //         });
+    //         res.map(item=>(setIdProof(item.uri),setPdfName(item.name)));   
+    //     } catch (error) {
+    //         if(DocumentPicker.isCancel(error)){
+    //             alert('Canceled');
+    //         }else{
+    //             throw error;
+    //         }
     //     }
-    //     const uploadUri = idProof;
-    //     let filename = uploadUri.substring(uploadUri.lastIndexOf('/') + 1);
-    // }
+    // };
+
 
     const postData={
         first_name: showUserData.first_name,
@@ -394,7 +387,7 @@ const ProfileScreen = () => {
                             <Text style={{fontFamily:RalewayRegular, fontSize:16, color:"black", marginVertical:10}}>Add your cowin Certificate here</Text>
                         </View>
                         <TouchableOpacity style={styles.button} activeOpacity={0.8}
-                        onPress={pdfHandler}
+                        // onPress={pdfHandler}
                         >
                             <Text style={{fontSize:15, fontFamily:RalewayBold, color:"white", textAlign:"center"}}>+ Add file</Text>
                         </TouchableOpacity>

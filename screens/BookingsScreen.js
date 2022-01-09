@@ -27,7 +27,7 @@ const BookingsScreen = ({route}) => {
     const [data, setData] = useState([]);
     const [isData, setIsData] = useState(false);
 
-    // console.log(isData);
+    console.log(data);
 
     const starImgFilled = "https://raw.githubusercontent.com/tranhonghan/images/main/star_filled.png";
     const starImgCorner = "https://raw.githubusercontent.com/tranhonghan/images/main/star_corner.png";

@@ -4,7 +4,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useNavigation } from '@react-navigation/core';
-import DocumentPicker from 'react-native-document-picker';
+// import DocumentPicker from 'react-native-document-picker';
 import SelectDropdown from 'react-native-select-dropdown';
 import { useTheme } from "@react-navigation/native";
 
@@ -44,37 +44,20 @@ export default function UserDetails_11_2({route}){
     const optionalClick2 =()=>{
         select2 === false ? setSelect2(true) : setSelect2(false);
     }
-    const selectFile = async () => {
-        try {
-          const res = await DocumentPicker.pick({
-            type: DocumentPicker.types.pdf,
-            //There can me more options as well
-            // DocumentPicker.types.allFiles
-            // DocumentPicker.types.images
-            // DocumentPicker.types.plainText
-            // DocumentPicker.types.audio
-            // DocumentPicker.types.pdf
-          });
-          //Printing the log realted to the file
-        //   console.log('res : ' + JSON.stringify(res));
-        //   console.log('URI : ' + res.uri);
-        //   console.log('Type : ' + res.type);
-        //   console.log('File Name : ' + res.name);
-        //   console.log('File Size : ' + res.size);
-          //Setting the state to show single file attributes
-          res.map(item=>(setIdProof(item.name)));
-        } catch (err) {
-          //Handling any exception (If any)
-          if (DocumentPicker.isCancel(err)) {
-            //If user canceled the document selection
-            alert('Canceled');
-          } else {
-            //For Unknown Error
-            // console.log('Unknown Error: ' + JSON.stringify(err));
-            throw err;
-          }
-        }
-      };
+    // const selectFile = async () => {
+    //     try {
+    //       const res = await DocumentPicker.pick({
+    //         type: DocumentPicker.types.pdf,
+    //       });
+    //       res.map(item=>(setIdProof(item.name)));
+    //     } catch (err) {
+    //       if (DocumentPicker.isCancel(err)) {
+    //         alert('Canceled');
+    //       } else {
+    //         throw err;
+    //       }
+    //     }
+    //   };
 
       const proceed=()=>{
           if(fullName1==="" || age1==="" || gender1==="" || number==="" || email==="" || number.length != 10){
@@ -317,7 +300,7 @@ export default function UserDetails_11_2({route}){
                         }
                         <TouchableOpacity 
                             disabled={select1 === true || select2 === true ? false : true}
-                            onPress={selectFile}
+                            // onPress={selectFile}
                             style={{elevation:5, backgroundColor:"#ed6c39", borderRadius:10, padding:15,marginTop:20,alignItems:"center",marginHorizontal:90}}>
                             <Text style={{color:"#fff"}}>+ Add file</Text>
                         </TouchableOpacity>
