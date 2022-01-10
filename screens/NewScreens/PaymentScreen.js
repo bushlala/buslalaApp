@@ -56,7 +56,7 @@ export default function PaymentScreen({route}){
           }).catch((error) => {
             // handle failure
             // alert(`Error: ${error.code} | ${error.description}`);
-            alert("You have cancled the payment");
+            alert("You have canceled the payment");
           });
     };
 

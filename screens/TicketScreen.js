@@ -19,10 +19,13 @@ const TicketScreen = () => {
     const colors = useTheme();
     const [data, setData] = useState([]);
     const [isData, setIsData] = useState(false);
-    // console.log(data);
     const[token, setToken] = useState("");
-    // console.log(isData);
-
+    const [date, setDate] = useState(new Date());
+    let tempDate = new Date(date);
+    let year = tempDate.getFullYear();
+    let month = ('0' + (tempDate.getMonth()+1)).slice(-2);
+    let day = ('0' + tempDate.getDate()).slice(-2); 
+    let fDate = `${year}-${month}-${day}`;
 
     const getData=()=>{
         AsyncStorage.getItem("jwt").then(res=>{
@@ -46,7 +49,8 @@ const TicketScreen = () => {
                 const Data = res.data;
                 console.log(res.status);
                 setData(Data.data);
-                // data.length != 0 ? setIsData(true) : setIsData(false);
+                setData(Data.data);
+                data.forEach(x=>setDate(x.date));
             }else console.log(res.status);
         })
         .catch(e=>{
@@ -124,19 +128,22 @@ const TicketScreen = () => {
                         data.map((item,index)=>(
                             <View style={{elevation:5,backgroundColor:"#e9f7f7",borderRadius:20,marginHorizontal:10,marginVertical:10}} key={index}>
                                 <View style={{marginVertical:10}}>
-                                    <Text style={{color:"#000",textAlign:"center",fontWeight:"500"}}>{item.bus}</Text>
+                                    <Text style={{color:"#000",textAlign:"center",fontWeight:"bold"}}>{item.tripId.busId.name}</Text>
                                     <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center",marginVertical:5}}>
                                         <View style={{alignItems:"center"}}>
-                                            <Text style={{color:"#000"}}>{item.source}</Text>
-                                            <Text style={{color:"#000",fontSize:12}}>10:00am</Text>
+                                            <Text style={{color:"#000",fontWeight:"500"}}>{item.tripId.sourceId.name}</Text>
+                                            <Text style={{color:"#000",fontSize:12}}>{item.tripId.time.dept}</Text>
                                         </View>
-                                        <Text style={{color:"#000"}}>--------</Text>
                                         <View style={{alignItems:"center"}}>
-                                            <Text style={{color:"#000"}}>{item.destination}</Text>
-                                            <Text style={{color:"#000",fontSize:12}}>09:00pm</Text>
+                                            <Text style={{color:"#000"}}>{fDate}</Text>
+                                            <Text style={{color:"#000",fontSize:12}}>{item.tripId.duration}</Text>
+                                        </View>
+                                        <View style={{alignItems:"center"}}>
+                                            <Text style={{color:"#000",fontWeight:"500"}}>{item.tripId.destinationId.name}</Text>
+                                            <Text style={{color:"#000",fontSize:12}}>{item.tripId.time.arr}</Text>
                                         </View>
                                     </View>
-                                    <Text style={{color:"#000",textAlign:"center",fontWeight:"400"}}>Passenger Name: {item.u1_name}</Text>
+                                    <Text style={{color:"#000",textAlign:"center",fontWeight:"400"}}>Name: {item.u1_name}</Text>
                                     <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Seat number: {item.seat_number1}</Text>
                                     {/* <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Ticket number: 012345687788</Text> */}
                                 </View>

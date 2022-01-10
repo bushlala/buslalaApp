@@ -12,7 +12,7 @@ import ToggleSwitch from "toggle-switch-react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-const {width, height} = Dimensions.get("window")
+const {width, height} = Dimensions.get("window");
 
 const BookingsScreen = ({route}) => {
 
@@ -26,8 +26,13 @@ const BookingsScreen = ({route}) => {
     const[token, setToken] = useState("");
     const [data, setData] = useState([]);
     const [isData, setIsData] = useState(false);
+    const [date, setDate] = useState(new Date());
+    let tempDate = new Date(date);
+    let year = tempDate.getFullYear();
+    let month = ('0' + (tempDate.getMonth()+1)).slice(-2);
+    let day = ('0' + tempDate.getDate()).slice(-2); 
+    let fDate = `${year}-${month}-${day}`;
 
-    console.log(data);
 
     const starImgFilled = "https://raw.githubusercontent.com/tranhonghan/images/main/star_filled.png";
     const starImgCorner = "https://raw.githubusercontent.com/tranhonghan/images/main/star_corner.png";
@@ -52,6 +57,7 @@ const BookingsScreen = ({route}) => {
             if(res.status===200){
                 const Data = res.data;
                 setData(Data.data);
+                data.forEach(x=>setDate(x.createdAt));
                 // Data != null ? setIsData(true) : setData(false)
             }else console.log(res.status);
         })
@@ -165,22 +171,22 @@ const BookingsScreen = ({route}) => {
                             // isData == true ? 
                             data.map((item,index)=>(
                                 <View key={index}>
-                                    <Text style={{color:"gray",textAlign:"center"}}>{item.payment_status}</Text>
+                                    <Text style={{color:"gray",textAlign:"center"}}>Payment {item.payment_status}</Text>
                                     <View style={styles.booking}>
                                         <View style={{alignItems:"center"}}>
                                             <View style={{padding:30, borderRadius:40, backgroundColor:"lightgray"}}></View>
                                             {/* <Text style={{fontSize:10, fontFamily:RalewayRegular, color:"gray", marginTop:3}}>3 mins ago</Text> */}
                                         </View>
                                         <View style={{alignItems:"flex-start", marginHorizontal:20}}>
-                                            <Text style={{fontFamily:RalewayBold, fontSize:14, color:"black"}}>{item.bus}</Text>
+                                            <Text style={{fontFamily:RalewayBold, fontSize:14, color:"black"}}>{item.tripId.busId.name}</Text>
                                             <View style={{flexDirection:"row", alignItems:"center"}}>
-                                                <Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}}>{item.source} </Text>
+                                                <Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}}>{item.tripId.sourceId.name} </Text>
                                                 <AntDesign
                                                 name="swapright"
                                                 color="black"
                                                 size={24}
                                                 />
-                                                <Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}}>{item.destination}</Text>
+                                                <Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}}>{item.tripId.destinationId.name}</Text>
                                             </View>
                                         </View>
                                         {/* <View style={{left:-10}}>
@@ -209,7 +215,7 @@ const BookingsScreen = ({route}) => {
                                         </View> */}
                                         <View style={{left:-15,marginTop:10,alignItems:"center"}}>
                                             <Text style={{color:"gray",fontSize:12,fontWeight:"bold"}}>Booking Date</Text>
-                                            <Text style={{color:"gray",fontSize:12}}>2021-01-08</Text>
+                                            <Text style={{color:"gray",fontSize:12}}>{fDate}</Text>
                                         </View>
                                     </View>
                                 </View>

@@ -111,7 +111,7 @@ const OnewayScreen = () => {
         "destination": to, 
         "date": deptDate
     };
-    // console.log(oneWayPostData);
+    console.log(oneWayPostData);
 
     const busesHandler=()=>{
         if(from==="" || to===""){
@@ -143,7 +143,7 @@ const OnewayScreen = () => {
         "deptDate": deptDate2, 
         "returnDate": returnDate
     };
-    console.log(roundTripPostData);
+    // console.log(roundTripPostData);
 
     const busesHandler1=()=>{
         if(from==="" || to===""){
@@ -253,7 +253,7 @@ const OnewayScreen = () => {
                                 <Ionicons
                                 name="locate"
                                 size={24}
-                                color="black"
+                                color="#000"
                                 />
                                 <Picker 
                                     selectedValue={to}
@@ -261,9 +261,9 @@ const OnewayScreen = () => {
                                     style={{flex:1,color:"#000"}}
                                     dropdownIconColor="#000"  
                                 >
-                                    <Picker.Item label='From' value="" style={{color:"#000"}} />
+                                    <Picker.Item label='To' value="" style={{color:"#000"}} />
                                     {
-                                        srcData.map(item=>{
+                                        destData.map(item=>{
                                             return(
                                                 <Picker.Item label={item.name} value={item.name} key={item._id} />
                                             )
@@ -272,7 +272,8 @@ const OnewayScreen = () => {
                                 </Picker>
                             </View>
                             {error1 ? <Text style={{color:"red", fontSize:12}}>Please Enter The Details</Text>:<Text></Text>}
-                        </KeyboardAvoidingView> :
+                        </KeyboardAvoidingView> 
+                        :
                         <KeyboardAvoidingView behavior="padding" style={styles.box}>
                             <View style={{alignItems:"center", flexDirection:"row"}}>
                                 <Entypo
@@ -315,14 +316,14 @@ const OnewayScreen = () => {
                                 size={24}
                                 />
                                 <Picker 
-                                    selectedValue={to}
-                                    onValueChange={(val)=>setTo(val)}
+                                    selectedValue={from}
+                                    onValueChange={(val)=>setFrom(val)}
                                     style={{flex:1,color:"#000"}}
                                     dropdownIconColor="#000"   
                                 >
-                                    <Picker.Item label='To' value="" style={{color:"#000"}} />
+                                    <Picker.Item label='From' value="" style={{color:"#000"}} />
                                     {
-                                        destData.map(item=>{
+                                        srcData.map(item=>{
                                             return(
                                                 <Picker.Item label={item.name} value={item.name} key={item._id} />
                                             )
@@ -332,7 +333,8 @@ const OnewayScreen = () => {
                             </View>
                             {error ? <Text style={{color:"red", fontSize:12}}>Please Enter The Details</Text>: <Text></Text>}
                         </KeyboardAvoidingView>
-                        :<KeyboardAvoidingView behavior="padding" style={styles.box}>
+                        :
+                        <KeyboardAvoidingView behavior="padding" style={styles.box}>
                             <View style={{flexDirection:"row", alignItems:"center"}}>
                                 <Ionicons
                                 name="locate"
