@@ -18,7 +18,7 @@ export default function PaymentScreen({route}){
     const navigation = useNavigation();
     const colors = useTheme();
     const { Data, name, email, number, price } = route.params;
-    console.log(Data);
+    // console.log(Data);
     
 
     const _razorpay=()=>{

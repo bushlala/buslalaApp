@@ -7,6 +7,9 @@ import { useNavigation } from '@react-navigation/core';
 import DocumentPicker from 'react-native-document-picker';
 import SelectDropdown from 'react-native-select-dropdown';
 import { useTheme } from "@react-navigation/native";
+import { utils } from '@react-native-firebase/app';     
+import storage from '@react-native-firebase/storage';
+import RNFetchBlob from 'rn-fetch-blob';
 
 import { fontColor, newColor, primary, secondary } from '../../components/Colors';
 
@@ -37,20 +40,53 @@ export default function UserDetails_11_2({route}){
     const [select2, setSelect2] = useState(false);
     const Gender = ["Male", "Female", "Others"];
     const [idProof, setIdProof] = useState(null);
+    const [docName, setDocName] = useState("");
+    const [process1, setProcess1] = useState("");
+    const [process2, setProcess2] = useState("");
+    const [url1, setUrl1] = useState("");
+    const [url2, setUrl2] = useState("");
 
+    
     const optionalClick1 =()=>{
         select1 === false ? setSelect1(true) : setSelect1(false);
     }
     const optionalClick2 =()=>{
         select2 === false ? setSelect2(true) : setSelect2(false);
     }
-    const selectFile = async () => {
+    const selectFile1 = async () => {
         try {
           const res = await DocumentPicker.pick({
             type: [DocumentPicker.types.pdf],
-          });
-        //   console.log(res.uri);
-          res.map(item=>(setIdProof(item.name)));
+            });
+            res.map( async item => {
+                const path = await RNFetchBlob.fs.readFile(item.uri,"base64");
+                try{
+                    const task = storage()
+                    .ref("ID_Proof/"+ item.name)
+                    .putString(path,"base64");
+                    task.on('state_changed',
+                        function(snapshot){
+                            const rate = Math.floor((snapshot.bytesTransferred/snapshot.totalBytes)*100);
+                            setProcess1(`${rate}%`);
+                        },
+                        function(err){
+                            console.log(err);
+                        },
+                        function(){
+                            task.snapshot.ref.getDownloadURL().then(function(url){
+                                setUrl1(url);
+                            })
+                        }
+                    );                  
+                    task.then(() => {
+                        console.log('PDF uploaded to the bucket!');
+                        setSelect1(true);
+                    });               
+                }
+                catch(e){
+                    console.log(e);
+                }
+            });
         } catch (err) {
           if (DocumentPicker.isCancel(err)) {
             alert('Canceled');
@@ -58,21 +94,64 @@ export default function UserDetails_11_2({route}){
             throw err;
           }
         }
-      };
+    };
+    const selectFile2 = async () => {
+        try {
+          const res = await DocumentPicker.pick({
+            type: [DocumentPicker.types.pdf],
+            });
+            res.map( async item => {
+                const path = await RNFetchBlob.fs.readFile(item.uri,"base64");
+                try{
+                    const task = storage()
+                    .ref("COWIN_Certificate/"+ item.name)
+                    .putString(path,"base64");
+                    task.on('state_changed',
+                        function(snapshot){
+                            const rate = Math.floor((snapshot.bytesTransferred/snapshot.totalBytes)*100);
+                            setProcess2(`${rate}%`);
+                        },
+                        function(err){
+                            console.log(err);
+                        },
+                        function(){
+                            task.snapshot.ref.getDownloadURL().then(function(url){
+                                setUrl2(url);
+                            })
+                        }
+                    );                  
+                    task.then(() => {
+                        console.log('PDF uploaded to the bucket!');
+                        setSelect2(true);
+                    });               
+                }
+                catch(e){
+                    console.log(e);
+                }
+            });
+        } catch (err) {
+          if (DocumentPicker.isCancel(err)) {
+            alert('Canceled');
+          } else {
+            throw err;
+          }
+        }
+    };
 
-      const proceed=()=>{
-          if(fullName1==="" || age1==="" || gender1==="" || number==="" || email==="" || number.length != 10){
-              alert("please enter all the details");
-          }
-          else{
-            navigation.navigate("BusDetails",{ 
-                "busName": name, "deptHour": deptHour, "arivHour": arivHour, "tripId" : tripId,
-                "fullName1": fullName1, "age1": age1, "fullName2": fullName2, "age2": age2,
-                "number": number, "email": email, "gender1": gender1, "gender2": gender2, 
-                "seats": seats, "price": price, "date": date, "src": src, "dest": dest, "rDate": rDate
-            })
-          }
-      };
+    const proceed=()=>{
+        if(fullName1==="" || age1==="" || gender1==="" || number==="" || email==="" || number.length != 10){
+            alert("please enter all the details");
+        }
+        else{
+        navigation.navigate("BusDetails",{ 
+            "busName": name, "deptHour": deptHour, "arivHour": arivHour, "tripId" : tripId,
+            "fullName1": fullName1, "age1": age1, "fullName2": fullName2, "age2": age2,
+            "number": number, "email": email, "gender1": gender1, "gender2": gender2, 
+            "seats": seats, "price": price, "date": date, "src": src, "dest": dest,
+            "rDate": rDate, "url1": url1, "url2": url2
+        })
+        }
+    };
 
     return(
         <View style={styles.screen}>
@@ -276,35 +355,37 @@ export default function UserDetails_11_2({route}){
                         </View>
                         <View style={{marginVertical:10}}>
                             <TouchableOpacity style={{flexDirection:"row",alignItems:"center"}} 
-                                onPress={optionalClick1}
+                                onPress={selectFile1}
                             >
                                 <MaterialCommunityIcons name={select1===true?"check-box-outline":"crop-square"} color={"gray"} size={22} />
                                 <Text style={{color:"#66645f",marginLeft:10}}>Upload ID Proof (Optional)</Text>
+                                <Text style={{color:"#66645f",marginLeft:10,fontSize:12}}>{process1}</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{marginVertical:10}}>
                             <TouchableOpacity style={{flexDirection:"row",alignItems:"center"}} 
-                                onPress={optionalClick2}
+                                onPress={selectFile2}
                             >
                                 <MaterialCommunityIcons name={select2===true?"check-box-outline":"crop-square"} color={"gray"} size={22} />
-                                <Text style={{color:"#66645f",marginLeft:10}}>Upload Cowin Certificate (Optional)</Text>
+                                <Text style={{color:"#66645f",marginLeft:10}}>Cowin Certificate (Optional)</Text>
+                                <Text style={{color:"#66645f",marginLeft:10,fontSize:12}}>{process2}</Text>
                             </TouchableOpacity>
                         </View>
-                        {
-                            idProof !== null ? 
+                        {/* {
+                            docName !== "" ? 
                                 <View style={{marginTop:10,flexDirection:"row"}}>
                                     <Text style={styles.textStyle}>File Name: </Text>
-                                    <Text style={styles.fileStyle}>{idProof}</Text>
+                                    <Text style={styles.fileStyle}>{docName}</Text>
                                 </View> 
                                 : 
                                 null
-                        }
-                        <TouchableOpacity 
+                        } */}
+                        {/* <TouchableOpacity 
                             disabled={select1 === true || select2 === true ? false : true}
                             onPress={selectFile}
                             style={{elevation:5, backgroundColor:"#ed6c39", borderRadius:10, padding:15,marginTop:20,alignItems:"center",marginHorizontal:90}}>
                             <Text style={{color:"#fff"}}>+ Add file</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         <View style={{elevation:5,width:"100%", backgroundColor:"#fff", borderRadius:10,padding:10,alignItems:"center",flexDirection:"row",marginBottom:200,marginTop:20}}>
                             <View style={{flexDirection:"row",justifyContent:"space-between"}}>
                                 <View style={{alignItems:"center"}}>

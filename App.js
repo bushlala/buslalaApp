@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {NavigationContainer,DefaultTheme,DarkTheme} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import { EventRegister } from 'react-native-event-listeners'; 
-
+import messaging from "@react-native-firebase/messaging";
 
 import WelcomeScreen from './screens/WelcomeScreen';
 import LoginScreen from './screens/LoginScreen';
@@ -11,7 +11,6 @@ import OtpVerifiedScreen from './screens/OtpVerifiedScreen';
 import OnewayScreen from './screens/OnewayScreen';
 import BusesScreen from './screens/BusesScreen';
 import ProfileScreen from './screens/ProfileScreen';
-// import NotificationScreen from './screens/NotificationScreen';
 import PaymentSettings from './screens/PaymentSettings';
 import TicketScreen from './screens/TicketScreen';
 import BookingsScreen from './screens/BookingsScreen';
@@ -32,14 +31,31 @@ const App = () => {
 
   const [darkApp, setDarkApp] = useState(false);
   const appTheme = darkApp ? DarkTheme : DefaultTheme; 
-  useEffect(()=>{
-       let eventListener  = EventRegister.addEventListener('changeThemeEvent',
+  
+  const themeEvent=()=>{
+    let eventListener  = EventRegister.addEventListener('changeThemeEvent',
                (data) => {
                      setDarkApp(data);
               })
-         return()=>{
-                EventRegister.removeEventListener(eventListener);
-         };
+    return()=>{
+          EventRegister.removeEventListener(eventListener);
+    };
+  };
+  const cloudMessage = async() =>{
+    const authStatus = await messaging().requestPermission();
+    const enabled = 
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED || 
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+      if(enabled){
+        console.log("auth status: ", authStatus);
+      }
+  };
+  useEffect(()=>{
+    cloudMessage();
+    themeEvent();
+    messaging().onMessage(async remoteMessage => {
+      console.log('A new FCM message arrived :',(remoteMessage));
+    });
   },[]);
 
   return (
