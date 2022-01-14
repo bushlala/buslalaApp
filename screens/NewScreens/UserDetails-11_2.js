@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/core';
 import DocumentPicker from 'react-native-document-picker';
 import SelectDropdown from 'react-native-select-dropdown';
 import { useTheme } from "@react-navigation/native";
-import { utils } from '@react-native-firebase/app';     
+// import { utils } from '@react-native-firebase/app';     
 import storage from '@react-native-firebase/storage';
 import RNFetchBlob from 'rn-fetch-blob';
 
@@ -36,23 +36,21 @@ export default function UserDetails_11_2({route}){
         gender2: ""
     });
     const { fullName1, age1, fullName2, age2, number, email, gender1, gender2 } = values;
+    const Gender = ["Male", "Female", "Others"];
     const [select1, setSelect1] = useState(false);
     const [select2, setSelect2] = useState(false);
-    const Gender = ["Male", "Female", "Others"];
-    const [idProof, setIdProof] = useState(null);
-    const [docName, setDocName] = useState("");
     const [process1, setProcess1] = useState("");
     const [process2, setProcess2] = useState("");
     const [url1, setUrl1] = useState("");
     const [url2, setUrl2] = useState("");
 
     
-    const optionalClick1 =()=>{
-        select1 === false ? setSelect1(true) : setSelect1(false);
-    }
-    const optionalClick2 =()=>{
-        select2 === false ? setSelect2(true) : setSelect2(false);
-    }
+    // const optionalClick1 =()=>{
+    //     select1 === false ? setSelect1(true) : setSelect1(false);
+    // }
+    // const optionalClick2 =()=>{
+    //     select2 === false ? setSelect2(true) : setSelect2(false);
+    // }
     const selectFile1 = async () => {
         try {
           const res = await DocumentPicker.pick({
@@ -62,7 +60,7 @@ export default function UserDetails_11_2({route}){
                 const path = await RNFetchBlob.fs.readFile(item.uri,"base64");
                 try{
                     const task = storage()
-                    .ref("ID_Proof/"+ item.name)
+                    .ref("Passenger/ID_Proof/"+ item.name)
                     .putString(path,"base64");
                     task.on('state_changed',
                         function(snapshot){
@@ -104,7 +102,7 @@ export default function UserDetails_11_2({route}){
                 const path = await RNFetchBlob.fs.readFile(item.uri,"base64");
                 try{
                     const task = storage()
-                    .ref("COWIN_Certificate/"+ item.name)
+                    .ref("Passenger/COWIN_Certificate/"+ item.name)
                     .putString(path,"base64");
                     task.on('state_changed',
                         function(snapshot){

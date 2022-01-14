@@ -28,7 +28,7 @@ const SeaterOption = ({name, priceLower,priceUpper, duration,
         >
             <View style={styles.view1}>
                 <Text style={{fontFamily:RalewayBold, color:"black", fontSize:14, marginBottom:5}}>{name}</Text>
-                <Text style={{fontSize:10, fontFamily:RalewayRegular, color:"gray"}}>{desc}</Text>
+                <Text style={{fontSize:12, fontFamily:RalewayRegular, color:"gray"}}>({desc})</Text>
                 <View style={{flexDirection:"row", alignItems:"center",marginVertical:5}}>
                     <FontAwesome
                     name="bed"

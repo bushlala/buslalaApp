@@ -1,8 +1,8 @@
-import { useNavigation, useRoute } from '@react-navigation/core'
-import React, { useState } from 'react'
-import { Image, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { RalewayBold, RalewayLight, RalewayRegular } from '../assets/fonts/fonts'
-import { primary, secondary, textColor } from '../components/Colors'
+import { useNavigation, useRoute } from '@react-navigation/core';
+import React  from 'react';
+import { Image, KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { RalewayBold, RalewayRegular } from '../assets/fonts/fonts';
+import { primary, secondary, textColor } from '../components/Colors';
 
 const OtpVerifiedScreen = () => {
 
@@ -29,7 +29,7 @@ const OtpVerifiedScreen = () => {
                     <TouchableOpacity activeOpacity={0.8} style={styles.button}
                     onPress={()=>{navigation.navigate("Oneway", {number: route.params.number})}}
                     >
-                        <Text style={{color:"white",fontSize:18, fontFamily:RalewayRegular}}>Verified</Text>
+                        <Text style={{color:"white",fontSize:18, fontFamily:RalewayRegular}}>Continue</Text>
                     </TouchableOpacity>
                 </KeyboardAvoidingView>
             </View>

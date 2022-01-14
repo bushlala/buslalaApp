@@ -1,9 +1,9 @@
-import { useNavigation } from '@react-navigation/core'
-import axios from 'axios'
-import React, { useEffect } from 'react'
-import { Image, KeyboardAvoidingView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { RalewayBold, RalewayLight, RalewayRegular } from '../assets/fonts/fonts'
-import { fontColor, newColor, primary, secondary, textColor } from '../components/Colors'
+import { useNavigation } from '@react-navigation/core';
+import axios from 'axios';
+import React, { useEffect } from 'react';
+import { KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { RalewayBold, RalewayRegular } from '../assets/fonts/fonts';
+import { fontColor, newColor, primary, secondary, textColor } from '../components/Colors';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -11,7 +11,6 @@ import Entypo from "react-native-vector-icons/Entypo";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useState } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Picker } from '@react-native-picker/picker';
 import { useTheme } from "@react-navigation/native";
 
 
@@ -30,35 +29,26 @@ const OnewayScreen = () => {
     const [returnDate, setReturnDate] = useState("");
     const [click, setClick] = useState(false);
     const [from, setFrom] = useState("");
+    const [to, setTo]= useState("");
     const [error, setError]= useState(false);
     const [error1, setError1]= useState(false);
-    const [to, setTo]= useState("");
     const [isOneWay, setIsOneWay] = useState(true);
     const [isTwoWay, setIsTwoWay] = useState(false);
     const [date1, setDate1] = useState(new Date());
     const [date2, setDate2] = useState(new Date());
     const [date3, setDate3] = useState(new Date());
-    const [srcData, setSrcData] = useState([]);
-    const [destData, setDestData] = useState([]);
     
-    // console.log(destData);
+    const [isClicked1, setIsClicked1] = useState(false);
+    const [isClicked2, setIsClicked2] = useState(false);
+
+    const [srcData, setSrcData] = useState([]);
+    const [filteredSrcData, setFilteredSrcData] = useState([]);
+    const [search, setSearch] = useState("");
+
+    const [destData, setDestData] = useState([]);
+    const [filteredDestData, setFilteredDestData] = useState([]);
 
 
-    // const inputHandler=()=>{
-    //     if(from===""){
-    //     setError1(true)}
-    //     else{
-    //         setError1(false);
-    //     }
-    // };
-
-    // const inputHandler1=()=>{
-    //     if(to===""){
-    //     setError1(true)}
-    //     else{
-    //         setError1(false);
-    //     }
-    // };
 
     const handleConfirm1=(event,selectedDate)=>{    // ***must have to pass 'event' as a param whether it is used or not, otherwise gives error
         const currentDate = selectedDate || date1;      
@@ -67,7 +57,6 @@ const OnewayScreen = () => {
         let tempDate = new Date(currentDate);
         let year = tempDate.getFullYear();
         let month = ('0' + (tempDate.getMonth()+1)).slice(-2);     // to get 0 before a single month (i.e 1 -> 01)
-        // let month =tempDate.getMonth()+1; 
         let day = ('0' + tempDate.getDate()).slice(-2);             // to get 0 before a single day   (i.e 3 -> 03)
         let fDate = `${year}-${month}-${day}`;
         setDeptDate(fDate);
@@ -107,8 +96,8 @@ const OnewayScreen = () => {
     };
 
     var oneWayPostData = {
-        "source": from, 
-        "destination": to, 
+        "source": !click ? from : to, 
+        "destination": !click ? to : from, 
         "date": deptDate
     };
     console.log(oneWayPostData);
@@ -126,24 +115,25 @@ const OnewayScreen = () => {
             .then((response)=>{
                 if(response.status===200){
                     navigation.navigate("Buses",
-                        {"Data": response.data, "src": from, "dest": to, 
-                        "oneWay": isOneWay, "roundTrip": isTwoWay,
-                        "date": deptDate
+                        {"Data": response.data, "src": !click ? from : to,"dest": !click ? to : from,
+                        "oneWay": isOneWay,"date": deptDate
                     });
                 }else{
                     console.log("Error");
                 }
-            }).catch((err)=>console.log(err));
+            }).catch((err)=>{
+                alert("No bus found");
+                console.log(err);
+            });
         }
     };
 
     var roundTripPostData = {
-        "source": from, 
-        "destination": to, 
+        "source": !click ? from : to, 
+        "destination": !click ? to : from, 
         "deptDate": deptDate2, 
         "returnDate": returnDate
     };
-    // console.log(roundTripPostData);
 
     const busesHandler1=()=>{
         if(from==="" || to===""){
@@ -158,14 +148,16 @@ const OnewayScreen = () => {
             .then((response)=>{
                 if(response.status===200){
                     navigation.navigate("Buses",
-                        {"Data": response.data,"src": from,"dest": to,
-                        "oneWay": isOneWay,"roundTrip": isTwoWay,
-                        "date": deptDate2,"rDate": returnDate
+                        {"Data": response.data,"src": !click ? from : to,"dest": !click ? to : from,
+                        "roundTrip": isTwoWay,"date": deptDate2,"rDate": returnDate
                     });
                 }else{
                     console.log("Error");
                 }
-            }).catch((err)=>console.log(err));           
+            }).catch((err)=>{
+                alert("No bus found");
+                console.log(err);
+            });           
         }
     };
 
@@ -175,7 +167,7 @@ const OnewayScreen = () => {
             if(resp.status===200){
                 const Data = resp.data;
                 setSrcData(Data.data);
-                // console.log(srcData);
+                setFilteredSrcData(Data.data);
             }else console.log(resp.status);
         })
         .catch(e=>{console.log(e);alert("please try after some time")});
@@ -186,6 +178,7 @@ const OnewayScreen = () => {
             if(resp.status===200){
                 const Data = resp.data;
                 setDestData(Data.data);
+                setFilteredDestData(Data.data);
             }else console.log(resp.status);
         })
         .catch(e=>{
@@ -197,6 +190,161 @@ const OnewayScreen = () => {
         sourceApi();
         destApi();
     }, []);
+
+    const searchFilter=(text)=>{
+        if(isClicked1){
+            if(text){
+                const newData =  srcData.filter((item)=>{
+                    const itemData = item.name ? item.name.toUpperCase()
+                    : ''.toUpperCase();
+                    const textData  = text.toUpperCase();
+                    return itemData.indexOf(textData) > -1;
+                })
+                setFilteredSrcData(newData);
+                setSearch(text);
+            }
+            else{
+                setFilteredSrcData(srcData);
+                setSearch(text);
+            }
+        }
+        else if(isClicked2){
+            if(text){
+                const newData =  destData.filter((item)=>{
+                    const itemData = item.name ? item.name.toUpperCase()
+                    : ''.toUpperCase();
+                    const textData  = text.toUpperCase();
+                    return itemData.indexOf(textData) > -1;
+                })
+                setFilteredDestData(newData);
+                setSearch(text);
+            }
+            else{
+                setFilteredDestData(destData);
+                setSearch(text);
+            }
+        }
+    };
+
+    const srcModal=()=>(
+        isClicked1 && 
+        <View style={styles.pickerModal}>
+            <View style={{position:"absolute",right:0,marginRight:10,zIndex:1,top:20}}>
+                <TouchableOpacity 
+                style={{backgroundColor:"gray",height:30,width:30,justifyContent:"center",alignItems:"center",borderRadius:15}}
+                onPress={()=>{
+                    setIsClicked1(false);
+                    setSearch("");
+                    setFilteredSrcData(srcData);
+                }}
+                >
+                    <Text style={{color:"#000",fontSize:20,top:-2}}>×</Text>
+                </TouchableOpacity>
+            </View>
+            <TextInput style={styles.searchField} 
+                placeholder='searh from ...'
+                value={search}
+                onChangeText={(val)=>searchFilter(val)}
+            />
+            <View style={{width:"100%",borderWidth:0.5,borderColor:"gray",marginTop:10}} />
+            <ScrollView style={{}}>
+            {
+                !click ? 
+                filteredSrcData.map((item,index)=>(
+                    <View key={index} style={{marginLeft:40}}>
+                        <TouchableOpacity style={styles.srcData}
+                            onPress={()=>{
+                                setFrom(item.name);
+                                setIsClicked1(false);
+                                setFilteredSrcData(srcData);
+                                setSearch("");
+                            }}
+                        >
+                            <Text style={{color:"#000",marginBottom:10}}>{item.name}</Text>
+                        </TouchableOpacity>
+                        <View style={{width:"80%",borderColor:"gray",borderWidth: 0.2}} />
+                    </View>
+                )) 
+                :
+                filteredDestData.map((item,index)=>(
+                    <View key={index} style={{marginLeft:40}}>
+                        <TouchableOpacity style={styles.srcData}
+                            onPress={()=>{
+                                setTo(item.name);
+                                setIsClicked1(false);
+                                setFilteredDestData(destData);
+                                setSearch("");
+                            }}
+                        >
+                            <Text style={{color:"#000",marginBottom:10}}>{item.name}</Text>
+                        </TouchableOpacity>
+                        <View style={{width:"80%",borderColor:"gray",borderWidth: 0.2}} />
+                    </View>
+                ))
+            }
+            </ScrollView>
+        </View>
+    );
+
+    const destModal=()=>(
+        isClicked2 && 
+        <View style={styles.pickerModal}>
+            <View style={{position:"absolute",right:0,marginRight:10,zIndex:1,top:20}}>
+                <TouchableOpacity 
+                style={{backgroundColor:"gray",height:30,width:30,justifyContent:"center",alignItems:"center",borderRadius:15}}
+                onPress={()=>{
+                    setIsClicked2(false);
+                    setSearch("");
+                    setFilteredDestData(destData);
+                }}
+                >
+                    <Text style={{color:"#000",fontSize:20,top:-2}}>×</Text>
+                </TouchableOpacity>
+            </View>
+            <TextInput style={styles.searchField} 
+                placeholder='searh to ...'
+                value={search}
+                onChangeText={(val)=>searchFilter(val)}
+            />
+            <View style={{width:"100%",borderWidth:0.5,borderColor:"gray",marginTop:10}} />
+            <ScrollView style={{}}>
+            {
+                !click ?
+                filteredDestData.map((item,index)=>(
+                    <View key={index} style={{marginLeft:40}}>
+                        <TouchableOpacity style={styles.srcData}
+                            onPress={()=>{
+                                setTo(item.name);
+                                setIsClicked2(false);
+                                setFilteredDestData(destData);
+                                setSearch("");
+                            }}
+                        >
+                            <Text style={{color:"#000",marginBottom:10}}>{item.name}</Text>
+                        </TouchableOpacity>
+                        <View style={{width:"80%",borderColor:"gray",borderWidth: 0.2}} />
+                    </View>
+                )) 
+                :
+                filteredSrcData.map((item,index)=>(
+                    <View key={index} style={{marginLeft:40}}>
+                        <TouchableOpacity style={styles.srcData}
+                            onPress={()=>{
+                                setFrom(item.name);
+                                setIsClicked2(false);
+                                setFilteredSrcData(srcData);
+                                setSearch("");
+                            }}
+                        >
+                            <Text style={{color:"#000",marginBottom:10}}>{item.name}</Text>
+                        </TouchableOpacity>
+                        <View style={{width:"80%",borderColor:"gray",borderWidth: 0.2}} />
+                    </View>
+                ))
+            }
+            </ScrollView>
+        </View>
+    );
 
     return (
         <View style={styles.screen}>
@@ -248,57 +396,19 @@ const OnewayScreen = () => {
                 </View>
                 <View style={styles.view2}>
                     <View style={styles.container}>
-                        {click ? <KeyboardAvoidingView behavior="padding" style={styles.box}>
-                            <View style={{flexDirection:"row", alignItems:"center"}}>
-                                <Ionicons
-                                name="locate"
-                                size={24}
-                                color="#000"
-                                />
-                                <Picker 
-                                    selectedValue={to}
-                                    onValueChange={(val)=>setTo(val)}
-                                    style={{flex:1,color:"#000"}}
-                                    dropdownIconColor="#000"  
-                                >
-                                    <Picker.Item label='To' value="" style={{color:"#000"}} />
-                                    {
-                                        destData.map(item=>{
-                                            return(
-                                                <Picker.Item label={item.name} value={item.name} key={item._id} />
-                                            )
-                                        })
-                                    }
-                                </Picker>
-                            </View>
-                            {error1 ? <Text style={{color:"red", fontSize:12}}>Please Enter The Details</Text>:<Text></Text>}
-                        </KeyboardAvoidingView> 
-                        :
                         <KeyboardAvoidingView behavior="padding" style={styles.box}>
-                            <View style={{alignItems:"center", flexDirection:"row"}}>
+                            <TouchableOpacity style={{alignItems:"center", flexDirection:"row",height:60}} 
+                                onPress={()=>setIsClicked1(true)}
+                            >
                                 <Entypo
                                 name="location-pin"
                                 color="black"
                                 size={24}
                                 />
-                                <Picker 
-                                    selectedValue={from}
-                                    onValueChange={(val)=>setFrom(val)}
-                                    style={{flex:1,color:"#000"}}
-                                    dropdownIconColor="#000"  
-                                >
-                                    <Picker.Item label='From' value="" style={{color:"#000"}} />
-                                    {
-                                        srcData.map(item=>{
-                                            return(
-                                                <Picker.Item label={item.name} value={item.name} key={item._id} />
-                                            )
-                                        })
-                                    }
-                                </Picker>
-                            </View>
+                            <Text style={{color:"#000",fontSize:16,marginLeft:20}}>{!click ? (!from ? `From` : from) : (!to ? `From` : to)}</Text>
+                            </TouchableOpacity>
                             {error ? <Text style={{color:"red", fontSize:12}}>Please Enter The Details</Text>: <Text></Text>}
-                        </KeyboardAvoidingView>}
+                        </KeyboardAvoidingView>
                         <TouchableOpacity activeOpacity={0.8} 
                         onPress={()=>setClick(!click)}
                         style={{backgroundColor:secondary, padding:5, borderRadius:20, marginBottom:25, alignSelf:"flex-end", marginRight:"20%"}}>
@@ -308,57 +418,19 @@ const OnewayScreen = () => {
                                 color="white"
                                 />
                         </TouchableOpacity>
-                        { click ? <KeyboardAvoidingView behavior="padding" style={styles.box}>
-                            <View style={{alignItems:"center", flexDirection:"row"}}>
-                                <Entypo
-                                name="location-pin"
-                                color="black"
-                                size={24}
-                                />
-                                <Picker 
-                                    selectedValue={from}
-                                    onValueChange={(val)=>setFrom(val)}
-                                    style={{flex:1,color:"#000"}}
-                                    dropdownIconColor="#000"   
-                                >
-                                    <Picker.Item label='From' value="" style={{color:"#000"}} />
-                                    {
-                                        srcData.map(item=>{
-                                            return(
-                                                <Picker.Item label={item.name} value={item.name} key={item._id} />
-                                            )
-                                        })
-                                    }
-                                </Picker>
-                            </View>
-                            {error ? <Text style={{color:"red", fontSize:12}}>Please Enter The Details</Text>: <Text></Text>}
-                        </KeyboardAvoidingView>
-                        :
                         <KeyboardAvoidingView behavior="padding" style={styles.box}>
-                            <View style={{flexDirection:"row", alignItems:"center"}}>
+                            <TouchableOpacity style={{alignItems:"center", flexDirection:"row",height:60}} 
+                                onPress={()=>setIsClicked2(true)}
+                            >
                                 <Ionicons
                                 name="locate"
                                 size={24}
                                 color="black"
                                 />
-                                <Picker 
-                                    selectedValue={to}
-                                    onValueChange={(val)=>setTo(val)}
-                                    style={{flex:1,color:"#000"}}
-                                    dropdownIconColor="#000"    
-                                >
-                                    <Picker.Item label='To' value="" style={{color:"#000"}} />
-                                    {
-                                        destData.map(item=>{
-                                            return(
-                                                <Picker.Item label={item.name} value={item.name} key={item._id}/>
-                                            )
-                                        })
-                                    }
-                                </Picker>
-                            </View>
+                            <Text style={{color:"#000",fontSize:16,marginLeft:20}}>{!click ? (!to ? `To` : to) : (!from ? `To` : from) }</Text>
+                            </TouchableOpacity>
                             {error1 ? <Text style={{color:"red", fontSize:12}}>Please Enter The Details</Text>:<Text></Text>}
-                        </KeyboardAvoidingView>}
+                        </KeyboardAvoidingView>
                         <View style={styles.tab}>
                             <TouchableOpacity
                             onPress={onewayHandler}
@@ -440,6 +512,8 @@ const OnewayScreen = () => {
                     </View>
                 </View>
             </ScrollView>
+            {srcModal()}
+            {destModal()}
         </View>
     )
 }
@@ -567,5 +641,24 @@ const styles = StyleSheet.create({
         color: "black",
         fontSize:15,
         fontFamily: RalewayBold
+    },
+    pickerModal: {
+        position:"absolute",
+        backgroundColor:"#fff",
+        left:20,
+        right:20,
+        top:20,
+        bottom:20,
+    },
+    srcData: {
+        marginTop: 10,
+    },
+    searchField: {
+        backgroundColor:"gray",
+        marginRight:60,
+        marginTop:10,
+        marginLeft:10,
+        borderRadius:30,
+        paddingLeft:30
     }
 })

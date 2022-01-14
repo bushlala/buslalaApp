@@ -1,14 +1,14 @@
-import { useNavigation, useRoute } from '@react-navigation/core'
-import axios from 'axios'
-import React, {useState,useEffect} from 'react'
-import { Dimensions,ScrollView, StyleSheet, Text, TouchableOpacity, View,Image } from 'react-native'
-import { RalewayBold, RalewayLight, RalewayRegular } from '../assets/fonts/fonts'
-import { fontColor, newColor, primary, secondary } from '../components/Colors'
+import { useNavigation } from '@react-navigation/core';
+import axios from 'axios';
+import React, {useState,useEffect} from 'react';
+import { Dimensions,ScrollView, StyleSheet, Text, TouchableOpacity, View,Image } from 'react-native';
+import { RalewayBold, RalewayRegular } from '../assets/fonts/fonts';
+import { fontColor, newColor, primary, secondary } from '../components/Colors';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
-import ToggleSwitch from "toggle-switch-react-native";
+// import ToggleSwitch from "toggle-switch-react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -19,14 +19,14 @@ const BookingsScreen = ({route}) => {
     const { first_name, number, address } = route.params;
 
     const navigation = useNavigation()
-    const [defaultRating, setDefaultRating] = useState(2);
-    const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5])
-    const [on, setOn] = useState(false);
-    const [on1, setOn1] = useState(true);
-    const[token, setToken] = useState("");
+    // const [defaultRating, setDefaultRating] = useState(2);
+    // const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5])
+    // const [on, setOn] = useState(false);
+    // const [on1, setOn1] = useState(true);
+    const [token, setToken] = useState("");
     const [data, setData] = useState([]);
-    const [isData, setIsData] = useState(false);
     const [date, setDate] = useState(new Date());
+
     let tempDate = new Date(date);
     let year = tempDate.getFullYear();
     let month = ('0' + (tempDate.getMonth()+1)).slice(-2);
@@ -34,8 +34,8 @@ const BookingsScreen = ({route}) => {
     let fDate = `${year}-${month}-${day}`;
 
 
-    const starImgFilled = "https://raw.githubusercontent.com/tranhonghan/images/main/star_filled.png";
-    const starImgCorner = "https://raw.githubusercontent.com/tranhonghan/images/main/star_corner.png";
+    // const starImgFilled = "https://raw.githubusercontent.com/tranhonghan/images/main/star_filled.png";
+    // const starImgCorner = "https://raw.githubusercontent.com/tranhonghan/images/main/star_corner.png";
 
     const getData=()=>{
         AsyncStorage.getItem("jwt").then(res=>{
@@ -58,7 +58,6 @@ const BookingsScreen = ({route}) => {
                 const Data = res.data;
                 setData(Data.data);
                 data.forEach(x=>setDate(x.createdAt));
-                // Data != null ? setIsData(true) : setData(false)
             }else console.log(res.status);
         })
         .catch(e=>{
@@ -291,7 +290,7 @@ const styles = StyleSheet.create({
     bookings:{
         marginVertical:10,
         width:width,
-        marginBottom:150,
+        marginBottom: height/2.9
     },
     booking:{
         flexDirection:"row",

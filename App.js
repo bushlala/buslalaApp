@@ -3,6 +3,8 @@ import {NavigationContainer,DefaultTheme,DarkTheme} from "@react-navigation/nati
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import { EventRegister } from 'react-native-event-listeners'; 
 import messaging from "@react-native-firebase/messaging";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 import WelcomeScreen from './screens/WelcomeScreen';
 import LoginScreen from './screens/LoginScreen';
@@ -24,23 +26,44 @@ import SelectedScreen from './screens/NewScreens/SelectedScreen';
 import SeatBooking_round_trip from './screens/NewScreens/SeatBookingRoundTrip';
 import NotificationScreen from './screens/NewScreens/NotificationScreen';
 
-const Stack = createNativeStackNavigator();
 
+
+const Stack = createNativeStackNavigator();
 
 const App = () => {
 
   const [darkApp, setDarkApp] = useState(false);
   const appTheme = darkApp ? DarkTheme : DefaultTheme; 
-  
+
+
+  //..........get mode from asynstorage......................
+  const getModeStatus=async()=>{
+    try {
+        await AsyncStorage.getItem("mode").then(val=>{
+            console.log(val);
+            if(val==="1"){
+              setDarkApp(true);
+            } 
+            else{
+              setDarkApp(false);
+            }
+        });
+    } 
+    catch(e) {
+      console.log(e);
+    }
+  };
+  // ...........change theme using eventRegister.............
   const themeEvent=()=>{
     let eventListener  = EventRegister.addEventListener('changeThemeEvent',
                (data) => {
                      setDarkApp(data);
-              })
+              });
     return()=>{
           EventRegister.removeEventListener(eventListener);
     };
   };
+  //........ permission for push notification for IOS only.........
   const cloudMessage = async() =>{
     const authStatus = await messaging().requestPermission();
     const enabled = 
@@ -50,14 +73,27 @@ const App = () => {
         console.log("auth status: ", authStatus);
       }
   };
+  //.........get fcm token from firebase............
+  const getFCM=async()=>{
+      let fcmToken = await messaging().getToken();
+      if(fcmToken){
+        console.log("token: ",fcmToken);  // send token to server
+      }
+      else{
+        console.log("token not found");
+      }
+  };
+  //......................................
   useEffect(()=>{
     cloudMessage();
     themeEvent();
+    getFCM();
+    getModeStatus();
     messaging().onMessage(async remoteMessage => {
       console.log('A new FCM message arrived :',(remoteMessage));
     });
   },[]);
-
+  //........................................
   return (
       <NavigationContainer theme={appTheme}>
         <Stack.Navigator initialRouteName="Welcome" screenOptions={{

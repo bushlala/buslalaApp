@@ -11,20 +11,19 @@ import Feather from "react-native-vector-icons/Feather";
 import Entypo from "react-native-vector-icons/Entypo";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import ProfileOptions from '../components/ProfileOptions';
-// import DocumentPicker from 'react-native-document-picker';
+import DocumentPicker from 'react-native-document-picker';
 import ToggleSwitch from "toggle-switch-react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import { EventRegister } from 'react-native-event-listeners';
+import { EventRegister } from 'react-native-event-listeners';
 import { useTheme } from "@react-navigation/native";
-// import storage from "@react-native-firebase/storage";
-// import firestore from '@react-native-firebase/firestore';
-
+import storage from '@react-native-firebase/storage';
+import RNFetchBlob from 'rn-fetch-blob';
+import messaging from "@react-native-firebase/messaging";
  
 const {width, height} = Dimensions.get("window");
 
 const ProfileScreen = () => {
 
-    // const FireBaseStorage = storage();
 
     const navigation = useNavigation();
     const route = useRoute();
@@ -35,16 +34,22 @@ const ProfileScreen = () => {
     const [isOpen2, setIsOpen2]=useState(false);
     const [isOpen3, setIsOpen3] = useState(false);
     const [on, setOn] = useState(false);
-    // const [on1, setOn1] = useState(false);
-    const [on2, setOn2] = useState(false);
-    const [pdfName, setPdfName] = useState("");
-    // const [uri, setUri] = useState("");
-    const [bookingData, setBookingData] = useState([]);
-    const [idProof, setIdProof] = useState(null);
-    const [ darkMode, setDarkMode ] = useState(false);
-    const[token, setToken] = useState("");
-    // console.log(darkMode);
+    const [on2, setOn2] = useState(true);
 
+    const [cowin, setCowin] = useState(null);
+    const [cowinName, setCowinName] = useState("");
+    const [process1, setProcess1] = useState("");
+    const [cowin_url, setCowin_url] = useState("");
+
+    const [id, setId] = useState(null);
+    const [idName, setIdName] = useState("");
+    const [process2, setProcess2] = useState("");
+    const [id_url, setId_url] = useState("");
+
+    const [darkMode, setDarkMode] = useState(false);
+    // const[token, setToken] = useState("");
+
+    
     const [showUserData, setShowUserData] = useState({
         first_name:"",
         last_name:"",
@@ -53,105 +58,247 @@ const ProfileScreen = () => {
         email:"",
         gender:""
     });
-    // console.log(showUserData);
 
     const closeHandle=()=>{
         setIsOpen(false);
-    }
+    };
     const closeHandle1=()=>{
         setIsOpen1(false);
-    }
+    };
     const closeHandle2=()=>{
         setIsOpen2(false);
-    }
+    };
     const closeHandle3=()=>{
         setIsOpen3(false);
     };
 
-    // const upMode=()=>{
-    //     try{
-    //         AsyncStorage.setItem("val",JSON.stringify(darkMode));
-    //     }
-    //     catch(err){
-    //         console.log(err);
-    //     }
-    // };
-    // const catchMode=async()=>{
-    //     try {
-    //         AsyncStorage.getItem("val").then(val=>{
-    //             console.log(val);
-    //             if(val=="true"){
-    //                 setDarkMode(true);
-    //             } else(setDarkMode(false))
-    //         })
-    //         // const value = await AsyncStorage.getItem("val");
-    //         // if(value !== null) {
-    //         //   setDarkMode(value);
-    //         // }
-    //     } catch(e) {
-    //     console.log(e);
-    //     }
-    // };
 
-    const getData=()=>{
-        AsyncStorage.getItem("jwt").then(res=>{
-            if(res!=null){
-                const value = JSON.parse(res);
-                setToken(value.data.token);
-            }
-        })
-    };
-    let axiosConfig = {
-        headers: {
-            'Content-Type': 'application/json;charset=UTF-8',
-            "Authorization": token,
+    const getAccountStatus=async()=>{
+        try {
+            await AsyncStorage.getItem("status").then(val=>{
+                if(val==="1"){
+                    setOn(true);
+                } else{
+                    setOn(false);
+                }
+            })
+        } catch(e) {
+        console.log(e);
         }
     };
+    // const setAccountStatus=async()=>{
+    //     on === false ? await AsyncStorage.setItem("status","1") : await AsyncStorage.setItem("status","0");
+    // };
 
-    const deactiveAcc=()=>{
-        axios.get("https://buslala-backend-api.herokuapp.com/api/user/delete",axiosConfig).then(res=>{
-            if(res.status===200){
-                AsyncStorage.removeItem("jwt");
-                navigation.navigate("Login");
-            }
-            else{
-                console.log(res.status);
-            }
-        })
-        .catch(e=>console.log(e));
+    // const toggleAcc=()=>{
+    //     setOn(!on);
+    //     setAccountStatus();
+    // };
+
+    const getModeStatus=async()=>{
+        try {
+            await AsyncStorage.getItem("mode").then(val=>{
+                console.log(val);
+                if(val==="1"){
+                    setDarkMode(true);
+                } else{
+                    setDarkMode(false);
+                }
+            })
+        } catch(e) {
+        console.log(e);
+        }
+    };
+    const setModeStatus=async()=>{
+        darkMode === false ?  await AsyncStorage.setItem("mode","1") : await AsyncStorage.setItem("mode","0");
+    };
+    const toggleMode=(val)=>{
+        setDarkMode(val);
+        EventRegister.emit("changeThemeEvent",val);
+        setModeStatus();
     };
 
-    const deleteUserAlert=()=>{
+    // const getData=()=>{
+    //     AsyncStorage.getItem("jwt").then(res=>{
+    //         if(res!=null){
+    //             const value = JSON.parse(res);
+    //             setToken(value.data.token);
+    //         }
+    //     })
+    // };
+    // let axiosConfig = {
+    //     headers: {
+    //         'Content-Type': 'application/json;charset=UTF-8',
+    //         "Authorization": token,
+    //     }
+    // };
+
+    // const deactiveAcc=()=>{
+    //     axios.get("https://buslala-backend-api.herokuapp.com/api/user/delete",axiosConfig).then(res=>{
+    //         if(res.status===200){
+    //             AsyncStorage.removeItem("jwt");
+    //             navigation.navigate("Login");
+    //         }
+    //         else{
+    //             console.log(res.status);
+    //         }
+    //     })
+    //     .catch(e=>console.log(e));
+    // };
+    const deactiveAcc=async()=>{
+        await AsyncStorage.removeItem("jwt");
+        navigation.navigate("Welcome");
+    };
+
+    const deactiveAcc_Alert=()=>{
+        setOn(true);
         Alert.alert(
-            "Deactive your account",
+            "Deactivate your account",
             "Are you sure?",
             [
                 {
                 text: "No",
-                onPress: () => console.log("No Pressed"),
+                onPress: () => {console.log("No Pressed");setOn(false)},
                 style: "cancel"
                 },
                 { text: "Yes", onPress: deactiveAcc }
             ]
         );
-    }
+    };
 
+    const select_cowin = async() =>{
+        try {
+            const res = await DocumentPicker.pick({
+                type: [DocumentPicker.types.pdf],
+            });
+            res.map(item=>(setCowin(item.uri),setCowinName(item.name)));   
+        } catch (error) {
+            if(DocumentPicker.isCancel(error)){
+                alert('Canceled');
+            }else{
+                throw error;
+            }
+        }
+    };
+    const Uplodad_cowin = async()=>{
+        const path = await RNFetchBlob.fs.readFile(cowin,"base64");
+        try{
+            const task = storage()
+            .ref("User/COWIN_certificate/"+ cowinName)
+            .putString(path,"base64");
+            task.on('state_changed',
+                function(snapshot){
+                    const rate = Math.floor((snapshot.bytesTransferred/snapshot.totalBytes)*100);
+                    setProcess1(`${rate}%`);
+                },
+                function(err){
+                    console.log(err);
+                },
+                function(){
+                    task.snapshot.ref.getDownloadURL().then(function(url){
+                        setCowin_url(url);
+                    })
+                }
+            );                  
+            task.then(async() => {
+                console.log('PDF uploaded to the bucket!');
+                await axios.patch("https://buslala-backend-api.herokuapp.com/api/user/profiles",{"cowin": cowin_url})
+                .then(res=>{
+                    if(res.status===200){
+                        setCowinName(null);
+                        setProcess1("");
+                        alert("Uploaded successfully");
+                    }
+                    else{
+                        console.log(res.status);
+                    }
+                })
+            });               
+        }
+        catch(e){
+            console.log(e);
+        }
+    };
 
+    const Uplodad_cowin_Alert=()=>{
+        Alert.alert(
+            "Upload your cowin certificate",
+            "Are you sure?",
+            [
+                {
+                text: "No",
+                onPress: () => {
+                    setCowinName(null);
+                },
+                style: "cancel"
+                },
+                { text: "Yes", onPress: Uplodad_cowin }
+            ]
+        );
+    };
 
-    // const pdfHandler=async()=>{
-    //     try {
-    //         const res = await DocumentPicker.pick({
-    //             type: DocumentPicker.types.pdf,
-    //         });
-    //         res.map(item=>(setIdProof(item.uri),setPdfName(item.name)));   
-    //     } catch (error) {
-    //         if(DocumentPicker.isCancel(error)){
-    //             alert('Canceled');
-    //         }else{
-    //             throw error;
-    //         }
-    //     }
-    // };
+    const select_ID = async() =>{
+        try {
+            const res = await DocumentPicker.pick({
+                type: [DocumentPicker.types.pdf],
+            });
+            res.map(item=>(setId(item.uri),setIdName(item.name)));   
+        } catch (error) {
+            if(DocumentPicker.isCancel(error)){
+                alert('Canceled');
+            }else{
+                throw error;
+            }
+        }
+    };
+    const Uplodad_ID = async()=>{
+        const path = await RNFetchBlob.fs.readFile(id,"base64");
+        try{
+            const task = storage()
+            .ref("User/ID_Proof/"+ idName)
+            .putString(path,"base64");
+            task.on('state_changed',
+                function(snapshot){
+                    const rate = Math.floor((snapshot.bytesTransferred/snapshot.totalBytes)*100);
+                    setProcess2(`${rate}%`);
+                },
+                function(err){
+                    console.log(err);
+                },
+                function(){
+                    task.snapshot.ref.getDownloadURL().then(function(url){
+                        setId_url(url);
+                    })
+                }
+            );                  
+            task.then(() => {
+                console.log('PDF uploaded to the bucket!');
+                setCowinName(null);
+                setProcess2("");
+                alert("Uploaded successfully");
+            });               
+        }
+        catch(e){
+            console.log(e);
+        }
+    };
+
+    const Uplodad_ID_Alert=()=>{
+        Alert.alert(
+            "Upload your Id proof",
+            "Are you sure?",
+            [
+                {
+                text: "No",
+                onPress: () => {
+                    setIdName(null);
+                },
+                style: "cancel"
+                },
+                { text: "Yes", onPress: Uplodad_ID }
+            ]
+        );
+    };
 
 
     const postData={
@@ -162,10 +309,8 @@ const ProfileScreen = () => {
         address: showUserData.address,
         gender: showUserData.gender
     };
-    // console.log(postData);
     
     const updateProfile=()=>{
-        // const pdfURL = await uploadPDF();
         axios.put("https://buslala-backend-api.herokuapp.com/api/user/profile",postData)
         .then(res=>{
             if(res.status==200){
@@ -180,7 +325,6 @@ const ProfileScreen = () => {
         axios.get("https://buslala-backend-api.herokuapp.com/api/user/profile")
         .then(res=>{
             if(res.status==200){
-                // console.log(res.data);
                 const data = res.data;
                 setShowUserData({...showUserData,first_name:data.first_name,last_name: data.last_name,number:data.number.toString(),address:data.address,email:data.email,gender:data.gender})
             }
@@ -191,10 +335,10 @@ const ProfileScreen = () => {
 
     useEffect(()=>{
         showUser();
-        myBookingsApi();
-        getData();
-        // upMode();
-        // catchMode();
+        // getData();
+        // getAccountStatus();
+        getModeStatus();
+        getNotiStatus();
     },[]);
     
     const logOutAlert = () =>
@@ -225,7 +369,8 @@ const ProfileScreen = () => {
     );
 
     const clickLogout=async()=>{
-        axios.post("https://buslala-backend-api.herokuapp.com/api/user/logout").then(res=>{
+        axios.post("https://buslala-backend-api.herokuapp.com/api/user/logout")
+        .then(res=>{
             if(res.status === 200){
                 AsyncStorage.removeItem("jwt");
                 navigation.navigate("Login");
@@ -233,19 +378,38 @@ const ProfileScreen = () => {
         })
         .catch(e=>console.log(e))
     };
-    const myBookingsApi=()=>{
-        axios.get("https://buslala-backend-api.herokuapp.com/api/user/booking")
-        .then(res=>{
-            if(res.status===200){
-                // console.log(res.data);
-                const Data = res.data;
-                setBookingData(Data.data);
-            }else console.log(res.status);
-        })
-        .catch(e=>{
-            console.log(e);
-            alert("please try again later");
-        })
+
+    const notification=async()=>{
+        setOn2(!on2);
+        if(on2){
+           let token = await messaging().deleteToken();
+           await AsyncStorage.setItem("notify","0")
+           alert("Notifications are disabled");
+           if(!token){
+               console.log("deleted:(");
+           }
+        }
+        else if(!on2){
+            let token = await messaging().getToken();
+            await AsyncStorage.setItem("notify","1")
+            alert("Notifications are enabled");
+            if(token){
+                console.log("retrieved:)", token);
+            }
+        }
+    };
+    const getNotiStatus=async()=>{
+        try {
+            await AsyncStorage.getItem("notify").then(val=>{
+                if(val==="1"){
+                    setOn2(true);
+                } else{
+                    setOn2(false);
+                }
+            })
+        } catch(e) {
+        console.log(e);
+        }
     };
 
 
@@ -333,24 +497,24 @@ const ProfileScreen = () => {
                     nav={()=>navigation.navigate("Bookings",{"first_name": showUserData.first_name,"number": showUserData.number,"address": showUserData.address})}
                     iconName="arrowright"
                     />
-                    {/* <ProfileOptions
+                    <ProfileOptions
                     text="Cowin Certificate"
                     desc="Add your cowin Certificate"
                     btn={()=>setIsOpen(true)}
                     iconName="arrowright"
-                    /> */}
+                    />
                     <ProfileOptions
                     text="Call Support"
                     desc="24/7 Service"
                     btn={()=>setIsOpen1(true)}
                     iconName="arrowright"
                     />
-                    {/* <ProfileOptions
+                    <ProfileOptions
                     text="Settings"
                     desc="Deactivate, Modes, Notifications"
                     btn={()=>setIsOpen2(true)}
                     iconName="arrowright"
-                    /> */}
+                    />
                     <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={logOutAlert}>
                         <Text style={{fontFamily:RalewayBold, fontSize:18, color:"white", textAlign:"center"}}>Logout</Text>
                     </TouchableOpacity>
@@ -375,8 +539,8 @@ const ProfileScreen = () => {
                         </View>
                         <View style={{alignItems:"center", marginVertical:10, width:"100%"}}>
                             <View style={styles.pdf}>
-                                {(!pdfName) ? <Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}}>Cowin.pdf</Text>:<Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}}>{pdfName}</Text>}
-                                <TouchableOpacity activeOpacity={0.8} onPress={closeHandle}>
+                                {(!cowinName) ? <Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}}>Cowin.pdf</Text>:<Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}}>{cowinName}</Text>}
+                                <TouchableOpacity activeOpacity={0.8} onPress={()=>{setCowin(null);setCowinName("")}}>
                                     <AntDesign
                                     name="close"
                                     size={24}
@@ -385,11 +549,12 @@ const ProfileScreen = () => {
                                 </TouchableOpacity>
                             </View>
                             <Text style={{fontFamily:RalewayRegular, fontSize:16, color:"black", marginVertical:10}}>Add your cowin Certificate here</Text>
+                            {process1 === "" ? null : <Text style={{textAlign:"center",color:"blue"}}>{process1}</Text>}
                         </View>
                         <TouchableOpacity style={styles.button} activeOpacity={0.8}
-                        // onPress={pdfHandler}
+                            onPress={!cowinName ? select_cowin : Uplodad_cowin_Alert}
                         >
-                            <Text style={{fontSize:15, fontFamily:RalewayBold, color:"white", textAlign:"center"}}>+ Add file</Text>
+                            <Text style={{fontSize:15, fontFamily:RalewayBold, color:"white", textAlign:"center"}}>{!cowinName ? `+ Add file`: `Upload`}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -449,32 +614,29 @@ const ProfileScreen = () => {
                                 onColor="red"
                                 offColor="gray"
                                 size="small"
-                                onToggle={()=>setOn(!on)}
+                                onToggle={deactiveAcc_Alert}
                                 />
                             </View>
-                            {/* <View style={{flexDirection:"row",alignItems:"center",justifyContent:"space-between", width:"100%",  borderBottomColor:"gray", borderBottomWidth:1, paddingVertical:10}}>
+                            <View style={{flexDirection:"row",alignItems:"center",justifyContent:"space-between", width:"100%",  borderBottomColor:"gray", borderBottomWidth:1, paddingVertical:10}}>
                                 <Text style={{fontSize:15, fontFamily:RalewayBold, color:"#000"}}>Modes: {!darkMode?"Day":"Night"}</Text>
                                 <ToggleSwitch
                                 isOn={darkMode}
                                 onColor="red"
                                 offColor="gray"
                                 size="small"
-                                onToggle={(val)=>{
-                                    setDarkMode(val);
-                                    EventRegister.emit("changeThemeEvent",val);
-                                }}
+                                onToggle={(val)=>toggleMode(val)}
                                 />
-                            </View> */}
-                            {/* <View style={{flexDirection:"row",alignItems:"center",justifyContent:"space-between", width:"100%",  borderBottomColor:"gray", borderBottomWidth:1, paddingVertical:10}}>
+                            </View>
+                            <View style={{flexDirection:"row",alignItems:"center",justifyContent:"space-between", width:"100%",  borderBottomColor:"gray", borderBottomWidth:1, paddingVertical:10}}>
                                 <Text style={{fontSize:15, fontFamily:RalewayBold, color:"black"}}>Notifications</Text>
                                 <ToggleSwitch
                                 isOn={on2}
                                 onColor="red"
                                 offColor="gray"
                                 size="small"
-                                onToggle={()=>setOn2(!on2)}
+                                onToggle={notification}
                                 />
-                            </View> */}
+                            </View>
                     </View>
                 </View>
             </Modal>
@@ -512,11 +674,11 @@ const ProfileScreen = () => {
                                     />
                                     <Text style={{color:primary, fontFamily:RalewayBold, fontSize:13, marginLeft:3}}>Vaccinated</Text>
                                 </View>
-                                {/* <TouchableOpacity style={{right:-20, backgroundColor:"lightgray",borderRadius:10, padding:5}}
+                                <TouchableOpacity style={{right:-20, backgroundColor:"lightgray",borderRadius:10, padding:5}}
                                     onPress={updateAlert}
                                 >
                                     <Text style={{fontFamily:RalewayRegular, fontSize:13, color:"red",marginHorizontal:5}}>Update</Text>
-                                </TouchableOpacity> */}
+                                </TouchableOpacity>
                             </View>
                         </View>
                         <ScrollView showsVerticalScrollIndicator={false} style={{marginVertical:10}}>
@@ -581,11 +743,11 @@ const ProfileScreen = () => {
                                 onChangeText={(val)=>setShowUserData({...showUserData,gender:val})}
                                 />
                             </View>
-                            {/* <Text style={{marginVertical:10, fontSize:15, fontFamily:RalewayBold, color:"black"}}>Verification</Text>
+                            <Text style={{marginVertical:10, fontSize:15, fontFamily:RalewayBold, color:"black"}}>Verification</Text>
                             <View style={{alignItems:"center", marginVertical:10, width:"100%"}}>
                                 <View style={styles.pdf}>
-                                    {(!pdfName) ? <Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}}>Cowin.pdf</Text>:<Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}}>{pdfName}</Text>}
-                                    <TouchableOpacity activeOpacity={0.8} onPress={closeHandle3}>
+                                    {(!idName) ? <Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}}>ID.pdf</Text>:<Text style={{fontSize:15, fontFamily:RalewayRegular, color:"gray"}}>{idName}</Text>}
+                                    <TouchableOpacity activeOpacity={0.8} onPress={()=>{setId(null);setIdName("")}}>
                                         <AntDesign
                                         name="close"
                                         size={24}
@@ -593,12 +755,12 @@ const ProfileScreen = () => {
                                         />
                                     </TouchableOpacity>
                                 </View>
-                                <Text style={{fontFamily:RalewayRegular, fontSize:16, color:"black", marginVertical:10}}>Add your cowin Certificate here</Text>
+                                <Text style={{fontFamily:RalewayRegular, fontSize:16, color:"black", marginVertical:10}}>{!process2 ? `Add your Id Proof here` : process2}</Text>
                             </View>
                             <TouchableOpacity style={styles.button} activeOpacity={0.8}
-                            onPress={pdfHandler}>
-                                <Text style={{fontSize:15, fontFamily:RalewayBold, color:"white", textAlign:"center"}}>+ Add file</Text>
-                            </TouchableOpacity> */}
+                            onPress={!idName ? select_ID : Uplodad_ID_Alert}>
+                                <Text style={{fontSize:15, fontFamily:RalewayBold, color:"white", textAlign:"center"}}>{!idName ? `+ Add file` : `Upload ID`}</Text>
+                            </TouchableOpacity>
                             {/* <View style={{borderBottomWidth:1, borderBottomColor:"gray", padding:5,marginVertical:10, flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
                                 <Text style={{fontSize:16, fontFamily:RalewayBold, color:"black"}}>Language</Text>
                                 <View style={{flexDirection:"row",alignItems:"center"}}>
@@ -612,10 +774,6 @@ const ProfileScreen = () => {
                                     </TouchableOpacity>
                                 </View>
                             </View> */}
-                            <TouchableOpacity style={styles.button} activeOpacity={0.8}
-                            onPress={updateAlert}>
-                                <Text style={{fontSize:15, fontFamily:RalewayBold, color:"white", textAlign:"center"}}>Update</Text>
-                            </TouchableOpacity>
                         </ScrollView>
                     </View>
                 </View>
@@ -624,12 +782,11 @@ const ProfileScreen = () => {
     )
 }
 
-export default ProfileScreen
+export default ProfileScreen;
 
 const styles = StyleSheet.create({
     screen:{
         flex:1,
-        // backgroundColor: "white",
     },
     view:{
         backgroundColor: primary,
@@ -663,7 +820,6 @@ const styles = StyleSheet.create({
         marginBottom:10,
         alignSelf:"center",
         width:"65%",
-        marginTop:20
     },
     heading:{
         flexDirection:"row",
@@ -700,7 +856,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius:10,
         borderTopRightRadius:10,
         marginHorizontal:20,
-        maxHeight: height/2.8,
+        maxHeight: height/2.5,
         elevation:5,
         padding:20,
         alignItems:"center",
@@ -725,7 +881,5 @@ const styles = StyleSheet.create({
         flexDirection:"row",
         alignItems:"center",
         justifyContent:"space-between",
-        width:"100%"
     }
-
 })

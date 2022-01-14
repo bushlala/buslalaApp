@@ -11,7 +11,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useState } from 'react';
 import SeaterOption from '../components/SeaterOption';
 import { useTheme } from "@react-navigation/native";
-
+// import dates from "../data/dates";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const {width} = Dimensions.get("window");
@@ -136,9 +136,9 @@ const BusesScreen = () => {
                 </View>
             </View>
             <View style={styles.view2}>
-                <TouchableOpacity activeOpacity={0.8} style={styles.destination}>
+                <View activeOpacity={0.8} style={styles.destination}>
                     <TouchableOpacity 
-                        style={{backgroundColor:"#fff",elevation:5,borderRadius:5}}
+                        style={{backgroundColor:"#fff",elevation:5,borderRadius:5,padding:2}}
                         onPress={()=>navigation.goBack()}
                     >
                     <Ionicons
@@ -166,7 +166,7 @@ const BusesScreen = () => {
                     size={24}
                     color="black"
                     />
-                </TouchableOpacity>
+                </View>
                 <View style={styles.timingsContainer}>
                     {/* <FlatList
                     data={dates}
@@ -182,11 +182,24 @@ const BusesScreen = () => {
                         </TouchableOpacity>
                     )}
                     /> */}
-                    <TouchableOpacity activeOpacity={0.8} style={styles.active}
-                        onPress={()=>{}}
-                    >
+                    {roundTrip && 
+                    <View style={{flexDirection:"row",alignItems:"center"}}>
+                        <TouchableOpacity activeOpacity={0.8} style={styles.active}>
+                            <Text style={styles.activeText}>{date}</Text>
+                        </TouchableOpacity>
+                        <AntDesign
+                            name="swap"
+                            size={24}
+                            color="black"
+                        />
+                        <TouchableOpacity activeOpacity={0.8} style={styles.active}>
+                            <Text style={styles.activeText}>{rDate}</Text>
+                        </TouchableOpacity>
+                    </View>}
+                    {oneway &&
+                    <TouchableOpacity activeOpacity={0.8} style={styles.active}>
                         <Text style={styles.activeText}>{date}</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity>}
 
                 </View>
                 <View style={styles.options}>
@@ -205,7 +218,7 @@ const BusesScreen = () => {
                                 priceLower={item1.bus.fare.lowerBerth}
                                 rating={item1.bus.rating}
                                 seats={item1.seats.available}
-                                desc={item.description}
+                                desc={item1.bus.bus_model}
                                 tripID={item1.tripId}
                                 src={src}
                                 dest={dest}                                
@@ -217,8 +230,8 @@ const BusesScreen = () => {
                     />
                 </View>
             </View>
-            <TouchableOpacity activeOpacity={0.8} style={styles.filter}
-            // onPress={()=>setIsOpen(true)}
+            {/* <TouchableOpacity activeOpacity={0.8} style={styles.filter}
+            onPress={()=>setIsOpen(true)}
             >
                 <MaterialCommunityIcons
                 name="filter-plus"
@@ -329,7 +342,7 @@ const BusesScreen = () => {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </Modal>
+            </Modal> */}
         </View>
     )
 }
@@ -451,7 +464,7 @@ const styles = StyleSheet.create({
         borderRadius:10,
         elevation:5,
         marginHorizontal:10,
-        marginBottom:10,
+        // marginBottom:10,
     },
     activeText:{
         fontSize:15,

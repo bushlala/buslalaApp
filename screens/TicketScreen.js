@@ -1,13 +1,12 @@
-import { useNavigation, useRoute } from '@react-navigation/core'
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { RalewayBold, RalewayLight, RalewayRegular } from '../assets/fonts/fonts'
-import { fontColor, newColor, primary, secondary, textColor } from '../components/Colors'
+import { useNavigation } from '@react-navigation/core';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { RalewayBold } from '../assets/fonts/fonts';
+import { fontColor, newColor, primary, secondary, textColor } from '../components/Colors';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
-// import Entypo from "react-native-vector-icons/Entypo";
 import { useTheme } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -17,10 +16,11 @@ const TicketScreen = () => {
 
     const navigation = useNavigation();
     const colors = useTheme();
+    
     const [data, setData] = useState([]);
-    const [isData, setIsData] = useState(false);
-    const[token, setToken] = useState("");
+    const [token, setToken] = useState("");
     const [date, setDate] = useState(new Date());
+
     let tempDate = new Date(date);
     let year = tempDate.getFullYear();
     let month = ('0' + (tempDate.getMonth()+1)).slice(-2);
@@ -47,8 +47,6 @@ const TicketScreen = () => {
         .then(res=>{
             if(res.status===200){
                 const Data = res.data;
-                console.log(res.status);
-                setData(Data.data);
                 setData(Data.data);
                 data.forEach(x=>setDate(x.date));
             }else console.log(res.status);
@@ -59,13 +57,10 @@ const TicketScreen = () => {
         })
     };
     
-    // const checkData=()=>{
-    //     data.length !== 0 ? setIsData(true) : setIsData(false)
-    // }
+
     useEffect(() => {
         ticketApi();
         getData();
-        // checkData();
     },[]);
 
     return (
@@ -124,10 +119,12 @@ const TicketScreen = () => {
 
                 <ScrollView style={styles.notifications} showsVerticalScrollIndicator={false}>
                     {
-                        // isData === true ? 
                         data.map((item,index)=>(
                             <View style={{elevation:5,backgroundColor:"#e9f7f7",borderRadius:20,marginHorizontal:10,marginVertical:10}} key={index}>
                                 <View style={{marginVertical:10}}>
+                                    <View style={{position:"absolute",right:20}}>
+                                        <Text style={{color:"blue",fontSize:12}}>{item.tripId.status}</Text>
+                                    </View>
                                     <Text style={{color:"#000",textAlign:"center",fontWeight:"bold"}}>{item.tripId.busId.name}</Text>
                                     <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center",marginVertical:5}}>
                                         <View style={{alignItems:"center"}}>
@@ -145,12 +142,9 @@ const TicketScreen = () => {
                                     </View>
                                     <Text style={{color:"#000",textAlign:"center",fontWeight:"400"}}>Name: {item.u1_name}</Text>
                                     <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Seat number: {item.seat_number1}</Text>
-                                    {/* <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Ticket number: 012345687788</Text> */}
                                 </View>
-                            </View> 
+                            </View>
                         ))
-                        // :
-                        // <Text style={{color:"gray",textAlign:"center",fontWeight:"bold"}}>You have no Tickets</Text>
                     }
                 </ScrollView>
             </View>
