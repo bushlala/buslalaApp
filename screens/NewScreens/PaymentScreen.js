@@ -18,13 +18,12 @@ export default function PaymentScreen({route}){
     const navigation = useNavigation();
     const colors = useTheme();
     const { Data, name, email, number, price } = route.params;
-    // console.log(Data);
     
 
     const _razorpay=()=>{
         var options = {
             description: 'Payment of seat booking',
-            image: require('../../assets/logo.png'),
+            image: '../../assets/logo.png',
             currency: 'INR',
             key: 'rzp_test_nxRhnTn0h9BeAk',
             amount: Data.amount,
@@ -35,7 +34,7 @@ export default function PaymentScreen({route}){
               contact: number,
               name: name
             },
-            theme: {color: '#53a20e'}
+            theme: {color: '#969557'}
           }
           RazorpayCheckout.open(options).then( async data => {
             // handle success

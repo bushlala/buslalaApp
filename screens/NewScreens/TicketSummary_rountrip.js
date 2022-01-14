@@ -17,7 +17,7 @@ export default function TicketSummaryScreen({route}){
 
     const navigation = useNavigation();
     const colors = useTheme();
-    const [Data, setData] = useState({});
+    // const [Data, setData] = useState({});
     const {Name,busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number,
              email, gender1, gender2, price, tripId, seats, date, src, dest, rDate, url1, url2} = route.params;
 
@@ -38,40 +38,40 @@ export default function TicketSummaryScreen({route}){
 
     // can be remove later --------------------->
 
-    const _razorpay=()=>{
-        var options = {
-            description: 'Payment of seat booking',
-            image: require('../../assets/logo.png'),
-            currency: 'INR',
-            key: 'rzp_test_nxRhnTn0h9BeAk',
-            amount: Data.amount,
-            name: "Buslala",
-            order_id: Data.id,
-            prefill: {
-              email: email,
-              contact: number,
-              name: Name
-            },
-            theme: {color: '#53a20e'}
-          }
-          RazorpayCheckout.open(options).then( async data => {
-            // handle success
-            axios.post("https://buslala-backend-api.herokuapp.com/api/user/verify-payment",{
-                payment_id: data.razorpay_payment_id,
-                order_id: Data.id,
-                signature: data.razorpay_signature,
-                order: Data,
-            }).then(res=>{
-                if(res.status==200){
-                    navigation.navigate("Booked Successfully",Name);
-                }
-                else console.log(res.status);
-            }).catch(e=>console.log(e));
-          }).catch((error) => {
-            // handle failure
-            alert("You have canceled the payment");
-          });
-    };
+    // const _razorpay=()=>{
+    //     var options = {
+    //         description: 'Payment of seat booking',
+    //         image: '../../assets/logo.png',
+    //         currency: 'INR',
+    //         key: 'rzp_test_nxRhnTn0h9BeAk',
+    //         amount: Data.amount,
+    //         name: "Buslala",
+    //         order_id: Data.id,
+    //         prefill: {
+    //           email: email,
+    //           contact: number,
+    //           name: Name
+    //         },
+    //         theme: {color: '#969557'}
+    //       }
+    //       RazorpayCheckout.open(options).then( async data => {
+    //         // handle success
+    //         axios.post("https://buslala-backend-api.herokuapp.com/api/user/verify-payment",{
+    //             payment_id: data.razorpay_payment_id,
+    //             order_id: Data.id,
+    //             signature: data.razorpay_signature,
+    //             order: Data,
+    //         }).then(res=>{
+    //             if(res.status==200){
+    //                 navigation.navigate("Booked Successfully",Name);
+    //             }
+    //             else console.log(res.status);
+    //         }).catch(e=>console.log(e));
+    //       }).catch((error) => {
+    //         // handle failure
+    //         alert("You have canceled the payment");
+    //       });
+    // };
 
     // <------------------------------------------------
     
@@ -79,10 +79,10 @@ export default function TicketSummaryScreen({route}){
         axios.post(`https://buslala-backend-api.herokuapp.com/api/user/book/${tripId}`,postdata)
         .then(res=>{
             if(res.status==200){
-                // let Data = res.data;
-                // navigation.navigate("PaymentScreen",{Data,"name":Name,"email": email,"number": number, "price": price});
-                setData(res.data);
-                _razorpay();
+                let Data = res.data;
+                navigation.navigate("PaymentScreen",{Data,"name":Name,"email": email,"number": number, "price": price});
+                // setData(res.data);
+                // _razorpay();
             }else console.log(res.status);
         })
         .catch(e=>{

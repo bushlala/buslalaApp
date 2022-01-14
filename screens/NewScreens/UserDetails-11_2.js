@@ -7,15 +7,13 @@ import { useNavigation } from '@react-navigation/core';
 import DocumentPicker from 'react-native-document-picker';
 import SelectDropdown from 'react-native-select-dropdown';
 import { useTheme } from "@react-navigation/native";
-// import { utils } from '@react-native-firebase/app';     
 import storage from '@react-native-firebase/storage';
 import RNFetchBlob from 'rn-fetch-blob';
 
 import { fontColor, newColor, primary, secondary } from '../../components/Colors';
 
 
-const {width} = Dimensions.get("window");
-const {height} = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 
 
 
@@ -24,7 +22,6 @@ export default function UserDetails_11_2({route}){
     const navigation = useNavigation();
     const colors = useTheme();
     const { name, src, dest, deptHour, arivHour, price, duration, tripId, seats, date, rDate } = route.params;
-    // console.log(rDate);
     const [ values, setValues ] = useState({
         fullName1: "",
         age1: "",
@@ -413,7 +410,6 @@ export default function UserDetails_11_2({route}){
 const styles = StyleSheet.create({
     screen:{
         flex: 1,
-        // backgroundColor: "#fff",
         width: width
     },
     view:{
