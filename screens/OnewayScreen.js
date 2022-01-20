@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/core';
 import axios from 'axios';
 import React, { useEffect } from 'react';
-import { KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { BackHandler, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { RalewayBold, RalewayRegular } from '../assets/fonts/fonts';
 import { fontColor, newColor, primary, secondary, textColor } from '../components/Colors';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -12,6 +12,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useState } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useTheme } from "@react-navigation/native";
+// import { funcBackHandler } from '../components/BackHandler';
 
 
 
@@ -189,6 +190,7 @@ const OnewayScreen = () => {
     useEffect(() => {
         sourceApi();
         destApi();
+        // funcBackHandler();
     }, []);
 
     const searchFilter=(text)=>{

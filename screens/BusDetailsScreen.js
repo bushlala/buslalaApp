@@ -12,14 +12,13 @@ const BusDetailsScreen = ({route}) => {
     const navigation = useNavigation();
     const colors = useTheme();
     const { busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number, email, 
-            gender1, gender2, price, tripId, seats, date, src, dest, rDate, url1, url2 } = route.params;
-    // console.log(rDate);
+            gender1, gender2, price, tripId, seat_number1, seat_number2, date, src, dest, rDate, url1, url2 } = route.params;
     const [error, setError] = useState(false);
     const [user, setUser]= useState(false);
     const [myName, setMyName] = useState("");
     const [Email, setEmail] = useState("");
     const [message, setMessage]= useState("");
-    // console.log(email);
+    console.log(seat_number1);
 
     const errorHandler=()=>{
         if(Email==="" || myName===""){
@@ -28,20 +27,6 @@ const BusDetailsScreen = ({route}) => {
             setError(false);
         }
     };
-
-    // const submitHandler=()=>{
-    //     if(!myName || !Email)
-    //     {
-    //         setError(true);
-    //     }else{
-    //         axios.post("https://buslala-backend-api.herokuapp.com/api/user//book_bus/:busId", {"email": email, "Name": myName, "BusName": route.params.name, "Price": route.params.price, "Time": route.params.deptHour})
-    //         .then((res)=>{
-    //             console.log(res.data);
-    //             navigation.navigate("Booked Successfully", {"myName": myName});
-    //         })
-    //         .catch((err)=>console.log(err))
-    //     }
-    // };
 
     const confirmBooking=()=>{
         if(myName==="" || Email===""){
@@ -55,8 +40,8 @@ const BusDetailsScreen = ({route}) => {
                 navigation.navigate("TicketSummary",{"Name": myName,"busName": busName, "deptHour": deptHour, 
                         "arivHour": arivHour, "fullName1": fullName1, "age1": age1, "fullName2": fullName2, 
                         "age2": age2, "number": number, "email": Email, "gender1": gender1, "gender2": gender2,
-                        "price": price, "tripId": tripId, "seats": seats, "date": date, "src": src, "dest": dest,
-                        "rDate": rDate, "url1": url1, "url2": url2
+                        "price": price, "tripId": tripId, "seat_number1": seat_number1,"seat_number2": seat_number2,
+                        "date": date, "src": src, "dest": dest, "rDate": rDate, "url1": url1, "url2": url2
                     })
             }
         }

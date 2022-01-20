@@ -1,7 +1,7 @@
 import { useNavigation, useRoute } from '@react-navigation/core';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Alert, Dimensions, FlatList, Image, KeyboardAvoidingView, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, BackHandler, Dimensions, FlatList, Image, KeyboardAvoidingView, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { RalewayBold, RalewayLight, RalewayRegular } from '../assets/fonts/fonts'
 import { fontColor, newColor, primary, secondary, textColor } from '../components/Colors'
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -73,19 +73,19 @@ const ProfileScreen = () => {
     };
 
 
-    const getAccountStatus=async()=>{
-        try {
-            await AsyncStorage.getItem("status").then(val=>{
-                if(val==="1"){
-                    setOn(true);
-                } else{
-                    setOn(false);
-                }
-            })
-        } catch(e) {
-        console.log(e);
-        }
-    };
+    // const getAccountStatus=async()=>{
+    //     try {
+    //         await AsyncStorage.getItem("status").then(val=>{
+    //             if(val==="1"){
+    //                 setOn(true);
+    //             } else{
+    //                 setOn(false);
+    //             }
+    //         })
+    //     } catch(e) {
+    //     console.log(e);
+    //     }
+    // };
     // const setAccountStatus=async()=>{
     //     on === false ? await AsyncStorage.setItem("status","1") : await AsyncStorage.setItem("status","0");
     // };
@@ -368,12 +368,23 @@ const ProfileScreen = () => {
         ]
     );
 
-    const clickLogout=async()=>{
+    // const backAction=()=>{
+    //     return true;
+    // };
+    // const funcBackHandler=()=>{
+    //     BackHandler.addEventListener('hardwareBackPress',backAction);
+    //     return ()=> {
+    //         BackHandler.removeEventListener('hardwareBackPress',backAction);
+    //     }
+    // };
+
+    const clickLogout=()=>{
         axios.post("https://buslala-backend-api.herokuapp.com/api/user/logout")
-        .then(res=>{
+        .then(async res=>{
             if(res.status === 200){
-                AsyncStorage.removeItem("jwt");
+                await AsyncStorage.removeItem("jwt");
                 navigation.navigate("Login");
+                // funcBackHandler();
             }else console.log(res.status);
         })
         .catch(e=>console.log(e))

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Image, ScrollView } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -6,7 +6,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import { useNavigation } from '@react-navigation/core';
 import { useTheme } from "@react-navigation/native";
 import axios from "axios";
-import RazorpayCheckout from 'react-native-razorpay';
+// import RazorpayCheckout from 'react-native-razorpay';
 
 
 
@@ -17,13 +17,22 @@ export default function TicketSummaryScreen({route}){
 
     const navigation = useNavigation();
     const colors = useTheme();
-    // const [Data, setData] = useState({});
-    const {Name,busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number,
-             email, gender1, gender2, price, tripId, seats, date, src, dest, rDate, url1, url2} = route.params;
+    const {Name,busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number,email, gender1, 
+            gender2, price, tripId, seat_number1, seat_number2, date, src, dest, rDate, url1, url2} = route.params;
+            
+    const [oneSeat, setOneSeat] = useState(true);
 
+    const seatNumHandler=()=>{
+        if(seat_number1 !== "" && seat_number2 !== ""){
+            setOneSeat(false)
+        }else setOneSeat(true)
+    };
+    useEffect(()=>{
+        seatNumHandler();
+    },[])
     var postdata={
-        "seat_number1": seats,
-        "seat_number2": "",
+        "seat_number1": seat_number1,
+        "seat_number2": seat_number2,
         "price": price,
         "u1_name": fullName1,
         "u1_age": age1,
@@ -35,6 +44,59 @@ export default function TicketSummaryScreen({route}){
         "ph_number": number,
         "email": email
     };
+
+    const oneSeatTicket=()=>(
+        <View style={{marginVertical:10}}>
+            <Text style={{color:"#000",textAlign:"center",fontWeight:"500"}}>{busName}</Text>
+            <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center",marginVertical:5}}>
+                <View style={{alignItems:"center"}}>
+                    <Text style={{color:"#000",fontWeight:"500"}}>{src}</Text>
+                    <Text style={{color:"gray",fontSize:12,fontWeight:"500"}}>{deptHour}</Text>
+                </View>
+                <Text style={{color:"#000"}}>--------</Text>
+                <View style={{alignItems:"center"}}>
+                    <Text style={{color:"#000",fontWeight:"500"}}>{dest}</Text>
+                    <Text style={{color:"gray",fontSize:12,fontWeight:"500"}}>{arivHour}</Text>
+                </View>
+            </View>
+            {/* <Text style={{color:"#000",textAlign:"center",fontWeight:"400"}}>Passenger: {fullName1}</Text>
+            <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Seat number: {seat_number1}</Text> */}
+            <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Journey Date: {date}</Text>
+            {
+                rDate !== undefined ? 
+                <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Return Date: {rDate}</Text>
+                :
+                null
+            }
+        </View>
+    );
+    const twoSeatTicket=()=>(
+        <View style={{marginVertical:10}}>
+            <Text style={{color:"#000",textAlign:"center",fontWeight:"500"}}>{busName}</Text>
+            <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center",marginVertical:5}}>
+                <View style={{alignItems:"center"}}>
+                    <Text style={{color:"#000",fontWeight:"500"}}>{src}</Text>
+                    <Text style={{color:"gray",fontSize:12,fontWeight:"500"}}>{deptHour}</Text>
+                </View>
+                <Text style={{color:"#000"}}>--------</Text>
+                <View style={{alignItems:"center"}}>
+                    <Text style={{color:"#000",fontWeight:"500"}}>{dest}</Text>
+                    <Text style={{color:"gray",fontSize:12,fontWeight:"500"}}>{arivHour}</Text>
+                </View>
+            </View>
+            <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Journey Date: {date}</Text>
+            {
+                rDate !== undefined ? 
+                <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Return Date: {rDate}</Text>
+                :
+                null
+            }
+            {/* <Text style={{color:"#000",textAlign:"center",fontWeight:"400"}}>P1: {fullName1}</Text>
+            <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Seat number: {seat_number1}</Text>
+            <Text style={{color:"#000",textAlign:"center",fontWeight:"400"}}>P2: {fullName2}</Text>
+            <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Seat number: {seat_number2}</Text> */}
+        </View>
+    );
 
     // can be remove later --------------------->
 
@@ -80,6 +142,7 @@ export default function TicketSummaryScreen({route}){
         .then(res=>{
             if(res.status==200){
                 let Data = res.data;
+                console.log(Data);
                 navigation.navigate("PaymentScreen",{Data,"name":Name,"email": email,"number": number, "price": price});
                 // setData(res.data);
                 // _razorpay();
@@ -152,49 +215,29 @@ export default function TicketSummaryScreen({route}){
             <ScrollView style={{marginBottom:0}}>
                 <View style={{marginHorizontal:20}}>
                     <View style={{elevation:5,backgroundColor:"#fff",borderRadius:10,marginHorizontal:10,marginVertical:10}}>
-                        <View style={{marginVertical:10}}>
-                            <Text style={{color:"#000",textAlign:"center",fontWeight:"500"}}>{busName}</Text>
-                            <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center",marginVertical:5}}>
-                                <View style={{alignItems:"center"}}>
-                                    <Text style={{color:"#000",fontWeight:"500"}}>{src}</Text>
-                                    <Text style={{color:"gray",fontSize:12,fontWeight:"500"}}>{deptHour}</Text>
-                                </View>
-                                <Text style={{color:"#000"}}>--------</Text>
-                                <View style={{alignItems:"center"}}>
-                                    <Text style={{color:"#000",fontWeight:"500"}}>{dest}</Text>
-                                    <Text style={{color:"gray",fontSize:12,fontWeight:"500"}}>{arivHour}</Text>
-                                </View>
-                            </View>
-                            <Text style={{color:"#000",textAlign:"center",fontWeight:"400"}}>Passenger Name: {fullName1}</Text>
-                            <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Seat number: {seats}</Text>
-                            <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Journey Date: {date}</Text>
-                            {
-                                rDate !== undefined ? 
-                                <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Return Date: {rDate}</Text>
-                                :
-                                null
-                            }
-                        </View>
+                        {oneSeat ? oneSeatTicket() : twoSeatTicket()}
                     </View>
                     <View style={{marginTop:20}}>
                         <Text style={{color:colors.colors.text,fontSize:18}}>Personal Details</Text>
                         <View style={{marginTop:10}}>
                             <View style={{flexDirection:"row",justifyContent:"space-between"}}>
                                 <MaterialCommunityIcons name="chair-rolling" color={colors.colors.text} size={24} />
-                                <Text style={{color:"#e66349"}}>{seats}</Text>
+                                <Text style={{color:"#e66349"}}>{seat_number1}</Text>
                                 <Text style={{color:colors.colors.text}}>{fullName1}</Text>
                                 <Text style={{color:colors.colors.text}}>{age1}</Text>
                                 <Text style={{color:colors.colors.text}}>{gender1}  </Text>
                             </View>
                             <View style={{borderWidth:0.2,borderColor:"gray",backgroundColor:"gray",marginVertical:10}} />
-                            {/* <View style={{flexDirection:"row",justifyContent:"space-between"}}>
-                                <MaterialCommunityIcons name="chair-rolling" color="#000" size={24} />
-                                <Text style={{color:"#e66349"}}>B4</Text>
-                                <Text style={{color:"#000"}}>{fullName2}</Text>
-                                <Text style={{color:"#000"}}>{age2}</Text>
-                                <Text style={{color:"#000"}}>{gender2}</Text>
-                            </View> */}
-                            <View></View>
+                            {
+                                !oneSeat && 
+                                <View style={{flexDirection:"row",justifyContent:"space-between"}}>
+                                    <MaterialCommunityIcons name="chair-rolling" color="#000" size={24} />
+                                    <Text style={{color:"#e66349"}}>{seat_number2}</Text>
+                                    <Text style={{color:"#000"}}>{fullName2}</Text>
+                                    <Text style={{color:"#000"}}>{age2}</Text>
+                                    <Text style={{color:"#000"}}>{gender2}</Text>
+                                </View>
+                            }
                         </View>
                     </View>
                     <View style={{marginTop:20}}>

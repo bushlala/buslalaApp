@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, TextInput, Picker } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -21,7 +21,7 @@ export default function UserDetails_11_2({route}){
 
     const navigation = useNavigation();
     const colors = useTheme();
-    const { name, src, dest, deptHour, arivHour, price, duration, tripId, seats, date, rDate } = route.params;
+    const { name, src, dest, deptHour, arivHour, price, duration, tripId, seats, date, rDate, seat_number1, seat_number2 } = route.params;
     const [ values, setValues ] = useState({
         fullName1: "",
         age1: "",
@@ -40,14 +40,21 @@ export default function UserDetails_11_2({route}){
     const [process2, setProcess2] = useState("");
     const [url1, setUrl1] = useState("");
     const [url2, setUrl2] = useState("");
+    const [onePerson, setOnePerson] = useState(true);
 
-    
-    // const optionalClick1 =()=>{
-    //     select1 === false ? setSelect1(true) : setSelect1(false);
-    // }
-    // const optionalClick2 =()=>{
-    //     select2 === false ? setSelect2(true) : setSelect2(false);
-    // }
+
+
+    useEffect(()=>{
+        personHandler();
+    },[]);
+
+    const personHandler=()=>{
+        if(seat_number1 !== "" && seat_number2 !== ""){
+            setOnePerson(false);
+        }
+        else setOnePerson(true);
+    };
+
     const selectFile1 = async () => {
         try {
           const res = await DocumentPicker.pick({
@@ -133,20 +140,155 @@ export default function UserDetails_11_2({route}){
         }
     };
 
+    const person1=()=>(
+        <>
+            <View style={{flexDirection:"row",justifyContent:"center",marginTop:20}}>
+                <Text style={{color:colors.colors.text}}>Person 1</Text>
+                <View style={{borderWidth:0.8,marginHorizontal:20,borderColor:colors.colors.text}}></View>
+                <Text style={{color:colors.colors.text}}>{seat_number1}</Text>
+            </View>
+            <View style={{elevation:5,width:"100%", backgroundColor:"white", borderRadius:10, padding:10,marginTop:10}}>
+                <TextInput 
+                    style={{paddingLeft:10,color:"#000",borderRadius:10}} 
+                    placeholder="Full Name " 
+                    placeholderTextColor="gray" 
+                    onChangeText={(text)=>setValues({...values, fullName1: text})}
+                />
+            </View>
+            <View style={{flexDirection:"row",justifyContent:"space-between"}}>
+                <View style={{flexDirection:"row",elevation:5, backgroundColor:"white", borderRadius:10, padding:10,marginTop:10}}>
+                    <TextInput 
+                        style={{color:"#000",paddingLeft:10,width:width/3}} 
+                        placeholder="Age" 
+                        placeholderTextColor="gray" 
+                        keyboardType="number-pad" 
+                        onChangeText={(text)=>setValues({...values, age1: text})}
+                    />
+                </View>
+                <View style={{elevation:5, backgroundColor:"white", borderRadius:10, padding:10,marginTop:10,}}>
+                    <SelectDropdown
+                        data={Gender}
+                        defaultButtonText={"Gender"}
+                        onSelect={(selectedItem) => {
+                            setValues({...values,gender1: selectedItem})
+                        }}
+                        buttonTextAfterSelection={(selectedItem) => {
+                            return selectedItem;
+                        }}
+                        rowTextForSelection={(item, index) => {
+                            return item;
+                        }}
+                        buttonStyle={styles.dropdown2BtnStyle}
+                        renderDropdownIcon={(isOpened) => {
+                            return (
+                                <MaterialIcons
+                                name={isOpened ? "expand-less" : "expand-more"}
+                                color={"#000"}
+                                size={24}
+                                />
+                            );
+                            }}
+                        dropdownIconPosition={"right"}
+                        dropdownStyle={styles.DropdownStyle}
+                        rowStyle={styles.rowStyle}
+                    />
+                </View>
+            </View>
+        </>
+    );
+    const person2=()=>(
+        <>
+            <View style={{flexDirection:"row",justifyContent:"center",marginTop:20}}>
+                <Text style={{color:"#000"}}>Person 2</Text>
+                <View style={{borderWidth:0.8,marginHorizontal:20,backgroundColor:"#000"}}></View>
+                <Text style={{color:"#000"}}>{seat_number2}</Text>
+            </View>
+            <View style={{elevation:5,width:"100%", backgroundColor:"white", borderRadius:10, padding:10,marginTop:10}}>
+                <TextInput 
+                    style={{color:"#000",width:"100%",paddingLeft:10}} 
+                    placeholder="Full Name" 
+                    placeholderTextColor="gray" 
+                    onChangeText={(text)=>setValues({...values, fullName2: text})}
+                />
+            </View>
+            <View style={{flexDirection:"row",justifyContent:"space-between"}}>
+                <View style={{flexDirection:"row",elevation:5, backgroundColor:"white", borderRadius:10,padding:10,marginTop:10}}>
+                    <TextInput 
+                        style={{color:"#000",paddingLeft:10,width:width/3}} 
+                        placeholder="Age" 
+                        placeholderTextColor="gray"
+                        keyboardType="number-pad" 
+                        onChangeText={(text)=>setValues({...values, age2: text})}
+                    />
+                </View>
+                <View style={{elevation:5, backgroundColor:"white", borderRadius:10, padding:10,marginTop:10,}}>
+                    <SelectDropdown
+                        data={Gender}
+                        defaultButtonText={"Gender"}
+                        onSelect={(selectedItem) => {
+                            setValues({...values,gender2: selectedItem})
+                        }}
+                        buttonTextAfterSelection={(selectedItem) => {
+                            return selectedItem;
+                        }}
+                        rowTextForSelection={(item, index) => {
+                            return item;
+                        }}
+                        buttonStyle={styles.dropdown2BtnStyle}
+                        renderDropdownIcon={(isOpened) => {
+                            return (
+                                <MaterialIcons
+                                name={isOpened ? "expand-less" : "expand-more"}
+                                color={"#000"}
+                                size={24}
+                                />
+                            );
+                            }}
+                            dropdownIconPosition={"right"}
+                            dropdownStyle={styles.DropdownStyle}
+                            rowStyle={styles.rowStyle}
+                    />
+                </View>
+            </View>
+        </>
+    );
+    const twoPerson=()=>(
+        <>
+            {person1()}
+            {person2()}
+        </>
+    );
     const proceed=()=>{
-        if(fullName1==="" || age1==="" || gender1==="" || number==="" || email==="" || number.length != 10){
-            alert("please enter all the details");
+        if(onePerson === true){
+            if(fullName1==="" || age1==="" || gender1==="" || number==="" || email==="" || number.length != 10){
+                alert("please enter all the details");
+            }
+            else{
+            navigation.navigate("BusDetails",{ 
+                "busName": name, "deptHour": deptHour, "arivHour": arivHour, "tripId" : tripId,
+                "fullName1": fullName1, "age1": age1, "fullName2": fullName2, "age2": age2,
+                "number": number, "email": email, "gender1": gender1, "gender2": gender2, 
+                "seat_number1": seat_number1,"price": price,"date": date, "src": src, 
+                "dest": dest, "rDate": rDate, "url1": url1, "url2": url2, "seat_number2": seat_number2
+            })
+            }
         }
-        else{
-        navigation.navigate("BusDetails",{ 
-            "busName": name, "deptHour": deptHour, "arivHour": arivHour, "tripId" : tripId,
-            "fullName1": fullName1, "age1": age1, "fullName2": fullName2, "age2": age2,
-            "number": number, "email": email, "gender1": gender1, "gender2": gender2, 
-            "seats": seats, "price": price, "date": date, "src": src, "dest": dest,
-            "rDate": rDate, "url1": url1, "url2": url2
-        })
+        else {
+            if(fullName1==="" || age1==="" || gender1==="" || fullName2==="" || age2==="" || gender2==="" || number==="" || email==="" || number.length != 10){
+                alert("please enter all the details");
+            }
+            else{
+            navigation.navigate("BusDetails",{ 
+                "busName": name, "deptHour": deptHour, "arivHour": arivHour, "tripId" : tripId,
+                "fullName1": fullName1, "age1": age1, "fullName2": fullName2, "age2": age2,
+                "number": number, "email": email, "gender1": gender1, "gender2": gender2, 
+                "seat_number1": seat_number1, "seat_number2": seat_number2, "price": price,
+                "date": date, "src": src, "dest": dest, "rDate": rDate, "url1": url1, "url2": url2
+            })
+            }
         }
     };
+    
 
     return(
         <View style={styles.screen}>
@@ -210,7 +352,7 @@ export default function UserDetails_11_2({route}){
                                 <Text style={{color:"gray"}}>{deptHour}</Text>
                             </View>
                         </View>
-                        <View style={{marginRight:20}}>
+                        <View style={{marginRight:20,alignItems:"center"}}>
                             <Text style={{color:"black"}}>{src}</Text>
                             <View style={{flexDirection:"row",justifyContent:"center"}}>
                                 <MaterialIcons name="import-export" color="#ed6c39" size={20} />
@@ -225,110 +367,9 @@ export default function UserDetails_11_2({route}){
             <ScrollView style={{}} showsVerticalScrollIndicator={false}>
                     <View style={{marginHorizontal:5}}>
                         <Text style={{color:colors.colors.text,marginTop:40}}>Personal Detials</Text>
-                        <View style={{flexDirection:"row",justifyContent:"center",marginTop:20}}>
-                            <Text style={{color:colors.colors.text}}>Person 1</Text>
-                            <View style={{borderWidth:0.8,marginHorizontal:20,borderColor:colors.colors.text}}></View>
-                            <Text style={{color:colors.colors.text}}>{seats}</Text>
-                        </View>
-                        <View style={{elevation:5,width:"100%", backgroundColor:"white", borderRadius:10, padding:10,marginTop:10}}>
-                            <TextInput 
-                                style={{paddingLeft:10,color:"#000",borderRadius:10}} 
-                                placeholder="Full Name" 
-                                placeholderTextColor="gray" 
-                                onChangeText={(text)=>setValues({...values, fullName1: text})}
-                            />
-                        </View>
-                        <View style={{flexDirection:"row",justifyContent:"space-between"}}>
-                            <View style={{flexDirection:"row",elevation:5, backgroundColor:"white", borderRadius:10, padding:10,marginTop:10}}>
-                                <TextInput 
-                                    style={{color:"#000",paddingLeft:10,width:width/3}} 
-                                    placeholder="Age" 
-                                    placeholderTextColor="gray" 
-                                    keyboardType="number-pad" 
-                                    onChangeText={(text)=>setValues({...values, age1: text})}
-                                />
-                            </View>
-                            <View style={{elevation:5, backgroundColor:"white", borderRadius:10, padding:10,marginTop:10,}}>
-                                <SelectDropdown
-                                    data={Gender}
-                                    defaultButtonText={"Gender"}
-                                    onSelect={(selectedItem) => {
-                                        setValues({...values,gender1: selectedItem})
-                                    }}
-                                    buttonTextAfterSelection={(selectedItem) => {
-                                        return selectedItem;
-                                    }}
-                                    rowTextForSelection={(item, index) => {
-                                        return item;
-                                    }}
-                                    buttonStyle={styles.dropdown2BtnStyle}
-                                    renderDropdownIcon={(isOpened) => {
-                                        return (
-                                          <MaterialIcons
-                                            name={isOpened ? "expand-less" : "expand-more"}
-                                            color={"#000"}
-                                            size={24}
-                                          />
-                                        );
-                                      }}
-                                    dropdownIconPosition={"right"}
-                                    dropdownStyle={styles.DropdownStyle}
-                                    rowStyle={styles.rowStyle}
-                                />
-                            </View>
-                        </View>
-                        {/* <View style={{flexDirection:"row",justifyContent:"center",marginTop:20}}>
-                            <Text style={{color:"#000"}}>Person 2</Text>
-                            <View style={{borderWidth:0.8,marginHorizontal:20,backgroundColor:"#000"}}></View>
-                            <Text style={{color:"#000"}}>{seats}</Text>
-                        </View>
-                        <View style={{elevation:5,width:"100%", backgroundColor:"white", borderRadius:10, padding:10,marginTop:10}}>
-                            <TextInput 
-                                style={{color:"#000",width:"100%",paddingLeft:10}} 
-                                placeholder="Full Name" 
-                                placeholderTextColor="gray" 
-                                onChangeText={(text)=>setValues({...values, fullName2: text})}
-                            />
-                        </View>
-                        <View style={{flexDirection:"row",justifyContent:"space-between"}}>
-                            <View style={{flexDirection:"row",elevation:5, backgroundColor:"white", borderRadius:10,padding:10,marginTop:10}}>
-                                <TextInput 
-                                    style={{color:"#000",paddingLeft:10,width:width/3}} 
-                                    placeholder="Age" 
-                                    placeholderTextColor="gray"
-                                    keyboardType="number-pad" 
-                                    onChangeText={(text)=>setValues({...values, age2: text})}
-                                />
-                            </View>
-                            <View style={{elevation:5, backgroundColor:"white", borderRadius:10, padding:10,marginTop:10,}}>
-                                <SelectDropdown
-                                    data={Gender}
-                                    defaultButtonText={"Gender"}
-                                    onSelect={(selectedItem) => {
-                                        setValues({...values,gender2: selectedItem})
-                                    }}
-                                    buttonTextAfterSelection={(selectedItem) => {
-                                        return selectedItem;
-                                    }}
-                                    rowTextForSelection={(item, index) => {
-                                        return item;
-                                    }}
-                                    buttonStyle={styles.dropdown2BtnStyle}
-                                    renderDropdownIcon={(isOpened) => {
-                                        return (
-                                          <MaterialIcons
-                                            name={isOpened ? "expand-less" : "expand-more"}
-                                            color={"#000"}
-                                            size={24}
-                                          />
-                                        );
-                                      }}
-                                      dropdownIconPosition={"right"}
-                                      dropdownStyle={styles.DropdownStyle}
-                                      rowStyle={styles.rowStyle}
-                                />
-                            </View>
-                        </View> */}
+                        {
+                            onePerson === false ?  twoPerson() : person1()
+                        }
                         <Text style={{color:colors.colors.text,marginTop:40}}>Contact Detials</Text>
                         <Text style={{color:"gray",marginTop:10}}>Your ticket will be sent here</Text>
                         <View style={{elevation:5, backgroundColor:"white", borderRadius:10, padding:5,marginTop:10}}>
@@ -338,6 +379,7 @@ export default function UserDetails_11_2({route}){
                                 placeholderTextColor="gray" 
                                 keyboardType="number-pad" 
                                 onChangeText={(text)=>setValues({...values, number: text})}
+                                maxLength={10}
                             />
                         </View>
                         <View style={{elevation:5, backgroundColor:"white", borderRadius:10, padding:5,marginTop:10}}>
@@ -385,7 +427,7 @@ export default function UserDetails_11_2({route}){
                             <View style={{flexDirection:"row",justifyContent:"space-between"}}>
                                 <View style={{alignItems:"center"}}>
                                     <Text style={{color:"gray"}}>Selected seats</Text>
-                                    <Text style={{color:"#000"}}>{seats}</Text>
+                                    <Text style={{color:"#000"}}>{!onePerson ? `${seat_number1} & ${seat_number2}` : seat_number1}</Text>
                                 </View>
                                 <View style={{borderWidth:0.9,borderColor:"#000",backgroundColor:"#000",marginHorizontal:5}} />
                                 <View style={{alignItems:"center"}}>

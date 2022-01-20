@@ -15,6 +15,7 @@ const OtpScreen = () => {
     const [error, setError] = useState(false);
     const [OTP, setOTP]= useState("");
     const [otp, setOtp] = useState(false);
+    const [field, setField] = useState(true);
     // const [redirect, setRedirect] = useState(false);
 
     const inputHandler=()=>{
@@ -24,23 +25,6 @@ const OtpScreen = () => {
             setError(false);
         }
     };
-    // const clickSubmit=()=>{
-    //     signup({"otp": OTP,"number": number}).then( data => {
-    //         if(data.error){
-    //             console.log(data.error);
-    //             // setRedirect(false);
-    //         }
-    //         else{
-    //             navigation.navigate("OtpVerified", {number: route.params.number})
-    //             // setRedirect(true);
-    //             authenticate(data, ()=>{                   
-    //                 // if(redirect ===true){
-    //                     console.log("user logged in");
-    //                 // }else setRedirect(false);
-    //             })
-    //         }
-    //     })
-    // };
 
     const verificatioHandler=async()=>{
 
@@ -48,19 +32,21 @@ const OtpScreen = () => {
             "number": number,
             "otp": OTP
         })
-        .then((response)=>{
+        .then(async(response)=>{
             if(response.status === 200){
-            console.log("User Registerd Successfully");
-            setOtp(false);
-            try {
-                const jsonValue = JSON.stringify(response);
-                AsyncStorage.setItem('jwt', jsonValue);
-                console.log(jsonValue);
-              } catch (e) {
-                console.log(e);
-              }
-            {OTP && navigation.navigate("OtpVerified", {number: number})}
-            }else{
+                console.log("User Registerd Successfully");
+                setOtp(false);
+                setField(false);
+                try {
+                    const jsonValue = JSON.stringify(response);
+                    await AsyncStorage.setItem('jwt', jsonValue);
+                } 
+                catch (e) {
+                    console.log(e);
+                }
+                navigation.navigate("Oneway")
+            }
+            else{
                 Alert.alert("Invalid Otp");
                 console.log("Invalid")
             }
@@ -69,26 +55,6 @@ const OtpScreen = () => {
             console.log(`Not Registerd ${err}`);
             setOtp(true)
         });
-
-        // OTP Verified Logic
-
-        // axios.post("https://otp.apistack.run/v1/verifyOtp",{
-        //     requestId: route.params.request,
-        //     otp: OTP
-        // },{
-        //     headers:{
-        //         'x-as-apikey': '96d018bc-a7ab-4dc4-92b9-810921f1b0ce',
-        //         'Content-Type': "application/json"
-        //     }
-        // })
-        // .then((res)=>{
-        //     return res.data.isOtpValid
-        // }).catch((err)=>{
-        //     console.log(err.message)
-        // })
-    }
-    const clickSubmit1 = () => {
-        navigation.navigate("OtpVerified", {number: route.params.number})
     };
 
     return (
@@ -106,20 +72,28 @@ const OtpScreen = () => {
                     <Text style={{fontFamily:RalewayRegular, fontSize:18, color:"#242424"}}>Code Sent to {route.params.number}</Text>
                     {error ? <Text style={{color:"red", fontSize:12, marginBottom:1}}>Please Enter a Valid OTP!</Text>:<Text></Text>}
                     {otp ? <Text style={{color:"red", fontSize:12, marginBottom:1}}>Invalid OTP!</Text>:<Text></Text>}
-                    <TextInput
-                    style={styles.input}
-                    placeholder="Enter OTP"
-                    placeholderTextColor="gray"
-                    textAlign="center"
-                    value={OTP}
-                    onChangeText={(text)=>setOTP(text)}
-                    onBlur={inputHandler}
-                    keyboardType="number-pad"
-                    />
-                    <TouchableOpacity disabled={error ? true : false} activeOpacity={0.8} style={styles.button}
+                    {
+                        field ? 
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Enter OTP"
+                            placeholderTextColor="gray"
+                            textAlign="center"
+                            value={OTP}
+                            onChangeText={(text)=>setOTP(text)}
+                            onBlur={inputHandler}
+                            keyboardType="number-pad"
+                        /> 
+                        : 
+                        <Image
+                            source={require("../assets/check.png")}
+                            style={{height:50, width:50, resizeMode:"contain", marginBottom:20}}
+                        />
+                    }
+                    <TouchableOpacity disabled={error || !field ? true : false} activeOpacity={0.8} style={styles.button}
                     onPress={verificatioHandler}
                     >
-                        <Text style={{color:"white",fontSize:18, fontFamily:RalewayRegular}}>Verify</Text>
+                        <Text style={{color:"white",fontSize:18, fontFamily:RalewayRegular}}>{field?"Verify":"Verified"}</Text>
                     </TouchableOpacity>
                 </KeyboardAvoidingView>
             </View>

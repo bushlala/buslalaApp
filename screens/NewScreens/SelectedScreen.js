@@ -24,18 +24,54 @@ export default function SelectedScreen(){
     const { src, dest, name, deptHour, arrivalHour, priceLower, priceUpper, duration, tripId, date, rDate } = route.params;
     // console.log(rDate);
     const [toggle, setToggle] = useState(false);
-    const [selectUpper, setSelectUpper] = useState("");
-    const [selectLower, setSelectLower] = useState("");
+    const [selectUpper, setSelectUpper] = useState([]);
+    const [selectLower, setSelectLower] = useState([]);
     // const [seatData, setSeatData] = useState([]);
     const [lowerSeats, setLowerSeats] = useState([]);
     const [upperSeats, setUpperSeats] = useState([]);
+
+    var UpperSeat1 = selectUpper.slice(0,1).toString();
+    var UpperSeat2 = selectUpper.slice(1).toString();
+    var LowerSeat1 = selectLower.slice(0,1).toString();
+    var LowerSeat2 = selectLower.slice(1).toString();  
+
+    // console.log(LowerSeat1,LowerSeat2);
+    // console.log(UpperSeat2);
    
-    const segmentClicked=(index)=>{
-        setSelectUpper(index);        
+    const segmentClicked=(data)=>{
+        if(toggle===true){
+            !selectUpper.includes(`${data.id}`) 
+            ? 
+                selectUpper.length < 2 
+                ?
+                setSelectUpper([...selectUpper,`${data.id}`]) 
+                : 
+                alert("Max number is reached")
+            :
+            setSelectUpper(
+                selectUpper.filter(
+                    item => item !== `${data.id}`
+                )
+            )
+        } else{
+            !selectLower.includes(`${data.id}`) 
+            ? 
+                selectLower.length < 2 
+                ?
+                setSelectLower([...selectLower,`${data.id}`]) 
+                : 
+                alert("Max number is reached")
+            :
+            setSelectLower(
+                selectLower.filter(
+                    item => item !== `${data.id}`
+                )
+            )
+        }       
     };
-    const segmentClicked1=(index)=>{
-        setSelectLower(index);        
-    };
+    // const segmentClicked1=(index)=>{
+    //     setSelectLower(index);        
+    // };
     
     const bookingApi=()=>{
         axios.get(`https://buslala-backend-api.herokuapp.com/api/user/trip/${tripId}`)
@@ -66,10 +102,9 @@ export default function SelectedScreen(){
                 key={id}
                 style={[styles.upperView2,
                     {backgroundColor: data.status == 1 ? "#000" 
-                        : selectUpper == data.id ? "blue" : "#9ea5b0" 
+                        : selectUpper.includes(`${data.id}`) ? "blue" : "#9ea5b0" 
                     }]} 
-                active={selectUpper == data.id}
-                onPress={()=>segmentClicked(data.id)}
+                onPress={()=>segmentClicked(data)}
                 disabled={data.status == 0 ? false : true}
             >
             </TouchableOpacity>
@@ -108,10 +143,9 @@ export default function SelectedScreen(){
                 key={id}
                 style={[styles.lowerSeat,
                     {backgroundColor: data.status == 1 ? "#000" 
-                        : selectLower == data.id ? "blue" : "#9ea5b0" 
+                        : selectLower.includes(`${data.id}`) ? "blue" : "#9ea5b0"
                     }]} 
-                active={selectLower == data.id}
-                onPress={()=>segmentClicked1(data.id)}
+                onPress={()=>segmentClicked(data)}
                 disabled={data.status == 0 ? false : true}
             >
             </TouchableOpacity>
@@ -144,23 +178,23 @@ export default function SelectedScreen(){
 
     const proceed=()=>{
         if(toggle===false){
-            if(selectLower===""){
+            if(selectLower.length === 0){
                 alert("please select a seat");
             }else{
                 navigation.navigate("UserDetails",{ 
                     "src": src, "dest": dest, "name": name, "tripId" : tripId,
-                    "deptHour": deptHour, "arivHour": arrivalHour, "price": toggle === false ? priceLower : priceUpper, 
-                    "duration": duration, "seats": toggle === false ? selectLower : selectUpper, "date": date, "rDate": rDate
+                    "deptHour": deptHour, "arivHour": arrivalHour, "price": priceLower, 
+                    "duration": duration, "seat_number1": LowerSeat1, "seat_number2": LowerSeat2, "date": date, "rDate": rDate
                 })
             }
         }else{
-            if(selectUpper===""){
+            if(selectUpper.length === 0){
                 alert("please select a seat");
             }else{
                 navigation.navigate("UserDetails",{ 
-                    "src": src, "dest": dest, "name": name, "tripId" : tripId,
-                    "deptHour": deptHour, "arivHour": arrivalHour, "price": toggle === false ? priceLower : priceUpper, 
-                    "duration": duration, "seats": toggle === false ? selectLower : selectUpper, "date": date, "rDate": rDate
+                    "src": src, "dest": dest, "name": name, "tripId" : tripId, "deptHour": deptHour, 
+                    "arivHour": arrivalHour, "price": priceUpper, "duration": duration, 
+                    "seat_number1": UpperSeat1, "seat_number2": UpperSeat2, "date": date, "rDate": rDate
                 })
             }
         }
@@ -277,7 +311,7 @@ export default function SelectedScreen(){
                     <View style={{flexDirection:"row",marginLeft:10}}>
                         <View style={{alignItems:"center"}}>
                             <Text style={{color:"gray"}}>Selected seat</Text>
-                            <Text style={{color:"#000"}}>{toggle === false ? selectLower : selectUpper}</Text>
+                            <Text style={{color:"#000"}}>{toggle === false ? `${LowerSeat1},${LowerSeat2}` : `${UpperSeat1},${UpperSeat2}`}</Text>
                         </View>
                         <View style={{backgroundColor:"#4a4847",borderWidth:1,marginHorizontal:10,borderColor:"#4a4847"}}></View>
                         <View style={{alignItems:"center"}}>
