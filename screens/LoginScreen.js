@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Alert, Image, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { RalewayBold, RalewayLight, RalewayRegular } from '../assets/fonts/fonts';
 import { primary, secondary, textColor } from '../components/Colors';
+import { API } from '../config';
 
 const LoginScreen = () => {
 
@@ -23,7 +24,7 @@ const LoginScreen = () => {
 
     const clickSubmit=()=>{
         {num &&
-        axios.post("https://buslala-backend-api.herokuapp.com/api/user/signup", {"number": num})
+        axios.post(`${API}/signup`, {"number": num})
         .then((response)=>{
             if(response.status===200){
                 setUser(false);

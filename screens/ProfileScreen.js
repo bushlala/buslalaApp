@@ -19,6 +19,7 @@ import { useTheme } from "@react-navigation/native";
 import storage from '@react-native-firebase/storage';
 import RNFetchBlob from 'rn-fetch-blob';
 import messaging from "@react-native-firebase/messaging";
+import { API } from '../config';
  
 const {width, height} = Dimensions.get("window");
 
@@ -202,7 +203,7 @@ const ProfileScreen = () => {
             );                  
             task.then(async() => {
                 console.log('PDF uploaded to the bucket!');
-                await axios.patch("https://buslala-backend-api.herokuapp.com/api/user/profiles",{"cowin": cowin_url})
+                await axios.patch(`${API}/profiles`,{"cowin": cowin_url})
                 .then(res=>{
                     if(res.status===200){
                         setCowinName(null);
@@ -273,7 +274,7 @@ const ProfileScreen = () => {
             );                  
             task.then(() => {
                 console.log('PDF uploaded to the bucket!');
-                setCowinName(null);
+                setIdName(null);
                 setProcess2("");
                 alert("Uploaded successfully");
             });               
@@ -285,8 +286,8 @@ const ProfileScreen = () => {
 
     const Uplodad_ID_Alert=()=>{
         Alert.alert(
-            "Upload your Id proof",
-            "Are you sure?",
+            "Upload your Id proof ?",
+            "Please update your profile after uploading your ID",
             [
                 {
                 text: "No",
@@ -302,16 +303,17 @@ const ProfileScreen = () => {
 
 
     const postData={
-        first_name: showUserData.first_name,
-        last_name: showUserData.last_name,
-        number: Number(showUserData.number),
-        email: showUserData.email,
-        address: showUserData.address,
-        gender: showUserData.gender
+        "first_name": showUserData.first_name,
+        "last_name": showUserData.last_name,
+        "number": Number(showUserData.number),
+        "email": showUserData.email,
+        "address": showUserData.address,
+        "gender": showUserData.gender,
+        "idproof" : id_url,
     };
     
     const updateProfile=()=>{
-        axios.put("https://buslala-backend-api.herokuapp.com/api/user/profile",postData)
+        axios.put(`${API}/profile`,postData)
         .then(res=>{
             if(res.status==200){
                 alert("Updated successfully");
@@ -322,7 +324,7 @@ const ProfileScreen = () => {
     };
 
     const showUser=()=>{
-        axios.get("https://buslala-backend-api.herokuapp.com/api/user/profile")
+        axios.get(`${API}/profile`)
         .then(res=>{
             if(res.status==200){
                 const data = res.data;

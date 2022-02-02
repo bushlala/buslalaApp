@@ -11,8 +11,10 @@ const BusDetailsScreen = ({route}) => {
 
     const navigation = useNavigation();
     const colors = useTheme();
-    const { busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number, email, 
+    const { busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number, email, reTime,
             gender1, gender2, price, tripId, seat_number1, seat_number2, date, src, dest, rDate, url1, url2 } = route.params;
+
+    console.log(reTime);
     const [error, setError] = useState(false);
     const [user, setUser]= useState(false);
     const [myName, setMyName] = useState("");
@@ -41,7 +43,7 @@ const BusDetailsScreen = ({route}) => {
                         "arivHour": arivHour, "fullName1": fullName1, "age1": age1, "fullName2": fullName2, 
                         "age2": age2, "number": number, "email": Email, "gender1": gender1, "gender2": gender2,
                         "price": price, "tripId": tripId, "seat_number1": seat_number1,"seat_number2": seat_number2,
-                        "date": date, "src": src, "dest": dest, "rDate": rDate, "url1": url1, "url2": url2
+                        "date": date, "src": src, "dest": dest, "rDate": rDate, "url1": url1, "url2": url2, "reTime": reTime
                     })
             }
         }

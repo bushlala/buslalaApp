@@ -21,7 +21,8 @@ export default function UserDetails_11_2({route}){
 
     const navigation = useNavigation();
     const colors = useTheme();
-    const { name, src, dest, deptHour, arivHour, price, duration, tripId, seats, date, rDate, seat_number1, seat_number2 } = route.params;
+    const { name, src, dest, deptHour, arivHour, price, duration, tripId, seats, date, rDate, seat_number1, seat_number2, reTime } = route.params;
+
     const [ values, setValues ] = useState({
         fullName1: "",
         age1: "",
@@ -268,7 +269,7 @@ export default function UserDetails_11_2({route}){
                 "busName": name, "deptHour": deptHour, "arivHour": arivHour, "tripId" : tripId,
                 "fullName1": fullName1, "age1": age1, "fullName2": fullName2, "age2": age2,
                 "number": number, "email": email, "gender1": gender1, "gender2": gender2, 
-                "seat_number1": seat_number1,"price": price,"date": date, "src": src, 
+                "seat_number1": seat_number1,"price": price,"date": date, "src": src, "reTime": reTime,
                 "dest": dest, "rDate": rDate, "url1": url1, "url2": url2, "seat_number2": seat_number2
             })
             }
@@ -281,7 +282,7 @@ export default function UserDetails_11_2({route}){
             navigation.navigate("BusDetails",{ 
                 "busName": name, "deptHour": deptHour, "arivHour": arivHour, "tripId" : tripId,
                 "fullName1": fullName1, "age1": age1, "fullName2": fullName2, "age2": age2,
-                "number": number, "email": email, "gender1": gender1, "gender2": gender2, 
+                "number": number, "email": email, "gender1": gender1, "gender2": gender2, "reTime": reTime,
                 "seat_number1": seat_number1, "seat_number2": seat_number2, "price": price,
                 "date": date, "src": src, "dest": dest, "rDate": rDate, "url1": url1, "url2": url2
             })
@@ -408,21 +409,6 @@ export default function UserDetails_11_2({route}){
                                 <Text style={{color:"#66645f",marginLeft:10,fontSize:12}}>{process2}</Text>
                             </TouchableOpacity>
                         </View>
-                        {/* {
-                            docName !== "" ? 
-                                <View style={{marginTop:10,flexDirection:"row"}}>
-                                    <Text style={styles.textStyle}>File Name: </Text>
-                                    <Text style={styles.fileStyle}>{docName}</Text>
-                                </View> 
-                                : 
-                                null
-                        } */}
-                        {/* <TouchableOpacity 
-                            disabled={select1 === true || select2 === true ? false : true}
-                            onPress={selectFile}
-                            style={{elevation:5, backgroundColor:"#ed6c39", borderRadius:10, padding:15,marginTop:20,alignItems:"center",marginHorizontal:90}}>
-                            <Text style={{color:"#fff"}}>+ Add file</Text>
-                        </TouchableOpacity> */}
                         <View style={{elevation:5,width:"100%", backgroundColor:"#fff", borderRadius:10,padding:10,alignItems:"center",flexDirection:"row",marginBottom:200,marginTop:20}}>
                             <View style={{flexDirection:"row",justifyContent:"space-between"}}>
                                 <View style={{alignItems:"center"}}>

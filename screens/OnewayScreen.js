@@ -12,6 +12,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useState } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useTheme } from "@react-navigation/native";
+import { API } from '../config';
 // import { funcBackHandler } from '../components/BackHandler';
 
 
@@ -112,7 +113,7 @@ const OnewayScreen = () => {
         }else{
             setError(false);
             setError1(false);
-            axios.post("https://buslala-backend-api.herokuapp.com/api/user/searchOneWayBus",oneWayPostData)
+            axios.post(`${API}/searchOneWayBus`,oneWayPostData)
             .then((response)=>{
                 if(response.status===200){
                     navigation.navigate("Buses",
@@ -145,7 +146,7 @@ const OnewayScreen = () => {
         }else{
             setError(false);
             setError1(false);
-            axios.post("https://buslala-backend-api.herokuapp.com/api/user/roundTrip",roundTripPostData)
+            axios.post(`${API}/roundTrip`,roundTripPostData)
             .then((response)=>{
                 if(response.status===200){
                     navigation.navigate("Buses",
@@ -163,7 +164,7 @@ const OnewayScreen = () => {
     };
 
     const sourceApi=()=>{
-        axios.get("https://buslala-backend-api.herokuapp.com/api/user/source")
+        axios.get(`${API}/source`)
         .then(resp=>{
             if(resp.status===200){
                 const Data = resp.data;
@@ -174,7 +175,7 @@ const OnewayScreen = () => {
         .catch(e=>{console.log(e);alert("please try after some time")});
     };
     const destApi=()=>{
-        axios.get("https://buslala-backend-api.herokuapp.com/api/user/destination")
+        axios.get(`${API}/destination`)
         .then(resp=>{
             if(resp.status===200){
                 const Data = resp.data;
@@ -233,18 +234,18 @@ const OnewayScreen = () => {
         <View style={styles.pickerModal}>
             <View style={{position:"absolute",right:0,marginRight:10,zIndex:1,top:20}}>
                 <TouchableOpacity 
-                style={{backgroundColor:"gray",height:30,width:30,justifyContent:"center",alignItems:"center",borderRadius:15}}
-                onPress={()=>{
-                    setIsClicked1(false);
-                    setSearch("");
-                    setFilteredSrcData(srcData);
-                }}
+                    style={{backgroundColor:"gray",height:30,width:30,justifyContent:"center",alignItems:"center",borderRadius:15}}
+                    onPress={()=>{
+                        setIsClicked1(false);
+                        setSearch("");
+                        setFilteredSrcData(srcData);
+                    }}
                 >
                     <Text style={{color:"#000",fontSize:20,top:-2}}>×</Text>
                 </TouchableOpacity>
             </View>
             <TextInput style={styles.searchField} 
-                placeholder='searh from ...'
+                placeholder='search from ...'
                 value={search}
                 onChangeText={(val)=>searchFilter(val)}
             />
@@ -304,7 +305,7 @@ const OnewayScreen = () => {
                 </TouchableOpacity>
             </View>
             <TextInput style={styles.searchField} 
-                placeholder='searh to ...'
+                placeholder='search to ...'
                 value={search}
                 onChangeText={(val)=>searchFilter(val)}
             />

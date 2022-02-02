@@ -1,26 +1,9 @@
-import { useNavigation } from '@react-navigation/core'
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { RalewayLight, RalewayRegular } from '../assets/fonts/fonts'
 import { fontColor, primary, secondary, textColor } from '../components/Colors'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useTheme } from "@react-navigation/native";
 
 const WelcomeScreen = () => {
-
-    const navigation= useNavigation();
-    const colors = useTheme();
-    
-    const getStarted=async()=>{
-        try {
-            let userData = await AsyncStorage.getItem('jwt')
-            let data = JSON.parse(userData);
-            data != null ? navigation.navigate("Oneway") : navigation.navigate("Login");
-          } catch(e) {
-            console.log(e);
-          }
-    };
-
 
     return (
         <View style={styles.screen}>
@@ -40,16 +23,16 @@ const WelcomeScreen = () => {
                     <Text style={{color:textColor, maxWidth:400, fontSize:18, textAlign:"center", fontFamily:RalewayLight}}>Book your tickets online with your best preferences</Text>
                 </View>
                 <TouchableOpacity activeOpacity={0.8} style={styles.button}
-                onPress={getStarted}
+                    disabled={true}
                 >
-                    <Text style={{color:textColor, fontFamily:RalewayRegular, fontSize:18}}>Get Started</Text>
+                    <Text style={{color:textColor, fontFamily:RalewayRegular, fontSize:18}}>Loading...</Text>
                 </TouchableOpacity>
             </View>
         </View>
     )
 }
 
-export default WelcomeScreen
+export default WelcomeScreen;
 
 const styles = StyleSheet.create({
     screen:{

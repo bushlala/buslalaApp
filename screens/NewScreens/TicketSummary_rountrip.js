@@ -6,6 +6,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import { useNavigation } from '@react-navigation/core';
 import { useTheme } from "@react-navigation/native";
 import axios from "axios";
+import { API } from "../../config";
 // import RazorpayCheckout from 'react-native-razorpay';
 
 
@@ -17,9 +18,10 @@ export default function TicketSummaryScreen({route}){
 
     const navigation = useNavigation();
     const colors = useTheme();
-    const {Name,busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number,email, gender1, 
+    const {Name,busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number,email, gender1, reTime,
             gender2, price, tripId, seat_number1, seat_number2, date, src, dest, rDate, url1, url2} = route.params;
-            
+
+    
     const [oneSeat, setOneSeat] = useState(true);
 
     const seatNumHandler=()=>{
@@ -42,61 +44,136 @@ export default function TicketSummaryScreen({route}){
         "u2_gender": gender2,
         "name": Name,
         "ph_number": number,
-        "email": email
+        "email": email,
+        "idproof": url1,
+        "cowin": url2
     };
 
-    const oneSeatTicket=()=>(
-        <View style={{marginVertical:10}}>
-            <Text style={{color:"#000",textAlign:"center",fontWeight:"500"}}>{busName}</Text>
-            <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center",marginVertical:5}}>
-                <View style={{alignItems:"center"}}>
-                    <Text style={{color:"#000",fontWeight:"500"}}>{src}</Text>
-                    <Text style={{color:"gray",fontSize:12,fontWeight:"500"}}>{deptHour}</Text>
+    console.log(postdata);
+
+    const ticket=()=>(
+        <View style={{marginVertical:10,minHeight:120}}>
+            <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center"}}>
+                <Text style={{color:"#000",fontWeight:"500"}}>{src}</Text>
+                <View style={{flexDirection:"row",alignItems:"center"}}>
+                    <Text style={{color:"#eb8634",fontSize:11}}>-----</Text>
+                    <AntDesign name="right" color="#eb8634" style={{top:1,left:-2}} />
+                    <Text style={{color:"#eb8634",fontSize:11,marginHorizontal:5}}>{reTime ? "Roundtrip" : "Oneway"}</Text>
+                    {
+                        reTime ? 
+                        <>
+                            <AntDesign name="left" color="#eb8634" style={{top:1,left:2}} />
+                            <Text style={{color:"#eb8634",fontSize:11,}}>-----</Text>
+                        </> 
+                        :
+                        <>
+                            <Text style={{color:"#eb8634",fontSize:11,left:2}}>-----</Text>
+                            <AntDesign name="right" color="#eb8634" style={{top:1}} />
+                        </>
+                    }
                 </View>
-                <Text style={{color:"#000"}}>--------</Text>
+                <Text style={{color:"#000",fontWeight:"500"}}>{dest}</Text>
+            </View>
+            <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center",marginTop:10}}>
                 <View style={{alignItems:"center"}}>
-                    <Text style={{color:"#000",fontWeight:"500"}}>{dest}</Text>
-                    <Text style={{color:"gray",fontSize:12,fontWeight:"500"}}>{arivHour}</Text>
+                    <Text style={{color:"#000",fontSize:10}}>Reporting Time</Text>
+                    <Text style={{color:"#000",fontSize:14}}>{deptHour}</Text>
+                </View>
+                <View style={{alignItems:"center"}}>
+                    <Text style={{textAlign:"center",color:"#000",fontSize:12}}>{date}</Text>
+                    <View style={{flexDirection:"row",alignItems:"center"}}>
+                        <Text style={{color:"#eb8634",fontSize:11,left:2}}>-----</Text>
+                        <AntDesign name="right" color="#eb8634" style={{top:1}} />
+                    </View>
+                </View>
+                <View style={{alignItems:"center"}}>
+                    <Text style={{color:"#000",fontSize:10}}>Reaching Time</Text>
+                    <Text style={{color:"#000",fontSize:14}}>{arivHour}</Text>
                 </View>
             </View>
-            {/* <Text style={{color:"#000",textAlign:"center",fontWeight:"400"}}>Passenger: {fullName1}</Text>
-            <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Seat number: {seat_number1}</Text> */}
-            <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Journey Date: {date}</Text>
             {
-                rDate !== undefined ? 
-                <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Return Date: {rDate}</Text>
-                :
-                null
+                rDate && 
+                <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center",marginTop:10}}>
+                    <View style={{alignItems:"center"}}>
+                        <Text style={{color:"#000",fontSize:10}}>Reaching Time</Text>
+                        <Text style={{color:"#000",fontSize:14}}>{reTime.arr}</Text>
+                    </View>
+                    <View style={{alignItems:"center"}}>
+                        <Text style={{textAlign:"center",color:"#000",fontSize:12}}>{rDate}</Text>
+                        <View style={{flexDirection:"row",alignItems:"center"}}>
+                            <AntDesign name="left" color="#eb8634" style={{top:1,left:2}} />
+                            <Text style={{color:"#eb8634",fontSize:11,}}>-----</Text>
+                        </View>
+                    </View>
+                    <View style={{alignItems:"center"}}>
+                        <Text style={{color:"#000",fontSize:10}}>Reporting Time</Text>
+                        <Text style={{color:"#000",fontSize:14}}>{reTime.dept}</Text>
+                    </View>
+                </View>
             }
-        </View>
-    );
-    const twoSeatTicket=()=>(
-        <View style={{marginVertical:10}}>
-            <Text style={{color:"#000",textAlign:"center",fontWeight:"500"}}>{busName}</Text>
-            <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center",marginVertical:5}}>
-                <View style={{alignItems:"center"}}>
-                    <Text style={{color:"#000",fontWeight:"500"}}>{src}</Text>
-                    <Text style={{color:"gray",fontSize:12,fontWeight:"500"}}>{deptHour}</Text>
-                </View>
-                <Text style={{color:"#000"}}>--------</Text>
-                <View style={{alignItems:"center"}}>
-                    <Text style={{color:"#000",fontWeight:"500"}}>{dest}</Text>
-                    <Text style={{color:"gray",fontSize:12,fontWeight:"500"}}>{arivHour}</Text>
-                </View>
+            <View style={{flexDirection:"row",marginTop:10,justifyContent:"space-around",alignItems:"flex-end"}}>
+                <Text style={{color:"gray",fontSize:10,marginBottom:5}}>Payment pending</Text>
+                {
+                    oneSeat ? <Text style={{color:"#eb8634",fontSize:20}}>{seat_number1}</Text> 
+                    :
+                    <Text style={{color:"#eb8634",fontSize:20}}>{seat_number1}, {seat_number2}</Text>
+                }
             </View>
-            <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Journey Date: {date}</Text>
-            {
-                rDate !== undefined ? 
-                <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Return Date: {rDate}</Text>
-                :
-                null
-            }
-            {/* <Text style={{color:"#000",textAlign:"center",fontWeight:"400"}}>P1: {fullName1}</Text>
-            <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Seat number: {seat_number1}</Text>
-            <Text style={{color:"#000",textAlign:"center",fontWeight:"400"}}>P2: {fullName2}</Text>
-            <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Seat number: {seat_number2}</Text> */}
         </View>
     );
+    // const twoSeatTicket=()=>(
+    //     <View style={{marginVertical:10,height:120}}>
+    //         <Text style={{textAlign:"center",color:"#000",fontSize:12}}>{date}</Text>
+    //         <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center"}}>
+    //             <Text style={{color:"#000",fontWeight:"500"}}>{src}</Text>
+    //             <View style={{flexDirection:"row",alignItems:"center"}}>
+    //                 <Text style={{color:"#eb8634",fontSize:11,left:-10}}>-----</Text>
+    //                 <AntDesign name="right" color="#eb8634" style={{top:1,left:-12}} />
+    //                 <Text style={{color:"#eb8634",fontSize:11,marginHorizontal:5}}>Oneway</Text>
+    //                 <Text style={{color:"#eb8634",fontSize:11,left:12}}>-----</Text>
+    //                 <AntDesign name="right" color="#eb8634" style={{top:1,left:10}} />
+    //             </View>
+    //             <Text style={{color:"#000",fontWeight:"500"}}>{dest}</Text>
+    //         </View>
+    //         <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center",marginTop:10}}>
+    //             <View style={{alignItems:"center"}}>
+    //                 <Text style={{color:"#000",fontSize:10}}>Reporting Time</Text>
+    //                 <Text style={{color:"#000",fontSize:14}}>{deptHour}</Text>
+    //             </View>
+    //             <View style={{alignItems:"center"}}>
+    //                 <Text style={{color:"#000",fontSize:10}}>Reaching Time</Text>
+    //                 <Text style={{color:"#000",fontSize:14}}>{arivHour}</Text>
+    //             </View>
+    //         </View>
+    //         <View style={{flexDirection:"row",marginBottom:10,justifyContent:"space-around",alignItems:"flex-end"}}>
+    //             <Text style={{color:"gray",fontSize:10}}>Payment pending</Text>
+    //             <Text style={{color:"#eb8634",fontSize:20}}>{seat_number1}, {seat_number2}</Text>
+    //         </View>
+    //         {/* <Text style={{color:"#000",textAlign:"center",fontWeight:"500"}}>{busName}</Text>
+    //         <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center",marginVertical:5}}>
+    //             <View style={{alignItems:"center"}}>
+    //                 <Text style={{color:"#000",fontWeight:"500"}}>{src}</Text>
+    //                 <Text style={{color:"gray",fontSize:12,fontWeight:"500"}}>{deptHour}</Text>
+    //             </View>
+    //             <Text style={{color:"#000"}}>--------</Text>
+    //             <View style={{alignItems:"center"}}>
+    //                 <Text style={{color:"#000",fontWeight:"500"}}>{dest}</Text>
+    //                 <Text style={{color:"gray",fontSize:12,fontWeight:"500"}}>{arivHour}</Text>
+    //             </View>
+    //         </View>
+    //         <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Journey Date: {date}</Text>
+    //         {
+    //             rDate !== undefined ? 
+    //             <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Return Date: {rDate}</Text>
+    //             :
+    //             null
+    //         } */}
+    //         {/* <Text style={{color:"#000",textAlign:"center",fontWeight:"400"}}>P1: {fullName1}</Text>
+    //         <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Seat number: {seat_number1}</Text>
+    //         <Text style={{color:"#000",textAlign:"center",fontWeight:"400"}}>P2: {fullName2}</Text>
+    //         <Text style={{color:"#000",textAlign:"center",fontWeight:"600"}}>Seat number: {seat_number2}</Text> */}
+    //     </View>
+    // );
 
     // can be remove later --------------------->
 
@@ -138,11 +215,11 @@ export default function TicketSummaryScreen({route}){
     // <------------------------------------------------
     
     const proceed=()=>{
-        axios.post(`https://buslala-backend-api.herokuapp.com/api/user/book/${tripId}`,postdata)
+        axios.post(`${API}/book/${tripId}`,postdata)
         .then(res=>{
             if(res.status==200){
                 let Data = res.data;
-                console.log(Data);
+                // console.log(Data);
                 navigation.navigate("PaymentScreen",{Data,"name":Name,"email": email,"number": number, "price": price});
                 // setData(res.data);
                 // _razorpay();
@@ -214,8 +291,8 @@ export default function TicketSummaryScreen({route}){
             </View>
             <ScrollView style={{marginBottom:0}}>
                 <View style={{marginHorizontal:20}}>
-                    <View style={{elevation:5,backgroundColor:"#fff",borderRadius:10,marginHorizontal:10,marginVertical:10}}>
-                        {oneSeat ? oneSeatTicket() : twoSeatTicket()}
+                    <View style={{elevation:5,backgroundColor:"#fff",marginHorizontal:10,marginVertical:10}}>
+                        {ticket()}
                     </View>
                     <View style={{marginTop:20}}>
                         <Text style={{color:colors.colors.text,fontSize:18}}>Personal Details</Text>
@@ -258,14 +335,6 @@ export default function TicketSummaryScreen({route}){
                     <View style={{marginTop:20}}>
                         <Text style={{color:colors.colors.text,fontSize:18}}>Payment Details</Text>
                         <View style={{marginTop:10}}>
-                            {/* <View style={{flexDirection:"row",justifyContent:"space-between"}}>
-                                <Text style={{color:"gray"}}>Ticket Fare</Text>
-                                <Text style={{color:"gray"}}>₹2,020.00</Text>
-                            </View>
-                            <View style={{flexDirection:"row",justifyContent:"space-between",marginVertical:5}}>
-                                <Text style={{color:"gray"}}>GST</Text>
-                                <Text style={{color:"gray"}}>₹50.00</Text>
-                            </View> */}
                             <View style={{flexDirection:"row",justifyContent:"space-between",marginBottom:30,alignItems:"center"}}>
                                 <Text style={{color:colors.colors.text}}>Total pay</Text>
                                 <Text style={{color:"#e66349",fontSize:18,fontWeight:"800"}}>₹{price}</Text>

@@ -10,6 +10,7 @@ import { useTheme } from "@react-navigation/native";
 
 import { fontColor, newColor, primary, secondary } from '../../components/Colors';
 import axios from "axios";
+import { API } from "../../config";
 
 
 const { width, height } = Dimensions.get("window");
@@ -29,6 +30,7 @@ export default function SelectedScreen(){
     // const [seatData, setSeatData] = useState([]);
     const [lowerSeats, setLowerSeats] = useState([]);
     const [upperSeats, setUpperSeats] = useState([]);
+    const [reTime, setReTime] = useState(null);
 
     var UpperSeat1 = selectUpper.slice(0,1).toString();
     var UpperSeat2 = selectUpper.slice(1).toString();
@@ -74,13 +76,13 @@ export default function SelectedScreen(){
     // };
     
     const bookingApi=()=>{
-        axios.get(`https://buslala-backend-api.herokuapp.com/api/user/trip/${tripId}`)
+        axios.get(`${API}/trip/${tripId}`)
         .then(res=>{
             if(res.status===200){
                 const DATA = res.data;
                 const lowerBerth = DATA.trip.seat_number.lowerBerth;
                 const upperBerth = DATA.trip.seat_number.upperBerth;
-                // setSeatData([DATA]);
+                setReTime(DATA.trip.retime);
                 setLowerSeats(lowerBerth);
                 setUpperSeats(upperBerth);
             }else console.log(res.status);
@@ -183,7 +185,7 @@ export default function SelectedScreen(){
             }else{
                 navigation.navigate("UserDetails",{ 
                     "src": src, "dest": dest, "name": name, "tripId" : tripId,
-                    "deptHour": deptHour, "arivHour": arrivalHour, "price": priceLower, 
+                    "deptHour": deptHour, "arivHour": arrivalHour, "price": LowerSeat2 ? (priceLower * 2) : priceLower, "reTime": reTime,
                     "duration": duration, "seat_number1": LowerSeat1, "seat_number2": LowerSeat2, "date": date, "rDate": rDate
                 })
             }
@@ -192,8 +194,8 @@ export default function SelectedScreen(){
                 alert("please select a seat");
             }else{
                 navigation.navigate("UserDetails",{ 
-                    "src": src, "dest": dest, "name": name, "tripId" : tripId, "deptHour": deptHour, 
-                    "arivHour": arrivalHour, "price": priceUpper, "duration": duration, 
+                    "src": src, "dest": dest, "name": name, "tripId" : tripId, "deptHour": deptHour, "reTime": reTime,
+                    "arivHour": arrivalHour, "price": UpperSeat2 ? (priceUpper * 2) : priceUpper, "duration": duration, 
                     "seat_number1": UpperSeat1, "seat_number2": UpperSeat2, "date": date, "rDate": rDate
                 })
             }

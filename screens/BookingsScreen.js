@@ -173,7 +173,11 @@ const BookingsScreen = ({route}) => {
                                     <Text style={{color:"gray",textAlign:"center"}}>Payment {item.payment_status}</Text>
                                     <View style={styles.booking}>
                                         <View style={{alignItems:"center"}}>
-                                            <View style={{padding:30, borderRadius:40, backgroundColor:"lightgray"}}></View>
+                                            <View style={{height:50, width:50, borderRadius:25, backgroundColor:"#000"}}>
+                                                <Image style={{overflow:"hidden",height:"100%",width:"100%",resizeMode:"contain"}} 
+                                                    source={require("../assets/logo.png")}
+                                                />
+                                            </View>
                                             {/* <Text style={{fontSize:10, fontFamily:RalewayRegular, color:"gray", marginTop:3}}>3 mins ago</Text> */}
                                         </View>
                                         <View style={{alignItems:"flex-start", marginHorizontal:20}}>
@@ -214,7 +218,7 @@ const BookingsScreen = ({route}) => {
                                         </View> */}
                                         <View style={{left:-15,marginTop:10,alignItems:"center"}}>
                                             <Text style={{color:"gray",fontSize:12,fontWeight:"bold"}}>Booking Date</Text>
-                                            <Text style={{color:"gray",fontSize:12}}>{fDate}</Text>
+                                            <Text style={{color:"gray",fontSize:12}}>{JSON.stringify(item.date).slice(0,JSON.stringify(item.date).indexOf("T")).replace(/"/g,'')}</Text>
                                         </View>
                                     </View>
                                 </View>

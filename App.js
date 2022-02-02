@@ -25,6 +25,7 @@ import UserDetails_11_2 from './screens/NewScreens/UserDetails-11_2';
 import SelectedScreen from './screens/NewScreens/SelectedScreen';
 import SeatBooking_round_trip from './screens/NewScreens/SeatBookingRoundTrip';
 import NotificationScreen from './screens/NewScreens/NotificationScreen';
+import { ActivityIndicator } from 'react-native';
 
 
 
@@ -33,7 +34,23 @@ const Stack = createNativeStackNavigator();
 const App = () => {
 
   const [darkApp, setDarkApp] = useState(false);
+  const [token, setToken] = useState(null);
+  const [appIsReady, setAppIsReady] = useState(false);
+
+  console.log(appIsReady);
+
   const appTheme = darkApp ? DarkTheme : DefaultTheme; 
+
+  //......check if user or not............................
+  const isUser=async()=>{
+    try {
+        let userData = await AsyncStorage.getItem('jwt')
+        let data = JSON.parse(userData);
+        data != null ? setToken(data) : setToken(null);
+      } catch(e) {
+        console.log(e);
+      }
+};
 
 
   //..........get mode from asynstorage......................
@@ -86,20 +103,30 @@ const App = () => {
   //......................................
   useEffect(()=>{
     cloudMessage();
+    isUser();
     themeEvent();
     getFCM();
     getModeStatus();
     messaging().onMessage(async remoteMessage => {
       console.log('A new FCM message arrived :',(remoteMessage));
     });
+    setTimeout(()=>{
+      setAppIsReady(true);
+    },3000)
   },[]);
-  //........................................
+  //..............render splash screen while checking user or not....................
+  if(!appIsReady){
+    return <WelcomeScreen />
+  };
+
+  //.........main return will be triggered after 3 sec / 3000 ms.......................
+  
   return (
       <NavigationContainer theme={appTheme}>
-        <Stack.Navigator initialRouteName="Welcome" screenOptions={{
+        <Stack.Navigator initialRouteName={token ? "Oneway" : "Login"} screenOptions={{
           headerShown:false,
         }}>
-          <Stack.Screen name="Welcome" component={WelcomeScreen}/>
+          {/* <Stack.Screen name="Welcome" component={WelcomeScreen}/> */}
           <Stack.Screen name="Login" component={LoginScreen}/>
           <Stack.Screen name="Otp" component={OtpScreen}/>
           <Stack.Screen name="OtpVerified" component={OtpVerifiedScreen}/>
