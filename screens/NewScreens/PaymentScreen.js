@@ -1,5 +1,13 @@
 import React from "react";
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Image, ScrollView } from "react-native";
+import { 
+    View, 
+    Text, 
+    StyleSheet, 
+    Dimensions, 
+    TouchableOpacity, 
+    Image, 
+    ScrollView 
+} from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -8,7 +16,6 @@ import RazorpayCheckout from 'react-native-razorpay';
 import axios from "axios";
 import { useTheme } from "@react-navigation/native";
 
-// import Entypo from "react-native-vector-icons/Entypo";
 
 
 const { width } = Dimensions.get("window");

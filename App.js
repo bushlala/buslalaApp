@@ -94,7 +94,8 @@ const App = () => {
   const getFCM=async()=>{
       let fcmToken = await messaging().getToken();
       if(fcmToken){
-        console.log("token: ",fcmToken);  // send token to server
+  //      console.log("token: ",fcmToken);  // send token to server
+        messaging().subscribeToTopic("topic");
       }
       else{
         console.log("token not found");
