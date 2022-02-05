@@ -319,7 +319,7 @@ export default function SelectedScreen(){
                         <View style={{alignItems:"center"}}>
                             <Text style={{color:"gray"}}>Price</Text>
                             {/* <Text style={{color:"#000"}}>₹{toggle === false ? priceLower: priceUpper}</Text> */}
-                            <Text style={{color:"#000"}}>₹{(toggle === true) ? (selectUpper ? priceUpper : null) : (selectLower ? priceLower : null)}</Text>
+                            <Text style={{color:"#000"}}>₹{toggle ? UpperSeat2 ? priceUpper*2 : priceUpper : LowerSeat2 ? priceLower*2 : priceLower}</Text>
                         </View>
                     </View>
                     <TouchableOpacity 

@@ -49,7 +49,7 @@ export default function TicketSummaryScreen({route}){
         "cowin": url2
     };
 
-    console.log(postdata);
+    // console.log(postdata);
 
     const ticket=()=>(
         <View style={{marginVertical:10,minHeight:120}}>

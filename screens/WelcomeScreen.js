@@ -9,7 +9,7 @@ const WelcomeScreen = () => {
         <View style={styles.screen}>
             <Image
             source={require("../assets/logo.png")}
-            style={{height:250, width:250, resizeMode:"contain"}}
+            style={{height:200, width:250, resizeMode:"contain"}}
             />
             <View style={styles.container}>
                 <View style={styles.heading}>
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     },
     container:{
         alignItems:"center",
-        marginTop:80
+        // marginTop:80
     },
     heading:{
         marginVertical:20
