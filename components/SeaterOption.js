@@ -1,24 +1,36 @@
 import { useNavigation } from '@react-navigation/core';
+import axios from 'axios';
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, Dimensions, Alert } from 'react-native'
 import Feather from "react-native-vector-icons/Feather";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { RalewayBold, RalewayRegular } from '../assets/fonts/fonts';
+import { API } from '../config';
 
 const {width} = Dimensions.get("window");
 
 const SeaterOption = ({name, priceLower,priceUpper, duration, 
                         rating, desc, seats, deptHour, arrivalHour, 
-                        src, dest, tripID, date, rDate
+                        src, dest, tripID, date, rDate, bus_model
                     }) => {
 
     const navigation = useNavigation();
 
     const busHandler=()=>{
-        navigation.navigate("SelectedScreen", 
-            {"name": name, "priceLower": priceLower, "priceUpper":priceUpper, 
-            "duration": duration, "deptHour": deptHour, "arrivalHour": arrivalHour, 
-            "src": src, "dest": dest,"tripId": tripID, "date": date, "rDate": rDate
+        axios.get(`${API}/trip/${tripID}`)
+        .then(resp=>{
+            resp.data.trip.status == "pending" 
+            ? 
+                navigation.navigate("SelectedScreen", 
+                {"name": name, "priceLower": priceLower, "priceUpper":priceUpper, "bus_model": bus_model,
+                "duration": duration, "deptHour": deptHour, "arrivalHour": arrivalHour, 
+                "src": src, "dest": dest,"tripId": tripID, "date": date, "rDate": rDate
+                })  
+            :
+            Alert.alert("Trip has already started");   
+        })
+        .catch(err=>{
+            console.log("Server error",err);
         })
     };
 
@@ -28,7 +40,7 @@ const SeaterOption = ({name, priceLower,priceUpper, duration,
         >
             <View style={styles.view1}>
                 <Text style={{fontFamily:RalewayBold, color:"black", fontSize:14, marginBottom:5}}>{name}</Text>
-                <Text style={{fontSize:12, fontFamily:RalewayRegular, color:"gray"}}>({desc})</Text>
+                <Text style={{fontSize:12, fontFamily:RalewayRegular, color:"gray",textTransform:"capitalize"}}>{desc}</Text>
                 <View style={{flexDirection:"row", alignItems:"center",marginVertical:5}}>
                     <FontAwesome
                     name="bed"

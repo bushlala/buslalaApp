@@ -28,6 +28,7 @@ import UserDetails_11_2 from './screens/NewScreens/UserDetails-11_2';
 import SelectedScreen from './screens/NewScreens/SelectedScreen';
 import SeatBooking_round_trip from './screens/NewScreens/SeatBookingRoundTrip';
 import NotificationScreen from './screens/NewScreens/NotificationScreen';
+import Privacy_Policy from './screens/NewScreens/Privacy_Policy';
 
 const Stack = createNativeStackNavigator();
 
@@ -139,6 +140,7 @@ const App = () => {
         />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="PaymentSettings" component={PaymentSettings} />
+        <Stack.Screen name="Privacy_Policy" component={Privacy_Policy} />
         <Stack.Screen name="Tickets" component={TicketScreen} />
         <Stack.Screen name="Bookings" component={BookingsScreen} />
         <Stack.Screen name="PaymentScreen" component={PaymentScreen} />

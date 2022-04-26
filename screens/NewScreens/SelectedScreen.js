@@ -22,70 +22,77 @@ export default function SelectedScreen(){
     const navigation = useNavigation();
     const colors = useTheme();
     const route = useRoute();
-    const { src, dest, name, deptHour, arrivalHour, priceLower, priceUpper, duration, tripId, date, rDate } = route.params;
-    // console.log(rDate);
+    const { src, dest, name, deptHour, arrivalHour, priceLower, priceUpper, duration, tripId, date, rDate, bus_model } = route.params;
     const [toggle, setToggle] = useState(false);
-    const [selectUpper, setSelectUpper] = useState([]);
-    const [selectLower, setSelectLower] = useState([]);
-    // const [seatData, setSeatData] = useState([]);
     const [lowerSeats, setLowerSeats] = useState([]);
     const [upperSeats, setUpperSeats] = useState([]);
     const [reTime, setReTime] = useState(null);
+    const [selectedSeats, setSelectedSeats] = useState([]);
+    const [selectLower, setSelectLower] = useState([]);
+    const [selectUpper, setSelectUpper] = useState([]);
+    // const [price, setPrice] = useState(null);
+  
+    var seat1 = selectedSeats.slice(0,1).toString();
+    var seat2 = selectedSeats.slice(1).toString();
 
-    var UpperSeat1 = selectUpper.slice(0,1).toString();
-    var UpperSeat2 = selectUpper.slice(1).toString();
-    var LowerSeat1 = selectLower.slice(0,1).toString();
-    var LowerSeat2 = selectLower.slice(1).toString();  
-
-    // console.log(LowerSeat1,LowerSeat2);
-    // console.log(UpperSeat2);
-   
-    const segmentClicked=(data)=>{
-        if(toggle===true){
-            !selectUpper.includes(`${data.id}`) 
-            ? 
-                selectUpper.length < 2 
-                ?
-                setSelectUpper([...selectUpper,`${data.id}`]) 
-                : 
-                alert("Max number is reached")
-            :
-            setSelectUpper(
-                selectUpper.filter(
+    let price = (selectLower.length == 0 && selectUpper.length == 0) ? null : 
+    (selectLower.length !== 0 && selectUpper.length === 0) ? (selectLower.length === 1) ?
+    priceLower : priceLower*2 : (selectLower.length === 0 && selectUpper.length !== 0) ?
+    selectUpper.length === 1 ? priceUpper : priceUpper*2 : (priceLower+priceUpper);
+    
+    const segmentClicked1=(data)=>{
+        if(!selectLower.includes(`${data.id}`) || !selectedSeats.includes(`${data.id}`)){
+            if(selectedSeats.length < 2 ){
+                setSelectedSeats([...selectedSeats,`${data.id}`]);
+                setSelectLower([...selectLower,`${data.id}`]); 
+            }
+            else alert("Max number is reached");
+        }
+        else{
+            setSelectedSeats(
+                selectedSeats.filter(
                     item => item !== `${data.id}`
                 )
-            )
-        } else{
-            !selectLower.includes(`${data.id}`) 
-            ? 
-                selectLower.length < 2 
-                ?
-                setSelectLower([...selectLower,`${data.id}`]) 
-                : 
-                alert("Max number is reached")
-            :
+            );
             setSelectLower(
                 selectLower.filter(
                     item => item !== `${data.id}`
                 )
-            )
-        }       
+            )  
+        }
     };
-    // const segmentClicked1=(index)=>{
-    //     setSelectLower(index);        
-    // };
+    
+    const segmentClicked2=(data)=>{
+        if(!selectUpper.includes(`${data.id}`) || !selectedSeats.includes(`${data.id}`)){
+            if(selectedSeats.length < 2 ){
+                setSelectedSeats([...selectedSeats,`${data.id}`]);
+                setSelectUpper([...selectUpper,`${data.id}`]); 
+            }
+            else alert("Max number is reached");
+        }
+        else{
+            setSelectedSeats(
+                selectedSeats.filter(
+                    item => item !== `${data.id}`
+                )
+            );
+            setSelectUpper(
+                selectUpper.filter(
+                    item => item !== `${data.id}`
+                )
+            )  
+        }
+    };
     
     const bookingApi=()=>{
         axios.get(`${API}/trip/${tripId}`)
         .then(res=>{
-            if(res.status===200){
-                const DATA = res.data;
-                const lowerBerth = DATA.trip.seat_number.lowerBerth;
-                const upperBerth = DATA.trip.seat_number.upperBerth;
-                setReTime(DATA.trip.retime);
-                setLowerSeats(lowerBerth);
-                setUpperSeats(upperBerth);
-            }else console.log(res.status);
+            const DATA = res.data;
+            const lowerBerth = DATA.trip.seat_number.lowerBerth;
+            const upperBerth = DATA.trip.seat_number.upperBerth;
+            setReTime(DATA.trip.retime);
+            setLowerSeats(lowerBerth);
+            setUpperSeats(upperBerth);
         })
         .catch(e=>{
             console.log(e);
@@ -104,39 +111,82 @@ export default function SelectedScreen(){
                 key={id}
                 style={[styles.upperView2,
                     {backgroundColor: data.status == 1 ? "#000" 
-                        : selectUpper.includes(`${data.id}`) ? "blue" : "#9ea5b0" 
+                        : selectedSeats.includes(`${data.id}`) ? "#ed6c39" : "#9ea5b0" 
                     }]} 
-                onPress={()=>segmentClicked(data)}
+                onPress={()=>segmentClicked2(data)}
                 disabled={data.status == 0 ? false : true}
             >
+                <Text style={{color:"#fff",fontSize:12,fontWeight:"500"}}>SL{id+1}</Text>
             </TouchableOpacity>
         );
         const colNumber = id % 4;
         UPPER_SEAT[colNumber].push( comp );
     });
 
-    const Upper=()=>(
-        <View style={{marginVertical:20}}>
-            <View style={{flexDirection:"row",justifyContent:"space-around"}}>
-                <View style={{flexDirection:"row"}}>
-                    <View style={{marginRight:10}}>
-                        {UPPER_SEAT[0]}
-                    </View>
-                    <View>
-                        {UPPER_SEAT[1]}
+    const UPPER_SEAT_1 = [[],[],[]];
+    upperSeats.map((data,id)=>{
+        const comp = (
+            <TouchableOpacity 
+                key={id}
+                style={[styles.upperView2,
+                    {backgroundColor: data.status == 1 ? "#000" 
+                        : selectedSeats.includes(`${data.id}`) ? "#ed6c39" : "#9ea5b0" 
+                    }]} 
+                onPress={()=>segmentClicked2(data)}
+                disabled={data.status == 0 ? false : true}
+            >
+                <Text style={{color:"#fff",fontSize:12,fontWeight:"500"}}>SL{id+1}</Text>
+            </TouchableOpacity>
+        );
+        const colNumber = id % 3;
+        UPPER_SEAT_1[colNumber].push( comp );
+    });
+
+    const Upper=()=>{
+        if(bus_model=="2+2"){
+            return(
+                <View style={{marginVertical:20}}>
+                    <View style={{flexDirection:"row",justifyContent:"space-around"}}>
+                        <View style={{flexDirection:"row"}}>
+                            <View style={{marginRight:10}}>
+                                {UPPER_SEAT[0]}
+                            </View>
+                            <View>
+                                {UPPER_SEAT[1]}
+                            </View>
+                        </View>
+                        <View style={{flexDirection:"row"}}>
+                            <View style={{marginRight:10}}>
+                                {UPPER_SEAT[2]}
+                            </View>
+                            <View>
+                                {UPPER_SEAT[3]}
+                            </View>
+                        </View>
                     </View>
                 </View>
-                <View style={{flexDirection:"row"}}>
-                    <View style={{marginRight:10}}>
-                        {UPPER_SEAT[2]}
-                    </View>
-                    <View>
-                        {UPPER_SEAT[3]}
+            )
+        }
+        else if(bus_model=="2+1"){
+            return(
+                <View style={{marginVertical:20}}>
+                    <View style={{flexDirection:"row",justifyContent:"space-around"}}>
+                        <View>
+                            {UPPER_SEAT_1[0]}
+                        </View>
+                        <View style={{flexDirection:"row"}}>
+                            <View style={{marginRight:10}}>
+                                {UPPER_SEAT_1[1]}
+                            </View>
+                            <View>
+                                {UPPER_SEAT_1[2]}
+                            </View>
+                        </View>
                     </View>
                 </View>
-            </View>
-        </View>
-    );
+            )
+        } else return null;
+    }
 
     const LOWER_SEAT = [[],[],[],[]];
     lowerSeats.map((data,id)=>{
@@ -145,60 +195,93 @@ export default function SelectedScreen(){
                 key={id}
                 style={[styles.lowerSeat,
                     {backgroundColor: data.status == 1 ? "#000" 
-                        : selectLower.includes(`${data.id}`) ? "blue" : "#9ea5b0"
+                        : selectedSeats.includes(`${data.id}`) ? "#ed6c39" : "#9ea5b0"
                     }]} 
-                onPress={()=>segmentClicked(data)}
+                onPress={()=>{
+                    segmentClicked1(data);
+                }}
                 disabled={data.status == 0 ? false : true}
             >
+                <Text style={{color:"#fff",fontSize:12,fontWeight:"500"}}>S{id+1}</Text>
             </TouchableOpacity>
         );
         const colNumber = id % 4;
         LOWER_SEAT[colNumber].push( comp );
     });
-    const Lower=()=>(
-        <View style={{marginVertical:20}}>
-            <View style={{flexDirection:"row",justifyContent:"space-around"}}>
-                <View style={{flexDirection:"row"}}>
-                    <View style={{marginRight:10}}>
-                        {LOWER_SEAT[0]}
-                    </View>
-                    <View>
-                        {LOWER_SEAT[1]}
+
+    const LOWER_SEAT_1 = [[],[],[]];
+    lowerSeats.map((data,id)=>{
+        const comp = (
+            <TouchableOpacity 
+                key={id}
+                style={[styles.lowerSeat,
+                    {backgroundColor: data.status == 1 ? "#000" 
+                        : selectedSeats.includes(`${data.id}`) ? "#ed6c39" : "#9ea5b0"
+                    }]} 
+                onPress={()=>segmentClicked1(data)}
+                disabled={data.status == 0 ? false : true}
+            >
+                <Text style={{color:"#fff",fontSize:12,fontWeight:"500"}}>S{id+1}</Text>
+            </TouchableOpacity>
+        );
+        const colNumber = id % 3;
+        LOWER_SEAT_1[colNumber].push( comp );
+    });
+    const Lower=()=>{
+        if(bus_model=="2+2"){
+            return(
+                <View style={{marginVertical:20}}>
+                    <View style={{flexDirection:"row",justifyContent:"space-around"}}>
+                        <View style={{flexDirection:"row"}}>
+                            <View style={{marginRight:10}}>
+                                {LOWER_SEAT[0]}
+                            </View>
+                            <View>
+                                {LOWER_SEAT[1]}
+                            </View>
+                        </View>
+                        <View style={{flexDirection:"row"}}>
+                            <View style={{marginRight:10}}>
+                                {LOWER_SEAT[2]}
+                            </View>
+                            <View>
+                                {LOWER_SEAT[3]}
+                            </View>
+                        </View>
                     </View>
                 </View>
-                <View style={{flexDirection:"row"}}>
-                    <View style={{marginRight:10}}>
-                        {LOWER_SEAT[2]}
-                    </View>
-                    <View>
-                        {LOWER_SEAT[3]}
+            )
+        }
+        else if(bus_model=="2+1"){
+            return(
+                <View style={{marginVertical:20}}>
+                    <View style={{flexDirection:"row",justifyContent:"space-around"}}>
+                        <View>
+                            {LOWER_SEAT_1[0]}
+                        </View>
+                        <View style={{flexDirection:"row"}}>
+                            <View style={{marginRight:10}}>
+                                {LOWER_SEAT_1[1]}
+                            </View>
+                            <View>
+                                {LOWER_SEAT_1[2]}
+                            </View>
+                        </View>
                     </View>
                 </View>
-            </View>
-        </View>
-    );
+            )
+        } else return null;
+    };
 
     const proceed=()=>{
-        if(toggle===false){
-            if(selectLower.length === 0){
-                alert("please select a seat");
-            }else{
-                navigation.navigate("UserDetails",{ 
-                    "src": src, "dest": dest, "name": name, "tripId" : tripId,
-                    "deptHour": deptHour, "arivHour": arrivalHour, "price": LowerSeat2 ? (priceLower * 2) : priceLower, "reTime": reTime,
-                    "duration": duration, "seat_number1": LowerSeat1, "seat_number2": LowerSeat2, "date": date, "rDate": rDate
-                })
-            }
+        if(selectedSeats.length === 0){
+            alert("please select a seat");
         }else{
-            if(selectUpper.length === 0){
-                alert("please select a seat");
-            }else{
-                navigation.navigate("UserDetails",{ 
-                    "src": src, "dest": dest, "name": name, "tripId" : tripId, "deptHour": deptHour, "reTime": reTime,
-                    "arivHour": arrivalHour, "price": UpperSeat2 ? (priceUpper * 2) : priceUpper, "duration": duration, 
-                    "seat_number1": UpperSeat1, "seat_number2": UpperSeat2, "date": date, "rDate": rDate
-                })
-            }
+            navigation.navigate("UserDetails",{ 
+                "src": src, "dest": dest, "name": name, "tripId" : tripId, "deptHour": deptHour, "reTime": reTime,
+                "arivHour": arrivalHour, "duration": duration, "date": date, "rDate": rDate, "seat_number1": seat1,
+                "seat_number2": seat2, "price": price
+            })
         }
     };
 
@@ -313,13 +396,18 @@ export default function SelectedScreen(){
                     <View style={{flexDirection:"row",marginLeft:10}}>
                         <View style={{alignItems:"center"}}>
                             <Text style={{color:"gray"}}>Selected seat</Text>
-                            <Text style={{color:"#000"}}>{toggle === false ? `${LowerSeat1},${LowerSeat2}` : `${UpperSeat1},${UpperSeat2}`}</Text>
+                            <Text style={{color:"#000"}}>
+                                {
+                                    (seat1 || seat2) ? `${seat1},${seat2}` : null                                  
+                                }
+                            </Text>
                         </View>
                         <View style={{backgroundColor:"#4a4847",borderWidth:1,marginHorizontal:10,borderColor:"#4a4847"}}></View>
                         <View style={{alignItems:"center"}}>
                             <Text style={{color:"gray"}}>Price</Text>
-                            {/* <Text style={{color:"#000"}}>₹{toggle === false ? priceLower: priceUpper}</Text> */}
-                            <Text style={{color:"#000"}}>₹{toggle ? UpperSeat2 ? priceUpper*2 : priceUpper : LowerSeat2 ? priceLower*2 : priceLower}</Text>
+                            <Text style={{color:"#000"}}>
+                                ₹{price}
+                            </Text>
                         </View>
                     </View>
                     <TouchableOpacity 
@@ -337,7 +425,7 @@ export default function SelectedScreen(){
 const styles = StyleSheet.create({
     screen:{
         flex: 1,
-        // backgroundColor: "#edf5f7",
+        backgroundColor: "#edf5f7",
         width: width
     },
     view:{
@@ -409,6 +497,8 @@ const styles = StyleSheet.create({
         width:40,
         borderRadius:5,
         marginBottom:5,
+        justifyContent:"center",
+        alignItems:"center"
     },
     proceedBtn: {
         backgroundColor:"#ed6c39",

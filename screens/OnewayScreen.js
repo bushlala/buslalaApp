@@ -12,8 +12,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useState } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useTheme } from "@react-navigation/native";
-import { API } from '../config';
-// import { funcBackHandler } from '../components/BackHandler';
+import { API, getUser } from '../config';
 
 
 
@@ -49,7 +48,6 @@ const OnewayScreen = () => {
 
     const [destData, setDestData] = useState([]);
     const [filteredDestData, setFilteredDestData] = useState([]);
-
 
 
     const handleConfirm1=(event,selectedDate)=>{    // ***must have to pass 'event' as a param whether it is used or not, otherwise gives error
@@ -102,7 +100,6 @@ const OnewayScreen = () => {
         "destination": !click ? to : from, 
         "date": deptDate
     };
-    console.log(oneWayPostData);
 
     const busesHandler=()=>{
         if(from==="" || to===""){
@@ -162,15 +159,13 @@ const OnewayScreen = () => {
             });           
         }
     };
-
     const sourceApi=()=>{
         axios.get(`${API}/source`)
         .then(resp=>{
-            if(resp.status===200){
-                const Data = resp.data;
-                setSrcData(Data.data);
-                setFilteredSrcData(Data.data);
-            }else console.log(resp.status);
+            console.log(resp.data);
+            const Data = resp.data;
+            setSrcData(Data.data);
+            setFilteredSrcData(Data.data);
         })
         .catch(e=>{console.log(e);alert("please try after some time")});
     };

@@ -11,8 +11,6 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useState } from 'react';
 import SeaterOption from '../components/SeaterOption';
 import { useTheme } from "@react-navigation/native";
-// import dates from "../data/dates";
-// import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const {width} = Dimensions.get("window");
 const {height} = Dimensions.get("window");
@@ -218,12 +216,13 @@ const BusesScreen = () => {
                                 priceLower={item1.bus.fare.lowerBerth}
                                 rating={item1.bus.rating}
                                 seats={item1.seats.available}
-                                desc={item1.bus.bus_model}
+                                desc={`${item1.bus.busType} (${item1.bus.bus_model})`}
                                 tripID={item1.tripId}
                                 src={src}
                                 dest={dest}                                
                                 date={date}
                                 rDate={rDate}
+                                bus_model={item1.bus.bus_model}
                             />
                         ))
                     )}

@@ -6,6 +6,7 @@ import { RalewayBold, RalewayLight, RalewayRegular } from '../assets/fonts/fonts
 import { primary, secondary, textColor } from '../components/Colors';
 import { signup, authenticate, isAuthenticated } from "../Auth/Signup";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API } from '../config';
 
 const OtpScreen = () => {
 
@@ -16,7 +17,6 @@ const OtpScreen = () => {
     const [OTP, setOTP]= useState("");
     const [otp, setOtp] = useState(false);
     const [field, setField] = useState(true);
-    // const [redirect, setRedirect] = useState(false);
 
     const inputHandler=()=>{
         if(OTP==="" || OTP.length!==6){
@@ -28,13 +28,12 @@ const OtpScreen = () => {
 
     const verificatioHandler=async()=>{
 
-        axios.post("https://buslala-backend-api.herokuapp.com/api/user/signup/verify", {
+        axios.post(`${API}/signup/verify`, {
             "number": number,
             "otp": OTP
         })
         .then(async(response)=>{
             if(response.status === 200){
-                console.log("User Registerd Successfully");
                 setOtp(false);
                 setField(false);
                 try {

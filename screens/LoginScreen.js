@@ -16,7 +16,7 @@ const LoginScreen = () => {
 
     const errorHandler=()=>{
         if(num==="" | num.length!==10){
-            setError(true)
+            setError(true);
         }else{
             setError(false);
         }

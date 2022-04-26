@@ -381,8 +381,9 @@ const ProfileScreen = () => {
     // };
 
     const clickLogout=()=>{
-        axios.post("https://buslala-backend-api.herokuapp.com/api/user/logout")
+        axios.post(`${API}/logout`)
         .then(async res=>{
+            console.log(res.data);
             if(res.status === 200){
                 await AsyncStorage.removeItem("jwt");
                 navigation.navigate("Login");
@@ -496,6 +497,12 @@ const ProfileScreen = () => {
                     text="Profile Settings"
                     desc="Profile, Address, Language, Security"
                     btn={()=>setIsOpen3(true)}
+                    iconName="arrowright"
+                    />
+                    <ProfileOptions
+                    text="Privacy & Policy"
+                    desc="User's Privacy-Policy"
+                    nav={()=>navigation.navigate("Privacy_Policy")}
                     iconName="arrowright"
                     />
                     <ProfileOptions
