@@ -162,7 +162,7 @@ const OnewayScreen = () => {
     const sourceApi=()=>{
         axios.get(`${API}/source`)
         .then(resp=>{
-            console.log(resp.data);
+            // console.log(resp.data);
             const Data = resp.data;
             setSrcData(Data.data);
             setFilteredSrcData(Data.data);

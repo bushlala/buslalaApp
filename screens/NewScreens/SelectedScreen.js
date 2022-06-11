@@ -106,21 +106,33 @@ export default function SelectedScreen(){
 
     const UPPER_SEAT = [[],[],[],[]];
     upperSeats.map((data,id)=>{
-        const comp = (
-            <TouchableOpacity 
-                key={id}
-                style={[styles.upperView2,
-                    {backgroundColor: data.status == 1 ? "#000" 
-                        : selectedSeats.includes(`${data.id}`) ? "#ed6c39" : "#9ea5b0" 
-                    }]} 
-                onPress={()=>segmentClicked2(data)}
-                disabled={data.status == 0 ? false : true}
-            >
-                <Text style={{color:"#fff",fontSize:12,fontWeight:"500"}}>SL{id+1}</Text>
-            </TouchableOpacity>
-        );
         const colNumber = id % 4;
-        UPPER_SEAT[colNumber].push( comp );
+        var input = 1;
+        // var totalSeats = upperSeats.length;
+        // var seatsPerCol = totalSeats / 4;
+        while (input <= (id+1)) {
+            console.log(input);
+            const comp = (
+                <TouchableOpacity 
+                    key={id}
+                    style={[styles.upperView2,
+                        {backgroundColor: data.status == 1 ? "#000" 
+                            : selectedSeats.includes(`${data.id}`) ? "#ed6c39" : "#9ea5b0" 
+                        }]} 
+                    onPress={()=>segmentClicked2(data)}
+                    disabled={data.status == 0 ? false : true}
+                >
+                    {
+                        colNumber == 0 || colNumber == 1 ?
+                        <Text style={{color:"#fff",fontSize:12,fontWeight:"500"}}>SL{input}</Text>
+                        :
+                        <Text style={{color:"#fff",fontSize:12,fontWeight:"500"}}>SL{input}</Text>
+                    }
+                </TouchableOpacity>
+            );
+            input++;
+            UPPER_SEAT[colNumber].push( comp );
+        };     
     });
 
     const UPPER_SEAT_1 = [[],[],[]];
@@ -272,6 +284,7 @@ export default function SelectedScreen(){
             )
         } else return null;
     };
+    console.log("reTime",reTime);
 
     const proceed=()=>{
         if(selectedSeats.length === 0){

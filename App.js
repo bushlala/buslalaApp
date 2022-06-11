@@ -29,6 +29,7 @@ import SelectedScreen from './screens/NewScreens/SelectedScreen';
 import SeatBooking_round_trip from './screens/NewScreens/SeatBookingRoundTrip';
 import NotificationScreen from './screens/NewScreens/NotificationScreen';
 import Privacy_Policy from './screens/NewScreens/Privacy_Policy';
+import MapViewScreen from './screens/NewScreens/MapViewScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -147,6 +148,7 @@ const App = () => {
         <Stack.Screen name="TicketSummary" component={TicketSummaryScreen} />
         <Stack.Screen name="UserDetails" component={UserDetails_11_2} />
         <Stack.Screen name="SelectedScreen" component={SelectedScreen} />
+        <Stack.Screen name="MapView" component={MapViewScreen} />
         <Stack.Screen
           name="SeatBookingRoundTrip"
           component={SeatBooking_round_trip}

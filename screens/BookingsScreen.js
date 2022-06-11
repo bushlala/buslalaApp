@@ -10,6 +10,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
 // import ToggleSwitch from "toggle-switch-react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API } from '../config';
 
 
 const {width, height} = Dimensions.get("window");
@@ -37,22 +38,16 @@ const BookingsScreen = ({route}) => {
     // const starImgFilled = "https://raw.githubusercontent.com/tranhonghan/images/main/star_filled.png";
     // const starImgCorner = "https://raw.githubusercontent.com/tranhonghan/images/main/star_corner.png";
 
-    const getData=()=>{
-        AsyncStorage.getItem("jwt").then(res=>{
-            if(res!=null){
-                const value = JSON.parse(res);
-                setToken(value.data.token);
+    const bookingAPI=async()=>{
+        const user = await AsyncStorage.getItem("jwt");
+        const userToken = JSON.parse(user);
+        let axiosConfig = {
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Authorization": userToken.data.token,
             }
-        })
-    };
-    let axiosConfig = {
-        headers: {
-            'Content-Type': 'application/json;charset=UTF-8',
-            "Authorization": token,
-        }
-    };
-    const bookingAPI=()=>{
-        axios.get("https://buslala-backend-api.herokuapp.com/api/user/booking",axiosConfig)
+        };
+        axios.get(`${API}/booking`,axiosConfig)
         .then(res=>{
             if(res.status===200){
                 const Data = res.data;
@@ -67,7 +62,6 @@ const BookingsScreen = ({route}) => {
     };
     useEffect(() => {
         bookingAPI();
-        getData();
     }, []);
 
     return (

@@ -15,6 +15,7 @@ import { useNavigation } from '@react-navigation/core'
 import RazorpayCheckout from 'react-native-razorpay';
 import axios from "axios";
 import { useTheme } from "@react-navigation/native";
+import { API } from "../../config";
 
 
 
@@ -32,7 +33,7 @@ export default function PaymentScreen({route}){
             description: 'Payment of seat booking',
             image: '../../assets/logo.png',
             currency: 'INR',
-            key: 'rzp_test_nxRhnTn0h9BeAk',
+            key: 'rzp_test_Dq60y8URjtgWcC',
             amount: Data.amount,
             name: "Buslala",
             order_id: Data.id,//Replace this with an order_id created using Orders API.
@@ -46,7 +47,7 @@ export default function PaymentScreen({route}){
           RazorpayCheckout.open(options).then( async data => {
             // handle success
             // setPaymentId(data.razorpay_payment_id);
-            axios.post("https://buslala-backend-api.herokuapp.com/api/user/verify-payment",{
+            axios.post(`${API}/verify-payment`,{
                 payment_id: data.razorpay_payment_id,
                 order_id: Data.id,
                 signature: data.razorpay_signature,
@@ -61,8 +62,8 @@ export default function PaymentScreen({route}){
             // alert(`Success: ${data.razorpay_payment_id}`);
           }).catch((error) => {
             // handle failure
-            // alert(`Error: ${error.code} | ${error.description}`);
-            alert("You have canceled the payment");
+            console.log(`Error: ${error.code} | ${error.description}`);
+            alert("Payment is denied");
           });
     };
 

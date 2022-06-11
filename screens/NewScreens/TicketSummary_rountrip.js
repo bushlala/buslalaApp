@@ -21,6 +21,7 @@ export default function TicketSummaryScreen({route}){
     const {Name,busName, deptHour, arivHour, fullName1, age1, fullName2, age2, number,email, gender1, reTime,
             gender2, price, tripId, seat_number1, seat_number2, date, src, dest, rDate, url1, url2} = route.params;
 
+
     
     const [oneSeat, setOneSeat] = useState(true);
 
@@ -31,7 +32,8 @@ export default function TicketSummaryScreen({route}){
     };
     useEffect(()=>{
         seatNumHandler();
-    },[])
+    },[]);
+
     var postdata={
         "seat_number1": seat_number1,
         "seat_number2": seat_number2,
@@ -96,7 +98,7 @@ export default function TicketSummaryScreen({route}){
                 <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center",marginTop:10}}>
                     <View style={{alignItems:"center"}}>
                         <Text style={{color:"#000",fontSize:10}}>Reaching Time</Text>
-                        <Text style={{color:"#000",fontSize:14}}>{reTime.arr}</Text>
+                        {/* <Text style={{color:"#000",fontSize:14}}>{reTime.arr}</Text> */}
                     </View>
                     <View style={{alignItems:"center"}}>
                         <Text style={{textAlign:"center",color:"#000",fontSize:12}}>{rDate}</Text>
@@ -107,7 +109,7 @@ export default function TicketSummaryScreen({route}){
                     </View>
                     <View style={{alignItems:"center"}}>
                         <Text style={{color:"#000",fontSize:10}}>Reporting Time</Text>
-                        <Text style={{color:"#000",fontSize:14}}>{reTime.dept}</Text>
+                        {/* <Text style={{color:"#000",fontSize:14}}>{reTime.dept}</Text> */}
                     </View>
                 </View>
             }
@@ -213,7 +215,6 @@ export default function TicketSummaryScreen({route}){
     // };
 
     // <------------------------------------------------
-    
     const proceed=()=>{
         axios.post(`${API}/book/${tripId}`,postdata)
         .then(res=>{

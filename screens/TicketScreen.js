@@ -8,6 +8,9 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useTheme } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
+import { API } from '../config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const {width,height} = Dimensions.get("window");
 
@@ -15,6 +18,7 @@ const TicketScreen = () => {
 
     const navigation = useNavigation();
     const colors = useTheme();
+    const isFocused = useIsFocused();
     
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -25,8 +29,16 @@ const TicketScreen = () => {
     // let day = ('0' + tempDate.getDate()).slice(-2); 
     // let fDate = `${year}-${month}-${day}`;
 
-    const ticketApi=()=>{
-        axios.get("https://buslala-backend-api.herokuapp.com/api/user/booking")
+    const ticketApi=async()=>{
+        const user = await AsyncStorage.getItem("jwt");
+        const userToken = JSON.parse(user);
+        let axiosConfig = {
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Authorization": userToken.data.token,
+            }
+        };
+        axios.get(`${API}/booking`,axiosConfig)
         .then(res=>{
             if(res.status===200){
                 const Data = res.data;
@@ -42,8 +54,13 @@ const TicketScreen = () => {
     
 
     useEffect(() => {
-        ticketApi();
-    },[]);
+        if(isFocused){
+            const interval = setInterval(() => {
+                ticketApi();
+            }, 3000);
+            return()=> clearInterval(interval)
+        }
+    },[isFocused]);
 
     return (
         <View style={styles.screen}>
@@ -72,12 +89,12 @@ const TicketScreen = () => {
                         onPress={()=>navigation.navigate("Notifications")}
                         >
                             <View style={{flexDirection:"row", alignItems:"center"}}>
-                            <MaterialIcons
-                            name="notifications-none"
-                            size={30}
-                            color="white"
-                            />
-                            <View style={styles.dot}></View>
+                                <MaterialIcons
+                                name="notifications-none"
+                                size={30}
+                                color="white"
+                                />
+                                <View style={styles.dot}></View>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -104,94 +121,130 @@ const TicketScreen = () => {
                         loading ? <ActivityIndicator color="blue" style={{marginTop:40}} size={40} />
                         :
                         data.map((item,index)=>(
-                            <View style={{elevation:5,backgroundColor:"#e9f7f7",borderRadius:20,marginHorizontal:10,marginVertical:10}} key={index}>
-                                <View style={{marginVertical:10}}>
-                                    <View style={{position:"absolute",right:20}}>
-                                        <Text style={{color:"blue",fontSize:12}}>{item.payment_status}</Text>
-                                    </View>
-                                    <Text style={{color:"#000",textAlign:"center",fontWeight:"bold"}}>{item.tripId.busId.name}</Text>
-                                    <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center"}}>
-                                        <Text style={{color:"#000",fontWeight:"500"}}>{item.tripId.sourceId.name}</Text>
-                                        <View style={{flexDirection:"row",alignItems:"center"}}>
-                                            <Text style={{color:"#eb8634",fontSize:11}}>-----</Text>
-                                            <AntDesign name="right" color="#eb8634" style={{top:1,left:-2}} />
-                                            <Text style={{color:"#eb8634",fontSize:11,marginHorizontal:5}}>{item.tripId.type}</Text>
-                                            {
-                                                item.tripId.retime ? 
-                                                <>
-                                                    <AntDesign name="left" color="#eb8634" style={{top:1,left:2}} />
-                                                    <Text style={{color:"#eb8634",fontSize:11,}}>-----</Text>
-                                                </> 
-                                                :
-                                                <>
-                                                    <Text style={{color:"#eb8634",fontSize:11,left:2}}>-----</Text>
-                                                    <AntDesign name="right" color="#eb8634" style={{top:1}} />
-                                                </>
-                                            }
-                                        </View>
-                                        <Text style={{color:"#000",fontWeight:"500"}}>{item.tripId.destinationId.name}</Text>
-                                    </View>
-                                    <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center",marginTop:10}}>
-                                        <View style={{alignItems:"center"}}>
-                                            <Text style={{color:"#000",fontSize:10}}>Reporting Time</Text>
-                                            <Text style={{color:"#000",fontSize:14}}>{item.tripId.time.dept}</Text>
-                                        </View>
-                                        <View style={{alignItems:"center"}}>
-                                            {
-                                                item.tripId.date ? 
-                                                <Text style={{textAlign:"center",color:"#000",fontSize:12}}>{JSON.stringify(item.tripId.date).slice(0,JSON.stringify(item.tripId.date).indexOf("T")).replace(/"/g,'')}</Text>
-                                                :
-                                                <Text style={{textAlign:"center",color:"#000",fontSize:12}}>{JSON.stringify(item.tripId.deptDate).slice(0,JSON.stringify(item.tripId.deptDate).indexOf("T")).replace(/"/g,'')}</Text>
-                                            }
-                                                <View style={{flexDirection:"row",alignItems:"center"}}>
-                                                <Text style={{color:"#eb8634",fontSize:11,left:2}}>-----</Text>
-                                                <AntDesign name="right" color="#eb8634" style={{top:1}} />
-                                            </View>
-                                        </View>
-                                        <View style={{alignItems:"center"}}>
-                                            <Text style={{color:"#000",fontSize:10}}>Reaching Time</Text>
-                                            <Text style={{color:"#000",fontSize:14}}>{item.tripId.time.arr}</Text>
-                                        </View>
-                                    </View>
+                            <View key={index}>
+                            {
+                                item.status === "completed" ? 
+                                <View style={{elevation:5,backgroundColor:"#e9f7f7",borderRadius:20,marginHorizontal:10,marginVertical:10}} key={index}>
                                     {
-                                        item.tripId.retime &&
-                                        <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center",marginTop:10}}>
-                                            <View style={{alignItems:"center"}}>
-                                                <Text style={{color:"#000",fontSize:10}}>Reaching Time</Text>
-                                                <Text style={{color:"#000",fontSize:14}}>{item.tripId.retime.arr}</Text>
-                                            </View>
-                                            <View style={{alignItems:"center"}}>
-                                                <Text style={{textAlign:"center",color:"#000",fontSize:12}}>{JSON.stringify(item.tripId.returnDate).slice(0,JSON.stringify(item.tripId.returnDate).indexOf("T")).replace(/"/g,'')}</Text>
-                                                <View style={{flexDirection:"row",alignItems:"center"}}>
-                                                    <AntDesign name="left" color="#eb8634" style={{top:1,left:2}} />
-                                                    <Text style={{color:"#eb8634",fontSize:11,}}>-----</Text>
-                                                </View>
-                                            </View>
-                                            <View style={{alignItems:"center"}}>
-                                                <Text style={{color:"#000",fontSize:10}}>Reporting Time</Text>
-                                                <Text style={{color:"#000",fontSize:14}}>{item.tripId.retime.dept}</Text>
-                                            </View>
+                                        item.tripId.status === "success" &&
+                                        <View
+                                            style={{
+                                                position:"absolute",
+                                                right:0,
+                                                height:"100%",
+                                                width:60,
+                                                bottom:0,
+                                                justifyContent:"center",
+                                                alignItems:"center"
+                                            }}
+                                        >
+                                            <TouchableOpacity
+                                                style={{
+                                                    backgroundColor:primary,
+                                                    right:0,
+                                                    bottom:-30,
+                                                    paddingVertical:2,
+                                                    paddingHorizontal:4,
+                                                    borderRadius:5,
+                                                    justifyContent:"center"
+                                                }}
+                                                onPress={()=>navigation.navigate("MapView",item.tripId.busId)}
+                                            >
+                                                <Text style={{color:"#fff",fontSize:12}}>Location</Text>
+                                            </TouchableOpacity>
                                         </View>
                                     }
-                                    <View style={{alignItems:"center"}}>
-                                        <View>
-                                            <Text style={{color:"gray",fontWeight:"400"}}>Name: {item.u1_name}</Text>
+                                    <View style={{marginVertical:10}}>
+                                        <View style={{position:"absolute",right:20}}>
+                                            <Text style={{color:"blue",fontSize:12}}>{item.payment_status}</Text>
+                                        </View>
+                                        <Text style={{color:"#000",textAlign:"center",fontWeight:"bold"}}>{item.tripId.busId.name}</Text>
+                                        <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center"}}>
+                                            <Text style={{color:"#000",fontWeight:"500"}}>{item.tripId.sourceId.name}</Text>
+                                            <View style={{flexDirection:"row",alignItems:"center"}}>
+                                                <Text style={{color:"#eb8634",fontSize:11}}>-----</Text>
+                                                <AntDesign name="right" color="#eb8634" style={{top:1,left:-2}} />
+                                                <Text style={{color:"#eb8634",fontSize:11,marginHorizontal:5}}>{item.tripId.type}</Text>
+                                                {
+                                                    item.tripId.retime ? 
+                                                    <>
+                                                        <AntDesign name="left" color="#eb8634" style={{top:1,left:2}} />
+                                                        <Text style={{color:"#eb8634",fontSize:11,}}>-----</Text>
+                                                    </> 
+                                                    :
+                                                    <>
+                                                        <Text style={{color:"#eb8634",fontSize:11,left:2}}>-----</Text>
+                                                        <AntDesign name="right" color="#eb8634" style={{top:1}} />
+                                                    </>
+                                                }
+                                            </View>
+                                            <Text style={{color:"#000",fontWeight:"500"}}>{item.tripId.destinationId.name}</Text>
+                                        </View>
+                                        <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center",marginTop:10}}>
+                                            <View style={{alignItems:"center"}}>
+                                                <Text style={{color:"#000",fontSize:10}}>Reporting Time</Text>
+                                                <Text style={{color:"#000",fontSize:14}}>{item.tripId.time.dept}</Text>
+                                            </View>
+                                            <View style={{alignItems:"center"}}>
+                                                {
+                                                    item.tripId.date ? 
+                                                    <Text style={{textAlign:"center",color:"#000",fontSize:12}}>{JSON.stringify(item.tripId.date).slice(0,JSON.stringify(item.tripId.date).indexOf("T")).replace(/"/g,'')}</Text>
+                                                    :
+                                                    <Text style={{textAlign:"center",color:"#000",fontSize:12}}>{JSON.stringify(item.tripId.deptDate).slice(0,JSON.stringify(item.tripId.deptDate).indexOf("T")).replace(/"/g,'')}</Text>
+                                                }
+                                                    <View style={{flexDirection:"row",alignItems:"center"}}>
+                                                        <Text style={{color:"#eb8634",fontSize:11,left:2}}>-----</Text>
+                                                        <AntDesign name="right" color="#eb8634" style={{top:1}} />
+                                                    </View>
+                                            </View>
+                                            <View style={{alignItems:"center"}}>
+                                                <Text style={{color:"#000",fontSize:10}}>Reaching Time</Text>
+                                                <Text style={{color:"#000",fontSize:14}}>{item.tripId.time.arr}</Text>
+                                            </View>
+                                        </View>
+                                        {
+                                            item.tripId.retime &&
+                                            <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center",marginTop:10}}>
+                                                <View style={{alignItems:"center"}}>
+                                                    <Text style={{color:"#000",fontSize:10}}>Reaching Time</Text>
+                                                    <Text style={{color:"#000",fontSize:14}}>{item.tripId.retime.arr}</Text>
+                                                </View>
+                                                <View style={{alignItems:"center"}}>
+                                                    <Text style={{textAlign:"center",color:"#000",fontSize:12}}>{JSON.stringify(item.tripId.returnDate).slice(0,JSON.stringify(item.tripId.returnDate).indexOf("T")).replace(/"/g,'')}</Text>
+                                                    <View style={{flexDirection:"row",alignItems:"center"}}>
+                                                        <AntDesign name="left" color="#eb8634" style={{top:1,left:2}} />
+                                                        <Text style={{color:"#eb8634",fontSize:11,}}>-----</Text>
+                                                    </View>
+                                                </View>
+                                                <View style={{alignItems:"center"}}>
+                                                    <Text style={{color:"#000",fontSize:10}}>Reporting Time</Text>
+                                                    <Text style={{color:"#000",fontSize:14}}>{item.tripId.retime.dept}</Text>
+                                                </View>
+                                            </View>
+                                        }
+                                        <View style={{alignItems:"center"}}>
+                                            <View>
+                                                <Text style={{color:"gray",fontWeight:"400"}}>Name: {item.u1_name}</Text>
+                                                {
+                                                    item.u2_name ? 
+                                                    <Text style={{color:"gray",fontWeight:"400"}}>Name: {item.u2_name}</Text>
+                                                    : null
+                                                }
+                                            </View>
+                                        </View>
+                                        <View style={{flexDirection:"row",marginTop:10,justifyContent:"space-around",alignItems:"flex-end"}}>
+                                            <Text style={{color:item.payment_status==="success"?"green":"#eb8634",fontSize:10,marginBottom:5}}>Payment {item.payment_status}</Text>
                                             {
-                                                item.u2_name ? 
-                                                <Text style={{color:"gray",fontWeight:"400"}}>Name: {item.u2_name}</Text>
-                                                : null
+                                                !item.seat_number2 ? <Text style={{color:"#eb8634",fontSize:20}}>{item.seat_number1}</Text> 
+                                                :
+                                                <Text style={{color:"#eb8634",fontSize:20}}>{item.seat_number1}, {item.seat_number2}</Text>
                                             }
                                         </View>
                                     </View>
-                                    <View style={{flexDirection:"row",marginTop:10,justifyContent:"space-around",alignItems:"flex-end"}}>
-                                        <Text style={{color:item.payment_status==="success"?"green":"#eb8634",fontSize:10,marginBottom:5}}>Payment {item.payment_status}</Text>
-                                        {
-                                            !item.seat_number2 ? <Text style={{color:"#eb8634",fontSize:20}}>{item.seat_number1}</Text> 
-                                            :
-                                            <Text style={{color:"#eb8634",fontSize:20}}>{item.seat_number1}, {item.seat_number2}</Text>
-                                        }
-                                    </View>
                                 </View>
+                                :
+                                null
+                            }
                             </View>
                         ))
                     }
@@ -201,7 +254,7 @@ const TicketScreen = () => {
     )
 }
 
-export default TicketScreen
+export default TicketScreen;
 
 const styles = StyleSheet.create({
     screen:{

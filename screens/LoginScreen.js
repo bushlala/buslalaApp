@@ -35,7 +35,7 @@ const LoginScreen = () => {
                 console.log(response.status)
             }
         }).catch((err)=>{
-            console.log("User Already Registered")
+            console.log("Server Error",err)
             setUser(true);
             })
         }
@@ -74,7 +74,7 @@ const LoginScreen = () => {
                     <Text style={{fontFamily:RalewayBold, fontSize:18, color:"lightgray"}}>Provide Your Phone Number</Text>
                     <Text style={{fontFamily:RalewayBold, fontSize:18, color:"lightgray", marginBottom:10}}>To Continue</Text>
                     {error && <Text style={{color:"red", fontSize:12}}>Please Enter a Valid Number!</Text>}
-                    {user && <Text style={{color:"red", fontSize:12, marginBottom:5}}>User Already Registered</Text>}
+                    {user && <Text style={{color:"red", fontSize:12, marginBottom:5}}>Server Error</Text>}
                     <TextInput
                     style={styles.input}
                     placeholder="Enter Phone Number"
