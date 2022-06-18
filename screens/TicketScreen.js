@@ -124,36 +124,7 @@ const TicketScreen = () => {
                             <View key={index}>
                             {
                                 item.status === "completed" ? 
-                                <View style={{elevation:5,backgroundColor:"#e9f7f7",borderRadius:20,marginHorizontal:10,marginVertical:10}} key={index}>
-                                    {
-                                        item.tripId.status === "success" &&
-                                        <View
-                                            style={{
-                                                position:"absolute",
-                                                right:0,
-                                                height:"100%",
-                                                width:60,
-                                                bottom:0,
-                                                justifyContent:"center",
-                                                alignItems:"center"
-                                            }}
-                                        >
-                                            <TouchableOpacity
-                                                style={{
-                                                    backgroundColor:primary,
-                                                    right:0,
-                                                    bottom:-30,
-                                                    paddingVertical:2,
-                                                    paddingHorizontal:4,
-                                                    borderRadius:5,
-                                                    justifyContent:"center"
-                                                }}
-                                                onPress={()=>navigation.navigate("MapView",item.tripId.busId)}
-                                            >
-                                                <Text style={{color:"#fff",fontSize:12}}>Location</Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                    }
+                                <View style={{elevation:5,backgroundColor:"#e9f7f7",borderRadius:10,marginHorizontal:10,marginVertical:10,overflow:"hidden"}} key={index}>
                                     <View style={{marginVertical:10}}>
                                         <View style={{position:"absolute",right:20}}>
                                             <Text style={{color:"blue",fontSize:12}}>{item.payment_status}</Text>
@@ -240,6 +211,44 @@ const TicketScreen = () => {
                                                 <Text style={{color:"#eb8634",fontSize:20}}>{item.seat_number1}, {item.seat_number2}</Text>
                                             }
                                         </View>
+                                    </View>
+                                    <View
+                                        style={{
+                                            flexDirection:"row",
+                                            alignItems:"center",
+                                            justifyContent:"space-between",
+                                            marginHorizontal:20,
+                                            marginBottom:10
+                                        }}
+                                    >
+                                        <TouchableOpacity
+                                            style={{
+                                                backgroundColor:secondary,
+                                                paddingHorizontal:10,
+                                                paddingVertical:5,
+                                                borderRadius:4
+                                            }}
+                                            activeOpacity={0.6}
+                                            onPress={()=>navigation.navigate("CancelTicket")}
+                                        >
+                                            <Text style={{color:"#fff"}}>Cancel Ticket</Text>
+                                        </TouchableOpacity>
+                                        {
+                                            item.tripId.status == "success" ?
+                                            <TouchableOpacity
+                                                style={{
+                                                    backgroundColor:primary,
+                                                    paddingVertical:5,
+                                                    paddingHorizontal:10,
+                                                    borderRadius:4,
+                                                }}
+                                                onPress={()=>navigation.navigate("MapView",item.tripId.busId)}
+                                            >
+                                                <Text style={{color:"#fff"}}>Location</Text>
+                                            </TouchableOpacity>
+                                            :
+                                            null
+                                        }
                                     </View>
                                 </View>
                                 :

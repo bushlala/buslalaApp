@@ -284,7 +284,6 @@ export default function SelectedScreen(){
             )
         } else return null;
     };
-    console.log("reTime",reTime);
 
     const proceed=()=>{
         if(selectedSeats.length === 0){
