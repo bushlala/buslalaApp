@@ -31,6 +31,8 @@ import NotificationScreen from './screens/NewScreens/NotificationScreen';
 import Privacy_Policy from './screens/NewScreens/Privacy_Policy';
 import MapViewScreen from './screens/NewScreens/MapViewScreen';
 import CancelTicket from './screens/NewScreens/CancelTicket';
+import BusDetailsList from './screens/NewScreens/busesScreen';
+import RoutesList from './screens/NewScreens/RoutesList';
 
 const Stack = createNativeStackNavigator();
 
@@ -151,6 +153,8 @@ const App = () => {
         <Stack.Screen name="SelectedScreen" component={SelectedScreen} />
         <Stack.Screen name="MapView" component={MapViewScreen} />
         <Stack.Screen name="CancelTicket" component={CancelTicket} />
+        <Stack.Screen name="BusDetailsList" component={BusDetailsList} />
+        <Stack.Screen name="ShowRoutes" component={RoutesList} />
         <Stack.Screen
           name="SeatBookingRoundTrip"
           component={SeatBooking_round_trip}
