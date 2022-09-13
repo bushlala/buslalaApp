@@ -4,6 +4,7 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -30,6 +31,7 @@ const RoutesList = ({route}) => {
   const [data, setData] = useState([]);
   const [sourceData, setSourceData] = useState([]);
   const [destData, setDestData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   var obj = {};
   var sourceObj = {};
@@ -41,6 +43,7 @@ const RoutesList = ({route}) => {
   };
 
   const getRoutesAPI = () => {
+    setLoading(true);
     AsyncStorage.getItem('jwt')
       .then(res => {
         //console.log(JSON.parse(res).data.token);
@@ -54,7 +57,7 @@ const RoutesList = ({route}) => {
         setData(res.data[2]);
         setSourceData(res.data[1]);
         setDestData(res.data[0]);
-
+        setLoading(false);
         //data.map(item => console.log(item.name));
       })
       .catch(err => console.log(err));
@@ -140,7 +143,7 @@ const RoutesList = ({route}) => {
     arrivalHour,
   ) => {
     const year = date.slice(0, 4);
-    const month = returnMonth(date.slice(5, 7));
+    const month = date.slice(5, 7);
     const day = date.slice(8, 10);
     let compDate = `${year}-${month}-${day}`;
     console.log(compDate);
@@ -151,9 +154,9 @@ const RoutesList = ({route}) => {
     };
     axios.post(`${API}/searchOneWayBus`, oneWayPostData).then(response => {
       if (response.status === 200) {
-        // console.log(response.data.data);
-        response.data.data.map(item => {
-          console.log(item.bus._id);
+        console.log(response.data.data_false);
+        response.data.data_false.map(item => {
+          console.log('bus_id', item.bus._id);
           if (item.bus._id === busId) {
             axios
               .get(`${API}/trip/${tripID}`)
@@ -252,6 +255,7 @@ const RoutesList = ({route}) => {
           </View>
         </View>
       </View>
+      {loading && <ActivityIndicator />}
       <ScrollView>
         {data.map(item => {
           loadObj();

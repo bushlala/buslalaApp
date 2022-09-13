@@ -29,7 +29,7 @@ export default function PaymentScreen({route}) {
       description: 'Payment of seat booking',
       image: '../../assets/logo.png',
       currency: 'INR',
-      key: 'rzp_live_4hWpET54Nst5vu',
+      key: 'rzp_live_VbEk75qcySCm5Z',
       amount: Data.amount,
       name: 'Buslala',
       order_id: Data.id, //Replace this with an order_id created using Orders API.
@@ -152,61 +152,9 @@ export default function PaymentScreen({route}) {
                 Select Payment Methods
               </Text>
             </View>
-            <View style={{marginTop: 5}}>
-              <Text style={{color: colors.colors.text}}>
-                Credit Card/Debit Card
-              </Text>
-            </View>
           </View>
-          <TouchableOpacity
-            style={{
-              elevation: 5,
-              width: '100%',
-              backgroundColor: 'white',
-              borderRadius: 10,
-              padding: 15,
-            }}
-            disabled={true}>
-            <View style={{marginLeft: 10}}>
-              <Text style={{color: '#000'}}>Mastercard</Text>
-            </View>
-            <View
-              style={{
-                marginLeft: 0,
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginLeft: 10,
-                marginTop: 3,
-              }}>
-              <View style={{backgroundColor: '#4a4d4f', borderRadius: 5}}>
-                <Image
-                  source={require('../../assets/icons/mastercard.png')}
-                  style={{height: 20, width: 40, resizeMode: 'contain'}}
-                />
-              </View>
-              <Text style={{color: '#000', marginLeft: 10}}>
-                **** **** **** 0000
-              </Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              marginTop: 5,
-              elevation: 5,
-              width: '100%',
-              backgroundColor: 'white',
-              borderRadius: 10,
-              padding: 25,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-            disabled={true}>
-            <Text style={{color: '#000'}}>+ Add a New Card</Text>
-          </TouchableOpacity>
+
           <View style={{marginTop: 20}}>
-            <View style={{marginLeft: 10, marginBottom: 10}}>
-              <Text style={{color: colors.colors.text}}>Other Methods</Text>
-            </View>
             <TouchableOpacity
               style={{
                 elevation: 5,

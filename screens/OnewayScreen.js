@@ -130,9 +130,9 @@ const OnewayScreen = () => {
     setIsVisible3(false);
     let tempDate = new Date(currentDate);
     let year = tempDate.getFullYear();
-    let month = returnMonth(('0' + (tempDate.getMonth() + 1)).slice(-2)); // to get 0 before a single month (i.e 1 -> 01)
+    let month = ('0' + (tempDate.getMonth() + 1)).slice(-2); // to get 0 before a single month (i.e 1 -> 01)
     let day = ('0' + tempDate.getDate()).slice(-2); // to get 0 before a single day   (i.e 3 -> 03)
-    let fDate = `${day} ${month} ${year}`;
+    let fDate = `${year}-${month}-${day}`;
     setReturnDate(fDate);
   };
 
@@ -166,6 +166,8 @@ const OnewayScreen = () => {
         .post(`${API}/searchOneWayBus`, oneWayPostData)
         .then(response => {
           if (response.status === 200) {
+            console.log(response.data);
+
             navigation.navigate('Buses', {
               Data: response.data,
               src: !click ? from : to,

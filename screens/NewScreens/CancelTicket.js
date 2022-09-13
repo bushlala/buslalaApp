@@ -17,6 +17,7 @@ import {RalewayBold} from '../../assets/fonts/fonts';
 import axios from 'axios';
 import {API} from '../../config';
 import {useNavigation, useRoute} from '@react-navigation/core';
+import {CancellationText} from '../../components/privacyTxt';
 
 const {width, height} = Dimensions.get('window');
 
@@ -136,8 +137,44 @@ export default function CancelTicket({navigation}) {
           contentContainerStyle={{
             paddingTop: 10,
             paddingHorizontal: 5,
+            paddingBottom: 400,
           }}>
-          <Text style={{color: colors.colors.text}}>Policy</Text>
+          <Text style={{color: colors.colors.text}}>
+            {CancellationText.text1}
+          </Text>
+          <Text style={{color: colors.colors.text}}>
+            {CancellationText.text2}
+          </Text>
+          <Text style={{color: colors.colors.text}}>
+            {CancellationText.text3}
+          </Text>
+          <Text style={{color: colors.colors.text}}>
+            {CancellationText.text4}
+          </Text>
+          <Text style={{color: colors.colors.text}}>
+            {CancellationText.text5}
+          </Text>
+          <Text style={{color: colors.colors.text}}>
+            {CancellationText.text6}
+          </Text>
+          <Text style={{color: colors.colors.text}}>
+            {CancellationText.text7}
+          </Text>
+          <Text style={{color: colors.colors.text}}>
+            {CancellationText.text8}
+          </Text>
+          <Text style={{color: colors.colors.text}}>
+            {CancellationText.text9}
+          </Text>
+          <Text style={{color: colors.colors.text}}>
+            {CancellationText.text10}
+          </Text>
+          <Text style={{color: colors.colors.text}}>
+            {CancellationText.text11}
+          </Text>
+          <Text style={{color: colors.colors.text}}>
+            {CancellationText.text12}
+          </Text>
         </ScrollView>
       </View>
       <View

@@ -15,6 +15,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Linking,
 } from 'react-native';
 import {RalewayBold, RalewayLight, RalewayRegular} from '../assets/fonts/fonts';
 import {
@@ -40,6 +41,7 @@ import storage from '@react-native-firebase/storage';
 import RNFetchBlob from 'rn-fetch-blob';
 import messaging from '@react-native-firebase/messaging';
 import {API} from '../config';
+import call from 'react-native-phone-call';
 
 const {width, height} = Dimensions.get('window');
 
@@ -534,6 +536,12 @@ const ProfileScreen = () => {
             iconName="arrowright"
           />
           <ProfileOptions
+            text="Ticket Details"
+            desc="List of all the booked Tickets"
+            nav={() => navigation.navigate('Tickets')}
+            iconName="arrowright"
+          />
+          <ProfileOptions
             text="Privacy & Policy"
             desc="User's Privacy-Policy"
             nav={() => navigation.navigate('Privacy_Policy')}
@@ -725,7 +733,18 @@ const ProfileScreen = () => {
                 24/7 Help Support
               </Text>
             </View>
-            <TouchableOpacity style={styles.button} activeOpacity={0.8}>
+            <TouchableOpacity
+              style={styles.button}
+              activeOpacity={0.8}
+              onPress={() => {
+                const args = {
+                  number: '9031901444', // String value with the number to call
+                  prompt: false, // Optional boolean property. Determines if the user should be prompted prior to the call
+                  skipCanOpen: true, // Skip the canOpenURL check
+                };
+
+                call(args).catch(console.error);
+              }}>
               <Text
                 style={{
                   fontSize: 15,
@@ -733,7 +752,25 @@ const ProfileScreen = () => {
                   color: 'white',
                   textAlign: 'center',
                 }}>
-                Call 333
+                Call 9031901444
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              activeOpacity={0.8}
+              onPress={() =>
+                Linking.openURL(
+                  'mailto:care@buslala.com?subject=SendMail&body=Description',
+                )
+              }>
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontFamily: RalewayBold,
+                  color: 'white',
+                  textAlign: 'center',
+                }}>
+                Email- care@buslala.com
               </Text>
             </TouchableOpacity>
           </View>

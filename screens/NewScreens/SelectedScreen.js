@@ -32,6 +32,7 @@ export default function SelectedScreen() {
     arrivalHour,
     priceLower,
     priceUpper,
+    priceLowerSleeper,
     duration,
     tripId,
     date,
@@ -48,6 +49,11 @@ export default function SelectedScreen() {
   const [token, setToken] = useState('');
   const [selectedSeatsNumber, setSelectedSeatsNumber] = useState([]);
   const [sleeperNumber, setSleeperNumber] = useState(0);
+  const [upperSeatsSLA, setUpperSeatsSLA] = useState([]);
+  const [upperSeatsSLB, setUpperSeatsSLB] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [lowerSeatsSA, setLowerSeatsSA] = useState([]);
+  const [lowerSeatsSB, setLowerSeatsSB] = useState([]);
 
   const config = {
     headers: {
@@ -87,8 +93,10 @@ export default function SelectedScreen() {
         : priceUpper * selectUpper.length
       : priceLower * selectLower.length + priceUpper * selectUpper.length;
 
+  const [price1, setPrice1] = useState(0);
+
   const segmentClicked1 = data => {
-    console.log(tripId);
+    console.log('price1', price1);
     //console.log(selectLower.length);
     if (
       !selectLower.includes(`${data.number}`) ||
@@ -97,12 +105,21 @@ export default function SelectedScreen() {
       if (selectedSeats.length < 5) {
         setSelectedSeats([...selectedSeats, `${data._id}`]);
         setSelectLower([...selectLower, `${data.number}`]);
-
+        if (data.type === 'sleeper') {
+          setPrice1(price1 + priceLowerSleeper);
+        } else {
+          setPrice1(price1 + priceLower);
+        }
         console.log('Selected id', selectedSeats);
       } else alert('Max number is reached');
     } else {
       setSelectedSeats(selectedSeats.filter(item => item !== `${data._id}`));
       setSelectLower(selectLower.filter(item => item !== `${data.number}`));
+      if (data.type == 'sleeper') {
+        setPrice1(price1 - priceLowerSleeper);
+      } else {
+        setPrice1(price1 - priceLower);
+      }
     }
   };
 
@@ -115,14 +132,17 @@ export default function SelectedScreen() {
       if (selectedSeats.length < 5) {
         setSelectedSeats([...selectedSeats, `${data._id}`]);
         setSelectUpper([...selectUpper, `${data.number}`]);
+        setPrice1(price1 + priceUpper);
       } else alert('Max number is reached');
     } else {
       setSelectedSeats(selectedSeats.filter(item => item !== `${data._id}`));
       setSelectUpper(selectUpper.filter(item => item !== `${data.number}`));
+      setPrice1(price1 - priceUpper);
     }
   };
 
   const bookingApi = () => {
+    setLoading(true);
     AsyncStorage.getItem('jwt')
       .then(res => {
         //console.log(JSON.parse(res).data.token);
@@ -159,48 +179,189 @@ export default function SelectedScreen() {
         console.log('error', e);
         alert('please try again after few minutes');
       });
+    setLoading(false);
   };
+
+  const [sleepers, setSleepers] = useState(0);
 
   useEffect(() => {
     bookingApi();
+    lowerSeats.map((data, id) => {
+      let count = 0;
+      if (data.type == 'sleeper') {
+        count += 1;
+        setSleepers(1);
+        return;
+      }
+    });
   }, []);
 
-  const UPPER_SEAT = [[], [], [], []];
-  upperSeats.map((data, id) => {
-    // var totalSeats = upperSeats.length;
-    // var seatsPerCol = totalSeats / 4;
-    //console.log(input);
-    const colNumber = id == upperSeats.length - 2 ? 3 : id % 4;
-    const comp = (
-      <TouchableOpacity
-        key={id}
-        style={[
-          styles.upperView2,
-          {
-            backgroundColor:
-              data.status == 1
-                ? '#000'
-                : selectedSeats.includes(`${data._id}`)
-                ? '#ed6c39'
-                : '#9ea5b0',
-          },
-        ]}
-        onPress={() => segmentClicked2(data)}
-        disabled={data.status == 0 ? false : true}>
-        {colNumber == 0 || colNumber == 1 ? (
-          <Text style={{color: '#fff', fontSize: 12, fontWeight: '500'}}>
-            {data.number}
-          </Text>
-        ) : (
-          <Text style={{color: '#fff', fontSize: 12, fontWeight: '500'}}>
-            {data.number}
-          </Text>
-        )}
-      </TouchableOpacity>
-    );
+  const [track, setTrack] = useState(0);
 
-    UPPER_SEAT[colNumber].push(comp);
-  });
+  function compare(a, b) {
+    if (parseInt(a.number.slice(2)) < parseInt(b.number.slice(2))) {
+      return -1;
+    }
+    if (parseInt(a.number.slice(2)) > parseInt(b.number.slice(2))) {
+      return 1;
+    }
+    return 0;
+  }
+  if (bus_model == '2+1') {
+    upperSeats.sort(compare);
+    // var text = 'SU1';
+    // console.log('hello', typeof parseInt(text.slice(2)));
+  }
+
+  const UPPER_SEAT = [[], [], [], []];
+  // if (track == 0) {
+  //   upperSeats.splice(1, 0, {status: 'empty'});
+  //   console.log('sup', upperSeats);
+  // }
+  // console.log('upperSeats', upperSeats);
+
+  if (
+    upperSeats.length > 0 &&
+    upperSeats[0].number.length == 4 &&
+    loading == false
+  ) {
+    //console.log('USLA LENGTH', upperSeats.length);
+    const uSLA = [];
+    const uSLB = [];
+
+    upperSeats.map(data => {
+      if (data.number.startsWith('SLA')) {
+        uSLA.push(data);
+      } else {
+        uSLB.push(data);
+      }
+    });
+    setUpperSeatsSLA(uSLA);
+    setUpperSeatsSLB(uSLB);
+    setLoading(true);
+  }
+
+  if (upperSeats.length > 0 && upperSeats[0].number.length < 4) {
+    upperSeats.map((data, id) => {
+      // var totalSeats = upperSeats.length;
+      // var seatsPerCol = totalSeats / 4;
+      //console.log(input);
+      if (
+        id == 1 &&
+        track == 0 &&
+        bus_model == '2+2' &&
+        data.number.length < 4
+      ) {
+        upperSeats.splice(1, 0, {status: 'empty'});
+
+        setTrack(1);
+      }
+      //console.log('sup', upperSeats[0].number.length);
+      const colNumber = id % 4;
+
+      const comp = (
+        <TouchableOpacity
+          key={id}
+          style={[
+            styles.upperView2,
+            {
+              backgroundColor:
+                data.status == true
+                  ? '#000'
+                  : data.status == 'empty'
+                  ? null
+                  : selectedSeats.includes(`${data._id}`)
+                  ? '#ed6c39'
+                  : '#9ea5b0',
+            },
+          ]}
+          onPress={() => segmentClicked2(data)}
+          disabled={data.status}>
+          {colNumber == 0 || colNumber == 1 ? (
+            <Text style={{color: '#fff', fontSize: 12, fontWeight: '500'}}>
+              {data.number}
+            </Text>
+          ) : (
+            <Text style={{color: '#fff', fontSize: 12, fontWeight: '500'}}>
+              {data.number}
+            </Text>
+          )}
+        </TouchableOpacity>
+      );
+
+      UPPER_SEAT[colNumber].push(comp);
+    });
+  } else {
+    upperSeatsSLA.map((data, id) => {
+      const colNumber = (id % 2) + 2;
+      //console.log(data);
+      const comp = (
+        <TouchableOpacity
+          key={id}
+          style={[
+            styles.upperView2,
+            {
+              backgroundColor:
+                data.status == true
+                  ? '#000'
+                  : data.status == 'empty'
+                  ? null
+                  : selectedSeats.includes(`${data._id}`)
+                  ? '#ed6c39'
+                  : '#9ea5b0',
+            },
+          ]}
+          onPress={() => segmentClicked2(data)}
+          disabled={data.status}>
+          {colNumber == 0 || colNumber == 1 ? (
+            <Text style={{color: '#fff', fontSize: 12, fontWeight: '500'}}>
+              {data.number}
+            </Text>
+          ) : (
+            <Text style={{color: '#fff', fontSize: 12, fontWeight: '500'}}>
+              {data.number}
+            </Text>
+          )}
+        </TouchableOpacity>
+      );
+      UPPER_SEAT[colNumber].push(comp);
+    });
+
+    upperSeatsSLB.map((data, id) => {
+      const colNumber = id % 2;
+      //console.log(data);
+      const comp = (
+        <TouchableOpacity
+          key={id}
+          style={[
+            styles.upperView2,
+            {
+              backgroundColor:
+                data.status == true
+                  ? '#000'
+                  : data.status == 'empty'
+                  ? null
+                  : selectedSeats.includes(`${data._id}`)
+                  ? '#ed6c39'
+                  : '#9ea5b0',
+            },
+          ]}
+          onPress={() => segmentClicked2(data)}
+          disabled={data.status}>
+          {colNumber == 0 || colNumber == 1 ? (
+            <Text style={{color: '#fff', fontSize: 12, fontWeight: '500'}}>
+              {data.number}
+            </Text>
+          ) : (
+            <Text style={{color: '#fff', fontSize: 12, fontWeight: '500'}}>
+              {data.number}
+            </Text>
+          )}
+        </TouchableOpacity>
+      );
+      UPPER_SEAT[colNumber].push(comp);
+    });
+  }
 
   const UPPER_SEAT_1 = [[], [], []];
   upperSeats.map((data, id) => {
@@ -211,7 +372,7 @@ export default function SelectedScreen() {
           styles.upperView2,
           {
             backgroundColor:
-              data.status == 1
+              data.status == true
                 ? '#000'
                 : selectedSeats.includes(`${data._id}`)
                 ? '#ed6c39'
@@ -219,7 +380,7 @@ export default function SelectedScreen() {
           },
         ]}
         onPress={() => segmentClicked2(data)}
-        disabled={data.status == 0 ? false : true}>
+        disabled={data.status}>
         <Text style={{color: '#fff', fontSize: 12, fontWeight: '500'}}>
           {data.number}
         </Text>
@@ -236,7 +397,7 @@ export default function SelectedScreen() {
           <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
             <View style={{flexDirection: 'row'}}>
               <View style={{marginRight: 10}}>{UPPER_SEAT[0]}</View>
-              <View style={{marginTop: 100}}>{UPPER_SEAT[1]}</View>
+              <View>{UPPER_SEAT[1]}</View>
             </View>
             <View style={{flexDirection: 'row'}}>
               <View style={{marginRight: 10}}>{UPPER_SEAT[2]}</View>
@@ -261,6 +422,128 @@ export default function SelectedScreen() {
   };
 
   const LOWER_SEAT = [[], [], [], []];
+
+  if (
+    lowerSeats.length > 0 &&
+    lowerSeats[0].number.length == 3 &&
+    loading == false
+  ) {
+    console.log('USLA LENGTH', upperSeats.length);
+    const uSA = [];
+    const uSB = [];
+
+    lowerSeats.map(data => {
+      if (data.number.startsWith('SA')) {
+        uSA.push(data);
+      } else {
+        uSB.push(data);
+      }
+    });
+    setLowerSeatsSA(uSA);
+    setLowerSeatsSB(uSB);
+    setLoading(true);
+  }
+  if (lowerSeats.length > 0 && bus_model == '2+2') {
+    if (
+      lowerSeats[0].number.startsWith('SA') ||
+      lowerSeats[0].number.startsWith('SB')
+    ) {
+      lowerSeatsSA.map((data, id) => {
+        const colNumber = (id % 2) + 2;
+        const comp = (
+          <TouchableOpacity
+            key={id}
+            style={[
+              data.type == 'sleeper' ? styles.upperView2 : styles.lowerSeat,
+              {
+                backgroundColor:
+                  data.status == true
+                    ? '#000'
+                    : selectedSeats.includes(`${data._id}`)
+                    ? '#ed6c39'
+                    : '#9ea5b0',
+              },
+            ]}
+            onPress={() => {
+              segmentClicked1(data);
+            }}
+            disabled={data.status}>
+            <Text style={{color: '#fff', fontSize: 12, fontWeight: '500'}}>
+              {data.number}
+            </Text>
+          </TouchableOpacity>
+        );
+
+        LOWER_SEAT[colNumber].push(comp);
+      });
+      lowerSeatsSB.map((data, id) => {
+        const colNumber = id % 2;
+        const comp = (
+          <TouchableOpacity
+            key={id}
+            style={[
+              data.type == 'sleeper' ? styles.upperView2 : styles.lowerSeat,
+              {
+                backgroundColor:
+                  data.status == true
+                    ? '#000'
+                    : selectedSeats.includes(`${data._id}`)
+                    ? '#ed6c39'
+                    : '#9ea5b0',
+              },
+            ]}
+            onPress={() => {
+              segmentClicked1(data);
+            }}
+            disabled={data.status}>
+            <Text style={{color: '#fff', fontSize: 12, fontWeight: '500'}}>
+              {data.number}
+            </Text>
+          </TouchableOpacity>
+        );
+
+        LOWER_SEAT[colNumber].push(comp);
+      });
+    } else {
+      lowerSeats.map((data, id) => {
+        const comp = (
+          <TouchableOpacity
+            key={id}
+            style={[
+              data.type == 'sleeper' ? styles.upperView2 : styles.lowerSeat,
+              {
+                backgroundColor:
+                  data.status == true
+                    ? '#000'
+                    : selectedSeats.includes(`${data._id}`)
+                    ? '#ed6c39'
+                    : '#9ea5b0',
+              },
+            ]}
+            onPress={() => {
+              segmentClicked1(data);
+            }}
+            disabled={data.status}>
+            <Text style={{color: '#fff', fontSize: 12, fontWeight: '500'}}>
+              {data.number}
+            </Text>
+          </TouchableOpacity>
+        );
+
+        if (sleeperNumber == 1) {
+          const colNumber = data.type == 'sleeper' ? (id % 2) + 2 : id % 2;
+          LOWER_SEAT[colNumber].push(comp);
+        } else {
+          const colNumber = id % 4;
+          LOWER_SEAT[colNumber].push(comp);
+        }
+
+        // LOWER_SEAT[colNumber].push(comp);
+      });
+    }
+  }
+
+  const LOWER_SEAT_1 = [[], [], []];
   lowerSeats.map((data, id) => {
     const comp = (
       <TouchableOpacity
@@ -269,36 +552,7 @@ export default function SelectedScreen() {
           data.type == 'sleeper' ? styles.upperView2 : styles.lowerSeat,
           {
             backgroundColor:
-              data.status == 1
-                ? '#000'
-                : selectedSeats.includes(`${data._id}`)
-                ? '#ed6c39'
-                : '#9ea5b0',
-          },
-        ]}
-        onPress={() => {
-          segmentClicked1(data);
-        }}
-        disabled={data.status == 0 ? false : true}>
-        <Text style={{color: '#fff', fontSize: 12, fontWeight: '500'}}>
-          {data.number}
-        </Text>
-      </TouchableOpacity>
-    );
-    const colNumber = data.type == 'sleeper' ? (id % 2) + 2 : id % 2;
-    LOWER_SEAT[colNumber].push(comp);
-  });
-
-  const LOWER_SEAT_1 = [[], [], []];
-  lowerSeats.map((data, id) => {
-    const comp = (
-      <TouchableOpacity
-        key={id}
-        style={[
-          styles.lowerSeat,
-          {
-            backgroundColor:
-              data.status == 1
+              data.status == true
                 ? '#000'
                 : selectedSeats.includes(`${data._id}`)
                 ? '#ed6c39'
@@ -306,7 +560,7 @@ export default function SelectedScreen() {
           },
         ]}
         onPress={() => segmentClicked1(data)}
-        disabled={data.status == 0 ? false : true}>
+        disabled={data.status}>
         <Text style={{color: '#fff', fontSize: 12, fontWeight: '500'}}>
           {data.number}
         </Text>
@@ -366,7 +620,7 @@ export default function SelectedScreen() {
         seat_number1: seats[0],
         seat_number2: seats[1],
         seat_id: selectedSeats[0],
-        price: price,
+        price: price1,
         seats_length: seats.length,
       });
     }
@@ -591,7 +845,7 @@ export default function SelectedScreen() {
               }}></View>
             <View style={{alignItems: 'center'}}>
               <Text style={{color: 'gray'}}>Price</Text>
-              <Text style={{color: '#000'}}>₹{price}</Text>
+              <Text style={{color: '#000'}}>₹{price1}</Text>
             </View>
           </View>
           <TouchableOpacity onPress={proceed} style={styles.proceedBtn}>
@@ -687,6 +941,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 10,
     elevation: 5,
+    marginRight: 5,
+  },
+  upperView3: {
+    height: 90,
+    width: 40,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
     marginRight: 5,
   },
 });

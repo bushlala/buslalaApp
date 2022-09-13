@@ -33,6 +33,7 @@ import MapViewScreen from './screens/NewScreens/MapViewScreen';
 import CancelTicket from './screens/NewScreens/CancelTicket';
 import BusDetailsList from './screens/NewScreens/busesScreen';
 import RoutesList from './screens/NewScreens/RoutesList';
+import notifee from '@notifee/react-native';
 
 const Stack = createNativeStackNavigator();
 
@@ -95,9 +96,11 @@ const App = () => {
   };
   //.........get fcm token from firebase............
   const getFCM = async () => {
+    await messaging().registerDeviceForRemoteMessages();
+
     let fcmToken = await messaging().getToken();
     if (fcmToken) {
-      //      console.log("token: ",fcmToken);  // send token to server
+      console.log('token: ', fcmToken); // send token to server
       messaging().subscribeToTopic('topic');
     } else {
       console.log('token not found');
@@ -110,9 +113,7 @@ const App = () => {
     themeEvent();
     getFCM();
     getModeStatus();
-    messaging().onMessage(async remoteMessage => {
-      console.log('A new FCM message arrived :', remoteMessage);
-    });
+
     setTimeout(() => {
       setAppIsReady(true);
     }, 3000);
@@ -121,6 +122,10 @@ const App = () => {
   if (!appIsReady) {
     return <WelcomeScreen />;
   }
+
+  messaging().onMessage(remoteMessage => {
+    console.log('remote message: ' + remoteMessage);
+  });
 
   //.........main return will be triggered after 3 sec / 3000 ms.......................
 
