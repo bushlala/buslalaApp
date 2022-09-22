@@ -553,7 +553,7 @@ const ProfileScreen = () => {
             nav={() => navigation.navigate('PaymentSettings')}
             iconName="arrowright"
           />
-          <ProfileOptions
+          {/* <ProfileOptions
             text="My Bookings"
             desc="Rating, Completed, Cancelled Tickets"
             nav={() =>
@@ -564,7 +564,7 @@ const ProfileScreen = () => {
               })
             }
             iconName="arrowright"
-          />
+          /> */}
           <ProfileOptions
             text="Cowin Certificate"
             desc="Add your cowin Certificate"

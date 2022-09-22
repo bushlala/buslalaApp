@@ -225,29 +225,60 @@ const BusesScreen = () => {
           <FlatList
             showsVerticalScrollIndicator={false}
             data={Data}
-            renderItem={({item}) =>
-              item.data_false.map(item1 => (
-                <SeaterOption
-                  key={item1.tripId}
-                  name={item1.bus.name}
-                  duration={item1.duration}
-                  arrivalHour={item1.time.arr}
-                  deptHour={item1.time.dept}
-                  priceUpper={item1.bus.fare.upperBerth}
-                  priceLower={item1.bus.fare.lowerBerth}
-                  priceLowerSleeper={item1.bus.fare.lowerSleeper}
-                  rating={item1.bus.rating}
-                  seats={item1.seats.length}
-                  desc={`${item1.bus.busType} (${item1.bus.bus_model})`}
-                  tripID={item1.tripId}
-                  src={src}
-                  dest={dest}
-                  date={date}
-                  rDate={rDate}
-                  bus_model={item1.bus.bus_model}
-                />
-              ))
-            }
+            renderItem={({item}) => {
+              return item.map((item1, index) => {
+                if (item1.bus !== null) {
+                  console.log('item1', item1.bus.name);
+                  return (
+                    <SeaterOption
+                      key={item1.tripId}
+                      name={item1.bus.name}
+                      seatlist={item1.bus.seats}
+                      duration={item1.duration}
+                      arrivalHour={item1.time.arr}
+                      deptHour={item1.time.dept}
+                      priceUpper={item1.bus.fare.upperBerth}
+                      priceLower={item1.bus.fare.lowerBerth}
+                      priceLowerSleeper={item1.bus.fare.lowerSleeper}
+                      rating={item1.bus.rating}
+                      seats={item1.seats.length}
+                      desc={`${item1.bus.busType} (${item1.bus.bus_model})`}
+                      tripID={item1.tripId}
+                      src={src}
+                      dest={dest}
+                      date={date}
+                      rDate={rDate}
+                      bus_model={item1.bus.bus_model}
+                    />
+                  );
+                }
+              });
+              // return (
+              //   <SeaterOption
+              //     key={item.tripId}
+              //     name={'Raj'}
+              //     duration={item.duration}
+              //     arrivalHour={item.time.arr}
+              //     deptHour={item.time.dept}
+              //     priceUpper={
+              //       item.bus.fare.upperBerth ? 10 : item.bus.fare.upperBerth
+              //     }
+              //     priceLower={
+              //       item.bus.fare.lowerBerth ? 10 : item.bus.fare.lowerBerth
+              //     }
+              //     priceLowerSleeper={item.bus.fare.lowerSleeper}
+              //     rating={item.bus.rating}
+              //     seats={item.seats.length}
+              //     desc={`${item.bus.busType} (${item.bus.bus_model})`}
+              //     tripID={item.tripId}
+              //     src={src}
+              //     dest={dest}
+              //     date={date}
+              //     rDate={rDate}
+              //     bus_model={item.bus.bus_model}
+              //   />
+              // );
+            }}
           />
         </View>
       </View>

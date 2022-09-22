@@ -38,6 +38,7 @@ export default function SelectedScreen() {
     date,
     rDate,
     bus_model,
+    seatlist,
   } = route.params;
   const [toggle, setToggle] = useState(false);
   const [lowerSeats, setLowerSeats] = useState([]);
@@ -54,6 +55,8 @@ export default function SelectedScreen() {
   const [loading, setLoading] = useState(true);
   const [lowerSeatsSA, setLowerSeatsSA] = useState([]);
   const [lowerSeatsSB, setLowerSeatsSB] = useState([]);
+  const [upperLoad, setUpperLoad] = useState(true);
+  const [backSeats, setBackSeats] = useState([]);
 
   const config = {
     headers: {
@@ -97,6 +100,7 @@ export default function SelectedScreen() {
 
   const segmentClicked1 = data => {
     console.log('price1', price1);
+    console.log('upperSeats', upperSeats);
     //console.log(selectLower.length);
     if (
       !selectLower.includes(`${data.number}`) ||
@@ -159,10 +163,10 @@ export default function SelectedScreen() {
         const upperBerth = [];
 
         //console.log(DATA.trip.seats);
-        DATA.trip.seats.map(data => {
+        console.log('DATA', DATA.trip.seats);
+        seatlist.map(data => {
           if (data.place == 'upperBirthA' || data.place == 'upperBirthB') {
             upperBerth.push(data);
-            //console.log(upperBerth);
           } else {
             if (data.type == 'sleeper') {
               setSleeperNumber(1);
@@ -180,6 +184,7 @@ export default function SelectedScreen() {
         alert('please try again after few minutes');
       });
     setLoading(false);
+    setUpperLoad(false);
   };
 
   const [sleepers, setSleepers] = useState(0);
@@ -223,9 +228,9 @@ export default function SelectedScreen() {
   if (
     upperSeats.length > 0 &&
     upperSeats[0].number.length == 4 &&
-    loading == false
+    upperLoad == false
   ) {
-    //console.log('USLA LENGTH', upperSeats.length);
+    console.log('USLA LENGTH', upperSeats.length);
     const uSLA = [];
     const uSLB = [];
 
@@ -238,7 +243,7 @@ export default function SelectedScreen() {
     });
     setUpperSeatsSLA(uSLA);
     setUpperSeatsSLB(uSLB);
-    setLoading(true);
+    setUpperLoad(true);
   }
 
   if (upperSeats.length > 0 && upperSeats[0].number.length < 4) {
@@ -293,7 +298,7 @@ export default function SelectedScreen() {
     });
   } else {
     upperSeatsSLA.map((data, id) => {
-      const colNumber = (id % 2) + 2;
+      const colNumber = id % 2;
       //console.log(data);
       const comp = (
         <TouchableOpacity
@@ -328,7 +333,7 @@ export default function SelectedScreen() {
     });
 
     upperSeatsSLB.map((data, id) => {
-      const colNumber = id % 2;
+      const colNumber = (id % 2) + 2;
       //console.log(data);
       const comp = (
         <TouchableOpacity
@@ -421,35 +426,46 @@ export default function SelectedScreen() {
     } else return null;
   };
 
-  const LOWER_SEAT = [[], [], [], []];
+  const LOWER_SEAT = [[], [], [], [], []];
 
-  if (
-    lowerSeats.length > 0 &&
-    lowerSeats[0].number.length == 3 &&
-    loading == false
-  ) {
-    console.log('USLA LENGTH', upperSeats.length);
+  if (lowerSeats.length > 0 && loading == false) {
+    //console.log('USLA LENGTH', upperSeats.length);
     const uSA = [];
     const uSB = [];
+    const uSBack = [];
 
     lowerSeats.map(data => {
-      if (data.number.startsWith('SA')) {
+      if (data.side == 'left') {
+        console.log('data', data.side);
         uSA.push(data);
       } else {
         uSB.push(data);
       }
+      if (data.place == 'backOfBus') {
+        uSBack.push(data);
+      }
     });
     setLowerSeatsSA(uSA);
     setLowerSeatsSB(uSB);
+    setBackSeats(uSBack);
     setLoading(true);
   }
   if (lowerSeats.length > 0 && bus_model == '2+2') {
-    if (
-      lowerSeats[0].number.startsWith('SA') ||
-      lowerSeats[0].number.startsWith('SB')
-    ) {
+    if (lowerSeatsSA.length > 0) {
+      let colNumber;
+      console.log('back Seats', backSeats);
       lowerSeatsSA.map((data, id) => {
-        const colNumber = (id % 2) + 2;
+        if (backSeats.length % 2 == 0) {
+          //console.log('back', back);
+          colNumber =
+            id == lowerSeatsSA.length - 1
+              ? 4
+              : id == lowerSeatsSA.length - 2
+              ? 4
+              : id % 2;
+        } else {
+          colNumber = id == lowerSeatsSA.length - 1 ? 4 : id % 2;
+        }
         const comp = (
           <TouchableOpacity
             key={id}
@@ -477,7 +493,7 @@ export default function SelectedScreen() {
         LOWER_SEAT[colNumber].push(comp);
       });
       lowerSeatsSB.map((data, id) => {
-        const colNumber = id % 2;
+        const colNumber = (id % 2) + 2;
         const comp = (
           <TouchableOpacity
             key={id}
@@ -504,6 +520,35 @@ export default function SelectedScreen() {
 
         LOWER_SEAT[colNumber].push(comp);
       });
+      // backSeats.map((data, id) => {
+      //   const colNumber = 4;
+      //   const comp = (
+      //     <TouchableOpacity
+      //       key={id}
+      //       style={[
+      //         data.type == 'sleeper' ? styles.upperView2 : styles.lowerSeat,
+      //         {
+      //           backgroundColor:
+      //             data.status == true
+      //               ? '#000'
+      //               : selectedSeats.includes(`${data._id}`)
+      //               ? '#ed6c39'
+      //               : '#9ea5b0',
+      //           marginRight: 10,
+      //         },
+      //       ]}
+      //       onPress={() => {
+      //         segmentClicked1(data);
+      //       }}
+      //       disabled={data.status}>
+      //       <Text style={{color: '#fff', fontSize: 12, fontWeight: '500'}}>
+      //         {data.number}
+      //       </Text>
+      //     </TouchableOpacity>
+      //   );
+
+      //   LOWER_SEAT[colNumber].push(comp);
+      // });
     } else {
       lowerSeats.map((data, id) => {
         const comp = (
@@ -570,7 +615,7 @@ export default function SelectedScreen() {
     LOWER_SEAT_1[colNumber].push(comp);
   });
   const Lower = () => {
-    if (bus_model == '2+2') {
+    if (bus_model == '2+2' && lowerSeatsSA.length == 0) {
       return (
         <View style={{marginVertical: 20}}>
           <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
@@ -579,6 +624,38 @@ export default function SelectedScreen() {
               <View>{LOWER_SEAT[1]}</View>
             </View>
             <View style={{flexDirection: 'row'}}>
+              <View style={{marginRight: 10}}>{LOWER_SEAT[2]}</View>
+              <View>{LOWER_SEAT[3]}</View>
+            </View>
+          </View>
+        </View>
+      );
+    } else if (bus_model == '2+2' && lowerSeatsSA.length > 0) {
+      const num = (lowerSeatsSA.length - 1) / 2;
+      return (
+        <View style={{marginVertical: 10}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginLeft: 30,
+            }}>
+            <View style={{flexDirection: 'row'}}>
+              <View style={{marginRight: 10}}>{LOWER_SEAT[0]}</View>
+              <View>{LOWER_SEAT[1]}</View>
+            </View>
+            <View style={{width: 100}}>
+              <View
+                style={{
+                  marginTop: backSeats.length % 2 == 0 ? 39.6 * num : 41 * num,
+                  flexDirection: 'row',
+                  marginLeft: backSeats.length % 2 == 0 ? 10 : 30,
+                }}>
+                {LOWER_SEAT[4]}
+              </View>
+            </View>
+
+            <View style={{flexDirection: 'row', marginRight: 30}}>
               <View style={{marginRight: 10}}>{LOWER_SEAT[2]}</View>
               <View>{LOWER_SEAT[3]}</View>
             </View>

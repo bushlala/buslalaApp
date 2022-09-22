@@ -33,6 +33,7 @@ const SeaterOption = ({
   date,
   rDate,
   bus_model,
+  seatlist,
 }) => {
   const navigation = useNavigation();
 
@@ -55,6 +56,7 @@ const SeaterOption = ({
               tripId: tripID,
               date: date,
               rDate: rDate,
+              seatlist: seatlist,
             })
           : Alert.alert('Trip has already started');
       })

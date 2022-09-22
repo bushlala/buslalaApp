@@ -180,7 +180,9 @@ const TicketScreen = () => {
                           textAlign: 'center',
                           fontWeight: 'bold',
                         }}>
-                        {item.tripId.busId.name}
+                        {typeof item.tripId.busId.name == 'undefined'
+                          ? 'Bus Not Available'
+                          : item.tripId.busId.name}
                       </Text>
                       <View
                         style={{

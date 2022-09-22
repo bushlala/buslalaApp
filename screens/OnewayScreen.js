@@ -28,6 +28,7 @@ import {useState} from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {useTheme} from '@react-navigation/native';
 import {API, getUser} from '../config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const OnewayScreen = () => {
   const colors = useTheme();
@@ -49,6 +50,7 @@ const OnewayScreen = () => {
   const [date1, setDate1] = useState(new Date());
   const [date2, setDate2] = useState(new Date());
   const [date3, setDate3] = useState(new Date());
+  const [token, setToken] = useState('');
 
   const [isClicked1, setIsClicked1] = useState(false);
   const [isClicked2, setIsClicked2] = useState(false);
@@ -146,6 +148,12 @@ const OnewayScreen = () => {
     setIsTwoWay(true);
   };
 
+  const config = {
+    headers: {
+      Authorization: token,
+    },
+  };
+
   var oneWayPostData = {
     source: !click ? from : to,
     destination: !click ? to : from,
@@ -153,6 +161,12 @@ const OnewayScreen = () => {
   };
 
   const busesHandler = () => {
+    AsyncStorage.getItem('jwt')
+      .then(res => {
+        //console.log(JSON.parse(res).data.token);
+        setToken(JSON.parse(res).data.token);
+      })
+      .catch(err => console.log(err));
     if (from === '' || to === '') {
       setError(true);
       setError1(true);
@@ -163,13 +177,20 @@ const OnewayScreen = () => {
       setError1(false);
       console.log('from', from, 'to', to, 'date', typeof deptDate);
       axios
-        .post(`${API}/searchOneWayBus`, oneWayPostData)
+        .post(`${API}/searchOneWayBus`, oneWayPostData, config)
         .then(response => {
           if (response.status === 200) {
-            console.log(response.data);
+            console.log(response.data.data_false);
+            console.log(oneWayPostData);
+
+            // response.data.map(item => {
+            //   item.data_false.map(item1 => {
+            //     console.log(item1);
+            //   });
+            // });
 
             navigation.navigate('Buses', {
-              Data: response.data,
+              Data: response.data.data_false,
               src: !click ? from : to,
               dest: !click ? to : from,
               oneWay: isOneWay,
