@@ -190,7 +190,10 @@ const OnewayScreen = () => {
             // });
 
             navigation.navigate('Buses', {
-              Data: response.data.data_false,
+              Data:
+                response.data.data_false.length != 0
+                  ? response.data.data_false
+                  : response.data.data,
               src: !click ? from : to,
               dest: !click ? to : from,
               oneWay: isOneWay,

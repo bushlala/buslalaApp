@@ -99,8 +99,8 @@ export default function SelectedScreen() {
   const [price1, setPrice1] = useState(0);
 
   const segmentClicked1 = data => {
-    console.log('price1', price1);
-    console.log('upperSeats', upperSeats);
+    console.log('price1', backSeats.length);
+    console.log('upperSeats', backSeats);
     //console.log(selectLower.length);
     if (
       !selectLower.includes(`${data.number}`) ||
@@ -588,7 +588,7 @@ export default function SelectedScreen() {
     }
   }
 
-  const LOWER_SEAT_1 = [[], [], []];
+  const LOWER_SEAT_1 = [[], [], [], []];
   lowerSeats.map((data, id) => {
     const comp = (
       <TouchableOpacity
@@ -611,7 +611,12 @@ export default function SelectedScreen() {
         </Text>
       </TouchableOpacity>
     );
-    const colNumber = id % 3;
+    let colNumber;
+    if (data.place == 'backOfBus') {
+      colNumber = 3;
+    } else {
+      colNumber = id % 3;
+    }
     LOWER_SEAT_1[colNumber].push(comp);
   });
   const Lower = () => {
@@ -671,6 +676,9 @@ export default function SelectedScreen() {
               <View style={{marginRight: 10}}>{LOWER_SEAT_1[1]}</View>
               <View>{LOWER_SEAT_1[2]}</View>
             </View>
+          </View>
+          <View style={{marginTop: -45, marginLeft: 120}}>
+            {LOWER_SEAT_1[3]}
           </View>
         </View>
       );

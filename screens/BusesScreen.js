@@ -233,7 +233,7 @@ const BusesScreen = () => {
                     <SeaterOption
                       key={item1.tripId}
                       name={item1.bus.name}
-                      seatlist={item1.bus.seats}
+                      seatlist={item1.seats}
                       duration={item1.duration}
                       arrivalHour={item1.time.arr}
                       deptHour={item1.time.dept}

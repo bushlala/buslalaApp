@@ -38,10 +38,12 @@ const SeaterOption = ({
   const navigation = useNavigation();
 
   const busHandler = () => {
+    console.log('trip Id', tripID);
     axios
       .get(`${API}/trip/${tripID}`)
       .then(resp => {
-        resp.data.trip.status == 'pending'
+        console.log(resp.data.bus.status);
+        resp.data.bus.status == 'notstarted'
           ? navigation.navigate('SelectedScreen', {
               name: name,
               priceLower: priceLower,

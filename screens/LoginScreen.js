@@ -39,7 +39,7 @@ const LoginScreen = () => {
             if (response.status === 200) {
               setUser(false);
               console.log('OTP SENT');
-              console.log(response);
+              console.log('response', response);
               {
                 num && navigation.navigate('Otp', {number: num});
               }

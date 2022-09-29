@@ -32,7 +32,6 @@ const TicketScreen = () => {
   const navigation = useNavigation();
   const colors = useTheme();
   const isFocused = useIsFocused();
-
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -58,6 +57,7 @@ const TicketScreen = () => {
           const Data = res.data;
           setData(Data.data);
           setLoading(false);
+          console.log('response', res.data);
         } else console.log(res.status);
       })
       .catch(e => {
@@ -157,7 +157,7 @@ const TicketScreen = () => {
           ) : (
             data.map((item, index) => (
               <View key={index}>
-                {item.status === 'completed' ? (
+                {true ? (
                   <View
                     style={{
                       elevation: 5,
@@ -180,7 +180,7 @@ const TicketScreen = () => {
                           textAlign: 'center',
                           fontWeight: 'bold',
                         }}>
-                        {typeof item.tripId.busId.name == 'undefined'
+                        {item.tripId.busId === null
                           ? 'Bus Not Available'
                           : item.tripId.busId.name}
                       </Text>
@@ -430,12 +430,17 @@ const TicketScreen = () => {
                           borderRadius: 4,
                         }}
                         activeOpacity={0.6}
+                        disabled={item.status == 'cancelled' ? true : false}
                         onPress={() =>
                           navigation.navigate('CancelTicket', {
                             bookingId: item._id,
                           })
                         }>
-                        <Text style={{color: '#fff'}}>Cancel Ticket</Text>
+                        <Text style={{color: '#fff'}}>
+                          {item.status == 'cancelled'
+                            ? 'cancelled'
+                            : 'Cancel Ticket'}
+                        </Text>
                       </TouchableOpacity>
                       {item.tripId.status == 'success' ? (
                         <TouchableOpacity
