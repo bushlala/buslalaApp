@@ -34,6 +34,7 @@ const TicketScreen = () => {
   const isFocused = useIsFocused();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const curDate = new Date();
 
   // let tempDate = new Date(date);
   // let year = tempDate.getFullYear();
@@ -74,6 +75,39 @@ const TicketScreen = () => {
       return () => clearInterval(interval);
     }
   }, [isFocused]);
+
+  const compDate = itemdate => {
+    if (itemdate < curDate) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const returnSeats = item => {
+    if (item.seat_number1 && !item.seat_number2) {
+      return `${item.seat_number1}`;
+    } else if (item.seat_number1 && item.seat_number2 && !item.seat_number3) {
+      return `${item.seat_number1}, ${item.seat_number2}`;
+    } else if (
+      item.seat_number1 &&
+      item.seat_number2 &&
+      item.seat_number3 &&
+      !item.seat_number4
+    ) {
+      return `${item.seat_number1}, ${item.seat_number2}, ${item.seat_number3}`;
+    } else if (
+      item.seat_number1 &&
+      item.seat_number2 &&
+      item.seat_number3 &&
+      item.seat_number4 &&
+      !item.seat_number5
+    ) {
+      return `${item.seat_number1}, ${item.seat_number2}, ${item.seat_number3}, ${item.seat_number4}`;
+    } else {
+      return `${item.seat_number1}, ${item.seat_number2}, ${item.seat_number3}, ${item.seat_number4}, ${item.seat_number5}`;
+    }
+  };
 
   return (
     <View style={styles.screen}>
@@ -375,7 +409,7 @@ const TicketScreen = () => {
                       )}
                       <View style={{alignItems: 'center'}}>
                         <View>
-                          <Text style={{color: 'gray', fontWeight: '400'}}>
+                          {/* <Text style={{color: 'gray', fontWeight: '400'}}>
                             Name: {item.u1_name}
                           </Text>
                           {item.u2_name ? (
@@ -383,6 +417,11 @@ const TicketScreen = () => {
                               Name: {item.u2_name}
                             </Text>
                           ) : null}
+                          {item.u3_name ? (
+                            <Text style={{color: 'gray', fontWeight: '400'}}>
+                              Name: {item.u3_name}
+                            </Text>
+                          ) : null} */}
                         </View>
                       </View>
                       <View
@@ -403,7 +442,7 @@ const TicketScreen = () => {
                           }}>
                           Payment {item.payment_status}
                         </Text>
-                        {!item.seat_number2 ? (
+                        {/* {!item.seat_number2 ? (
                           <Text style={{color: '#eb8634', fontSize: 20}}>
                             {item.seat_number1}
                           </Text>
@@ -411,7 +450,10 @@ const TicketScreen = () => {
                           <Text style={{color: '#eb8634', fontSize: 20}}>
                             {item.seat_number1}, {item.seat_number2}
                           </Text>
-                        )}
+                        )} */}
+                        <Text style={{color: '#eb8634', fontSize: 20}}>
+                          {returnSeats(item)}
+                        </Text>
                       </View>
                     </View>
                     <View
@@ -422,27 +464,34 @@ const TicketScreen = () => {
                         marginHorizontal: 20,
                         marginBottom: 10,
                       }}>
-                      <TouchableOpacity
-                        style={{
-                          backgroundColor: secondary,
-                          paddingHorizontal: 10,
-                          paddingVertical: 5,
-                          borderRadius: 4,
-                        }}
-                        activeOpacity={0.6}
-                        disabled={item.status == 'cancelled' ? true : false}
-                        onPress={() =>
-                          navigation.navigate('CancelTicket', {
-                            bookingId: item._id,
-                          })
-                        }>
-                        <Text style={{color: '#fff'}}>
-                          {item.status == 'cancelled'
-                            ? 'cancelled'
-                            : 'Cancel Ticket'}
-                        </Text>
-                      </TouchableOpacity>
-                      {item.tripId.status == 'success' ? (
+                      {new Date(item.tripId.date).setHours(0, 0, 0, 0) >=
+                      curDate.setHours(0, 0, 0, 0) ? (
+                        <TouchableOpacity
+                          style={{
+                            backgroundColor: secondary,
+                            paddingHorizontal: 10,
+                            paddingVertical: 5,
+                            borderRadius: 4,
+                          }}
+                          activeOpacity={0.6}
+                          disabled={item.status == 'cancelled' ? true : false}
+                          onPress={() =>
+                            navigation.navigate('CancelTicket', {
+                              bookingId: item._id,
+                            })
+                          }>
+                          <Text style={{color: '#fff'}}>
+                            {item.status == 'cancelled'
+                              ? 'cancelled'
+                              : 'Cancel Ticket'}
+                          </Text>
+                        </TouchableOpacity>
+                      ) : (
+                        console.log('hello', new Date('2022-10-12') >= curDate)
+                      )}
+                      {new Date(item.tripId.date).setHours(0, 0, 0, 0) >=
+                        curDate.setHours(0, 0, 0, 0) &&
+                      item.tripId.status == 'success' ? (
                         <TouchableOpacity
                           style={{
                             backgroundColor: primary,
@@ -456,6 +505,21 @@ const TicketScreen = () => {
                           <Text style={{color: '#fff'}}>Location</Text>
                         </TouchableOpacity>
                       ) : null}
+
+                      {/* {item.tripId.status == 'success' ? (
+                        <TouchableOpacity
+                          style={{
+                            backgroundColor: primary,
+                            paddingVertical: 5,
+                            paddingHorizontal: 10,
+                            borderRadius: 4,
+                          }}
+                          onPress={() =>
+                            navigation.navigate('MapView', item.tripId.busId)
+                          }>
+                          <Text style={{color: '#fff'}}>Location</Text>
+                        </TouchableOpacity>
+                      ) : null} */}
                     </View>
                   </View>
                 ) : null}

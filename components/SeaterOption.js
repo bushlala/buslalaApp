@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/core';
 import axios from 'axios';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -36,13 +36,14 @@ const SeaterOption = ({
   seatlist,
 }) => {
   const navigation = useNavigation();
+  const [seatsLeft, setSeatsLeft] = useState(0);
 
   const busHandler = () => {
     console.log('trip Id', tripID);
+
     axios
       .get(`${API}/trip/${tripID}`)
       .then(resp => {
-        console.log(resp.data.bus.status);
         resp.data.bus.status == 'notstarted'
           ? navigation.navigate('SelectedScreen', {
               name: name,
@@ -66,6 +67,18 @@ const SeaterOption = ({
         console.log('Server error', err);
       });
   };
+
+  useEffect(() => {
+    var count = 0;
+
+    seatlist.map((data, id) => {
+      if (data.status == false) {
+        count = count + 1;
+      }
+    });
+
+    setSeatsLeft(count);
+  }, []);
 
   return (
     <TouchableOpacity
@@ -128,7 +141,7 @@ const SeaterOption = ({
             fontFamily: RalewayRegular,
             marginVertical: 5,
           }}>
-          {seats} Seats left
+          {seatsLeft} Seats left
         </Text>
         <View style={styles.hours}>
           <Text

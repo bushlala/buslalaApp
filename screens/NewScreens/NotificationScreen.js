@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -15,6 +15,9 @@ import {useTheme} from '@react-navigation/native';
 
 import {fontColor, newColor, primary, secondary} from '../../components/Colors';
 import {notificationData} from '../../data/notification';
+import axios from 'axios';
+import {API} from '../../config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const {width} = Dimensions.get('window');
 
@@ -22,6 +25,81 @@ export default function NotificationScreen() {
   const navigation = useNavigation();
   const colors = useTheme();
   const [isData, setIsData] = useState(true);
+  const [token, setToken] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
+  const currDate = new Date();
+
+  const config = {
+    headers: {
+      Authorization: token,
+    },
+  };
+
+  const [count, setCount] = useState(0);
+
+  const notificationsFetchAPI = () => {
+    setLoading(true);
+    AsyncStorage.getItem('jwt')
+      .then(res => {
+        //console.log(JSON.parse(res).data.token);
+        const date1 = new Date('7/13/2010');
+        const date2 = new Date('12/15/2010');
+        const diffTime = Math.abs(currDate - date1);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        const diffMinutes = Math.ceil(diffTime / (1000 * 60));
+        console.log(diffMinutes + ' minutes');
+        console.log(diffDays + ' days');
+        setToken(JSON.parse(res).data.token);
+      })
+      .catch(err => console.log(err));
+
+    axios
+      .get(`${API}/notifications`, config)
+      .then(res => {
+        console.log('res', res.data);
+        setData(res.data);
+        var c = 0;
+        res.data.map(item => {
+          if (item.status == false) {
+            setCount(c + 1);
+          }
+        });
+      })
+      .catch(err => console.log(err));
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    notificationsFetchAPI();
+  }, []);
+  const putData = {
+    status: true,
+  };
+  const readNotification = id => {
+    axios
+      .put(`${API}/notifications/${id}`, putData, config)
+      .then(res => {
+        console.log('res', res);
+        navigation.navigate('Oneway');
+      })
+      .catch(err => console.log(err));
+  };
+
+  const calculateTime = givenDate => {
+    const diffTime = Math.abs(currDate - new Date(givenDate));
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffMinutes = Math.ceil(diffTime / (1000 * 60));
+    const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
+
+    if (diffMinutes < 60) {
+      return `${diffMinutes} minutes ago`;
+    } else if (diffMinutes > 60 && diffHours < 24) {
+      return `${diffHours} hours ago`;
+    } else {
+      return `${diffDays} days ago`;
+    }
+  };
 
   return (
     <View style={styles.screen}>
@@ -90,42 +168,44 @@ export default function NotificationScreen() {
             />
           </TouchableOpacity>
           <Text style={{fontSize: 17, color: 'black'}}>
-            {notificationData.length} Notifications
+            {count} Notifications
           </Text>
         </View>
 
         <ScrollView
           style={styles.notifications}
           showsVerticalScrollIndicator={false}>
-          {isData === true ? (
-            notificationData.map(item => (
-              <TouchableOpacity
-                activeOpacity={0.8}
-                style={styles.notification}
-                key={item.id}>
-                <View style={{alignItems: 'center'}}>
-                  <View
-                    style={{
-                      padding: 30,
-                      borderRadius: 40,
-                      backgroundColor: 'lightgray',
-                    }}></View>
-                  <Text style={{fontSize: 10, color: 'gray', marginTop: 3}}>
-                    3 mins ago
-                  </Text>
-                </View>
-                <View
-                  style={{alignItems: 'flex-start', marginHorizontal: 20}}
-                  key={item.id}>
-                  <Text style={{fontSize: 16, color: 'black'}}>
-                    {item.heading}
-                  </Text>
-                  <Text style={{fontSize: 15, color: 'gray'}} numberOfLines={2}>
-                    {item.description}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            ))
+          {loading === false ? (
+            data.map(item => {
+              if (item.status == false) {
+                return (
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    style={styles.notification}
+                    onPress={() => readNotification(item._id)}
+                    key={item._id}>
+                    <View
+                      style={{alignItems: 'center', justifyContent: 'center'}}>
+                      <Text style={{fontSize: 10, color: 'gray', marginTop: 3}}>
+                        {calculateTime(item.createdAt)}
+                      </Text>
+                    </View>
+                    <View
+                      style={{alignItems: 'flex-start', marginHorizontal: 20}}
+                      key={item.id}>
+                      <Text style={{fontSize: 15, color: 'black'}}>
+                        {item.title}
+                      </Text>
+                      <Text
+                        style={{fontSize: 14, color: 'gray'}}
+                        numberOfLines={2}>
+                        {item.body}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                );
+              }
+            })
           ) : (
             <Text
               style={{color: 'gray', fontWeight: 'bold', textAlign: 'center'}}>
@@ -215,6 +295,6 @@ const styles = StyleSheet.create({
     borderBottomColor: 'gray',
     borderBottomWidth: 1,
     padding: 10,
-    width: width - 60,
+    width: width - 80,
   },
 });

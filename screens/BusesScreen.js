@@ -227,8 +227,8 @@ const BusesScreen = () => {
             data={Data}
             renderItem={({item}) => {
               return item.map((item1, index) => {
-                if (item1.bus !== null) {
-                  console.log('item1', item1.bus.name);
+                if (item1.bus !== null && item1.trip_status !== 'success') {
+                  console.log('item1', item1.trip_status);
                   return (
                     <SeaterOption
                       key={item1.tripId}

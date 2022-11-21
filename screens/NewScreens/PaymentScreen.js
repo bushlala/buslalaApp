@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -16,6 +16,7 @@ import RazorpayCheckout from 'react-native-razorpay';
 import axios from 'axios';
 import {useTheme} from '@react-navigation/native';
 import {API} from '../../config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const {width} = Dimensions.get('window');
 
@@ -23,13 +24,32 @@ export default function PaymentScreen({route}) {
   const navigation = useNavigation();
   const colors = useTheme();
   const {Data, name, email, number, price} = route.params;
+  const [token, setToken] = useState('');
+  const postData = {
+    title: 'A new order has been placed',
+    body: 'A new order has been placed. Enjoy your trip.',
+    status: false,
+  };
+
+  const config = {
+    headers: {
+      Authorization: token,
+    },
+  };
 
   const _razorpay = () => {
+    AsyncStorage.getItem('jwt')
+      .then(res => {
+        //console.log(JSON.parse(res).data.token);
+        setToken(JSON.parse(res).data.token);
+        console.log('Data.id', Data.id);
+      })
+      .catch(err => console.log(err));
     var options = {
       description: 'Payment of seat booking',
       image: '../../assets/logo.png',
       currency: 'INR',
-      key: 'rzp_live_VbEk75qcySCm5Z',
+      key: 'rzp_live_50LP3KWWzGN3e5',
       amount: Data.amount,
       name: 'Buslala',
       order_id: Data.id, //Replace this with an order_id created using Orders API.
@@ -55,6 +75,10 @@ export default function PaymentScreen({route}) {
             if (res.status == 200) {
               console.log(res.data);
               navigation.navigate('Booked Successfully', name);
+              axios
+                .post(`${API}/notifications`, postData, config)
+                .then(console.log('Notification posted'))
+                .catch(err => console.log(err));
             } else console.log(res.status);
           })
           .catch(e => console.log(e));

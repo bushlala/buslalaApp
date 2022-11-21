@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const API = `https://sea-turtle-app-5sz9y.ondigitalocean.app/api/user`;
-export const APIADMIN = `https://sea-turtle-app-5sz9y.ondigitalocean.app/api/admin`;
+export const API = `https://coral-app-5v83l.ondigitalocean.app/api/user`;
+export const APIADMIN = `https://coral-app-5v83l.ondigitalocean.app/api/admin`;
 
 export const getUser = async () => {
   try {

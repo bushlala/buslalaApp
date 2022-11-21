@@ -73,6 +73,7 @@ export default function TicketSummaryScreen({route}) {
   const seatNumHandler = () => {
     if (seats_length > 1) {
       setOneSeat(false);
+      console.log('seats', seats);
     } else setOneSeat(true);
   };
   useEffect(() => {
@@ -88,12 +89,108 @@ export default function TicketSummaryScreen({route}) {
     u1_gender: gender1,
 
     name: Name,
-    ph_number: number,
+    number: number,
     email: email,
     idproof: url1,
     cowin: url2,
   };
+  var postdata2 = {
+    seat_number1: seat_number1,
+    seat_number2: seat_number2,
 
+    price: price,
+    u1_name: fullName1,
+    u1_age: age1,
+    u1_gender: gender1,
+    u2_name: fullName2,
+    u2_age: age2,
+    u2_gender: gender2,
+
+    name: Name,
+    number: number,
+    email: email,
+    idproof: url1,
+    cowin: url2,
+  };
+  var postdata3 = {
+    seat_number1: seat_number1,
+    seat_number2: seat_number2,
+    seat_number3: seats[2],
+
+    price: price,
+    u1_name: fullName1,
+    u1_age: age1,
+    u1_gender: gender1,
+    u2_name: fullName2,
+    u2_age: age2,
+    u2_gender: gender2,
+    u3_name: fullName3,
+    u3_age: age3,
+    u3_gender: gender3,
+
+    name: Name,
+    number: number,
+    email: email,
+    idproof: url1,
+    cowin: url2,
+  };
+  var postdata4 = {
+    seat_number1: seat_number1,
+    seat_number2: seat_number2,
+    seat_number3: seats[2],
+    seat_number4: seats[3],
+
+    price: price,
+    u1_name: fullName1,
+    u1_age: age1,
+    u1_gender: gender1,
+    u2_name: fullName2,
+    u2_age: age2,
+    u2_gender: gender2,
+    u3_name: fullName3,
+    u3_age: age3,
+    u3_gender: gender3,
+    u4_name: fullName4,
+    u4_age: age4,
+    u4_gender: gender4,
+
+    name: Name,
+    number: number,
+    email: email,
+    idproof: url1,
+    cowin: url2,
+  };
+  var postdata5 = {
+    seat_number1: seat_number1,
+    seat_number1: seat_number1,
+    seat_number2: seat_number2,
+    seat_number3: seats[2],
+    seat_number4: seats[3],
+    seat_number5: seats[4],
+
+    price: price,
+    u1_name: fullName1,
+    u1_age: age1,
+    u1_gender: gender1,
+    u2_name: fullName2,
+    u2_age: age2,
+    u2_gender: gender2,
+    u3_name: fullName3,
+    u3_age: age3,
+    u3_gender: gender3,
+    u4_name: fullName4,
+    u4_age: age4,
+    u4_gender: gender4,
+    u5_name: fullName5,
+    u5_age: age5,
+    u5_gender: gender5,
+
+    name: Name,
+    number: number,
+    email: email,
+    idproof: url1,
+    cowin: url2,
+  };
   // console.log(postdata);
 
   const ticket = () => (
@@ -307,27 +404,122 @@ export default function TicketSummaryScreen({route}) {
         setToken(JSON.parse(res).data.token);
       })
       .catch(err => console.log(err));
-    axios
-      .post(`${API}/book/${tripId}`, postdata, config)
-      .then(res => {
-        if (res.status == 200) {
-          let Data = res.data;
-          // console.log(Data);
-          navigation.navigate('PaymentScreen', {
-            Data,
-            name: Name,
-            email: email,
-            number: number,
-            price: price,
-          });
-          // setData(res.data);
-          // _razorpay();
-        } else console.log(res.status);
-      })
-      .catch(e => {
-        alert('please try again later');
-        console.log('Error is there', e);
-      });
+    if (seats.length == 1) {
+      console.log('this is for 1', tripId);
+      axios
+        .post(`${API}/book/${tripId}`, postdata, config)
+        .then(res => {
+          if (res.status == 200) {
+            let Data = res.data;
+            // console.log(Data);
+            navigation.navigate('PaymentScreen', {
+              Data,
+              name: Name,
+              email: email,
+              number: number,
+              price: price,
+            });
+            // setData(res.data);
+            // _razorpay();
+          } else console.log(res.status);
+        })
+        .catch(e => {
+          alert('please try again later');
+          console.log('Error is there', e);
+        });
+    } else if (seats.length == 2) {
+      console.log('this is for 2');
+      axios
+        .post(`${API}/book/${tripId}`, postdata2, config)
+        .then(res => {
+          if (res.status == 200) {
+            let Data = res.data;
+            // console.log(Data);
+            navigation.navigate('PaymentScreen', {
+              Data,
+              name: Name,
+              email: email,
+              number: number,
+              price: price,
+            });
+            // setData(res.data);
+            // _razorpay();
+          } else console.log(res.status);
+        })
+        .catch(e => {
+          alert('please try again later');
+          console.log('Error is there', e);
+        });
+    } else if (seats.length == 3) {
+      console.log('this is for 3', postdata3);
+      axios
+        .post(`${API}/book/${tripId}`, postdata3, config)
+        .then(res => {
+          if (res.status == 200) {
+            let Data = res.data;
+            // console.log(Data);
+            navigation.navigate('PaymentScreen', {
+              Data,
+              name: Name,
+              email: email,
+              number: number,
+              price: price,
+            });
+            // setData(res.data);
+            // _razorpay();
+          } else console.log(res.status);
+        })
+        .catch(e => {
+          alert('please try again later');
+          console.log('Error is there', e);
+        });
+    } else if (seats.length == 4) {
+      console.log('this is for 4');
+      axios
+        .post(`${API}/book/${tripId}`, postdata4, config)
+        .then(res => {
+          if (res.status == 200) {
+            let Data = res.data;
+            // console.log(Data);
+            navigation.navigate('PaymentScreen', {
+              Data,
+              name: Name,
+              email: email,
+              number: number,
+              price: price,
+            });
+            // setData(res.data);
+            // _razorpay();
+          } else console.log(res.status);
+        })
+        .catch(e => {
+          alert('please try again later');
+          console.log('Error is there', e);
+        });
+    } else if (seats.length == 5) {
+      console.log('this is for 5');
+      axios
+        .post(`${API}/book/${tripId}`, postdata5, config)
+        .then(res => {
+          if (res.status == 200) {
+            let Data = res.data;
+            // console.log(Data);
+            navigation.navigate('PaymentScreen', {
+              Data,
+              name: Name,
+              email: email,
+              number: number,
+              price: price,
+            });
+            // setData(res.data);
+            // _razorpay();
+          } else console.log(res.status);
+        })
+        .catch(e => {
+          alert('please try again later');
+          console.log('Error is there', e);
+        });
+    }
   };
 
   return (

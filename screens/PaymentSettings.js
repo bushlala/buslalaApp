@@ -47,32 +47,6 @@ const PaymentSettings = () => {
                 color="white"
               />
             </TouchableOpacity>
-            <View style={{alignItems: 'center', marginLeft: 10}}>
-              <Text
-                style={{fontSize: 18, fontFamily: RalewayBold, color: 'white'}}>
-                Arpit Saxena
-              </Text>
-              <Text
-                style={{
-                  fontSize: 13,
-                  fontFamily: RalewayRegular,
-                  color: 'white',
-                  marginVertical: 5,
-                }}>
-                +91 9856485236
-              </Text>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Entypo name="location-pin" color="white" size={24} />
-                <Text
-                  style={{
-                    fontSize: 13,
-                    fontFamily: RalewayRegular,
-                    color: 'white',
-                  }}>
-                  Noida, India
-                </Text>
-              </View>
-            </View>
           </View>
           <View
             style={{

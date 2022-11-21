@@ -547,12 +547,12 @@ const ProfileScreen = () => {
             nav={() => navigation.navigate('Privacy_Policy')}
             iconName="arrowright"
           />
-          <ProfileOptions
+          {/* <ProfileOptions
             text="Payment"
             desc="UPI, Saved Cards"
             nav={() => navigation.navigate('PaymentSettings')}
             iconName="arrowright"
-          />
+          /> */}
           {/* <ProfileOptions
             text="My Bookings"
             desc="Rating, Completed, Cancelled Tickets"
