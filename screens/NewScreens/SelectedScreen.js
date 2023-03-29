@@ -435,10 +435,10 @@ export default function SelectedScreen() {
     const uSBack = [];
 
     lowerSeats.map(data => {
-      if (data.side == 'left') {
+      if (data.side == 'left' && data.place != 'backOfBus') {
         console.log('data', data.side);
         uSA.push(data);
-      } else {
+      } else if (data.side == 'right' && data.place != 'backOfBus') {
         uSB.push(data);
       }
       if (data.place == 'backOfBus') {
@@ -453,26 +453,27 @@ export default function SelectedScreen() {
   if (lowerSeats.length > 0 && bus_model == '2+2') {
     if (lowerSeatsSA.length > 0) {
       let colNumber;
-      console.log('back Seats', backSeats);
+      //console.log('back Seats', backSeats);
       lowerSeatsSA.map((data, id) => {
-        if (backSeats.length % 2 == 0 && backSeats.length != 0) {
-          //console.log('back', back);
-          colNumber =
-            id == lowerSeatsSA.length - 1
-              ? 4
-              : id == lowerSeatsSA.length - 2
-              ? 4
-              : id % 2;
-        } else if (
-          backSeats.length % 2 != 0 &&
-          backSeats.length != 0 &&
-          sleeperNumber != 1
-        ) {
-          console.log('else condition');
-          colNumber = id == lowerSeatsSA.length - 1 ? 4 : id % 2;
-        } else {
-          colNumber = id % 2;
-        }
+        // if (backSeats.length % 2 == 0 && backSeats.length != 0) {
+        //   //console.log('back', back);
+        //   colNumber =
+        //     id == lowerSeatsSA.length - 1
+        //       ? 4
+        //       : id == lowerSeatsSA.length - 2
+        //       ? 4
+        //       : id % 2;
+        // } else if (
+        //   backSeats.length % 2 != 0 &&
+        //   backSeats.length != 0 &&
+        //   sleeperNumber != 1
+        // ) {
+        //   console.log('else condition');
+        //   colNumber = id == lowerSeatsSA.length - 1 ? 4 : id % 2;
+        // } else {
+        //   colNumber = id % 2;
+        // }
+        colNumber = id % 2;
         const comp = (
           <TouchableOpacity
             key={id}
@@ -514,6 +515,35 @@ export default function SelectedScreen() {
                     ? '#ed6c39'
                     : '#9ea5b0',
               },
+            ]}
+            onPress={() => {
+              segmentClicked1(data);
+            }}
+            disabled={data.status}>
+            <Text style={{color: '#fff', fontSize: 12, fontWeight: '500'}}>
+              {data.number}
+            </Text>
+          </TouchableOpacity>
+        );
+
+        LOWER_SEAT[colNumber].push(comp);
+      });
+      backSeats.map((data, id) => {
+        const colNumber = 4;
+        const comp = (
+          <TouchableOpacity
+            key={id}
+            style={[
+              data.type == 'sleeper' ? styles.upperView2 : styles.lowerSeat,
+              {
+                backgroundColor:
+                  data.status == true
+                    ? '#000'
+                    : selectedSeats.includes(`${data._id}`)
+                    ? '#ed6c39'
+                    : '#9ea5b0',
+              },
+              {marginRight: 10},
             ]}
             onPress={() => {
               segmentClicked1(data);
@@ -596,7 +626,7 @@ export default function SelectedScreen() {
   }
 
   const LOWER_SEAT_1 = [[], [], [], []];
-  lowerSeats.map((data, id) => {
+  lowerSeatsSA.map((data, id) => {
     const comp = (
       <TouchableOpacity
         key={id}
@@ -645,7 +675,68 @@ export default function SelectedScreen() {
     if (data.place == 'backOfBus') {
       colNumber = 3;
     } else {
-      colNumber = id % 3;
+      if (data.side == 'left') {
+        colNumber = 0;
+      } else {
+        colNumber = (id % 2) + 1;
+      }
+    }
+    LOWER_SEAT_1[colNumber].push(comp);
+  });
+  lowerSeatsSB.map((data, id) => {
+    const comp = (
+      <TouchableOpacity
+        key={id}
+        style={[
+          data.type == 'sleeper' ? styles.upperView2 : styles.lowerSeat,
+          {
+            backgroundColor:
+              data.status == true
+                ? '#000'
+                : selectedSeats.includes(`${data._id}`)
+                ? '#ed6c39'
+                : '#9ea5b0',
+          },
+        ]}
+        onPress={() => segmentClicked1(data)}
+        disabled={data.status}>
+        <Text style={{color: '#fff', fontSize: 12, fontWeight: '500'}}>
+          {data.number}
+        </Text>
+      </TouchableOpacity>
+    );
+    // const comp2 = (
+    //   <View>
+    //     <TouchableOpacity
+    //       key={id}
+    //       style={[
+    //         data.type == 'sleeper' ? styles.upperView2 : styles.lowerSeat,
+    //         {
+    //           backgroundColor:
+    //             data.status == true
+    //               ? '#000'
+    //               : selectedSeats.includes(`${data._id}`)
+    //               ? '#ed6c39'
+    //               : '#9ea5b0',
+    //         },
+    //       ]}
+    //       onPress={() => segmentClicked1(data)}
+    //       disabled={data.status}>
+    //       <Text style={{color: '#fff', fontSize: 12, fontWeight: '500'}}>
+    //         {data.number}
+    //       </Text>
+    //     </TouchableOpacity>
+    //   </View>
+    // );
+    let colNumber;
+    if (data.place == 'backOfBus') {
+      colNumber = 3;
+    } else {
+      if (data.side == 'left') {
+        colNumber = 0;
+      } else {
+        colNumber = (id % 2) + 1;
+      }
     }
     LOWER_SEAT_1[colNumber].push(comp);
   });
@@ -673,27 +764,25 @@ export default function SelectedScreen() {
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              marginLeft: 30,
+              marginLeft: 15,
             }}>
             <View style={{flexDirection: 'row'}}>
               <View style={{marginRight: 10}}>{LOWER_SEAT[0]}</View>
               <View>{LOWER_SEAT[1]}</View>
             </View>
-            <View style={{width: 100}}>
-              <View
-                style={{
-                  marginTop: backSeats.length % 2 == 0 ? 39.6 * num : 41 * num,
-                  flexDirection: 'row',
-                  marginLeft: backSeats.length % 2 == 0 ? 10 : 30,
-                }}>
-                {LOWER_SEAT[4]}
-              </View>
-            </View>
 
-            <View style={{flexDirection: 'row', marginRight: 30}}>
+            <View style={{flexDirection: 'row', marginRight: 18}}>
               <View style={{marginRight: 10}}>{LOWER_SEAT[2]}</View>
               <View>{LOWER_SEAT[3]}</View>
             </View>
+          </View>
+          <View
+            style={{
+              marginTop: 10,
+              flexDirection: 'row',
+              marginLeft: 15,
+            }}>
+            {LOWER_SEAT[4]}
           </View>
         </View>
       );
@@ -712,6 +801,8 @@ export default function SelectedScreen() {
               flexDirection: 'row',
               marginLeft: 20,
               justifyContent: 'space-evenly',
+              marginTop: sleeperNumber == 1 ? -45 : 0,
+              marginLeft: sleeperNumber == 1 ? -25 : 0,
             }}>
             {LOWER_SEAT_1[3]}
           </View>

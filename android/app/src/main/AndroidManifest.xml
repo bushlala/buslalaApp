@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
@@ -53,6 +54,6 @@
       </activity>
       <meta-data
      android:name="com.google.android.geo.API_KEY"
-     android:value="AIzaSyADsP1zSHCrMeyM2spsz4uwRj0PVnQlNx0"/>
+     android:value="AIzaSyB8rEE5-xgSHo4hMcO5FZIs1AoP9nguFrY"/>
     </application>
 </manifest>

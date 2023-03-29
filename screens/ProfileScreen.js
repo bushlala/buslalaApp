@@ -1,5 +1,6 @@
 import {useNavigation, useRoute} from '@react-navigation/core';
 import axios from 'axios';
+import ImagePicker from 'react-native-image-crop-picker';
 import React, {useEffect, useState} from 'react';
 import {
   Alert,
@@ -68,6 +69,7 @@ const ProfileScreen = () => {
   const [id_url, setId_url] = useState('');
 
   const [darkMode, setDarkMode] = useState(false);
+  const [userImage,setUserImage]=React.useState(null);
   // const[token, setToken] = useState("");
 
   const [showUserData, setShowUserData] = useState({
@@ -444,6 +446,16 @@ const ProfileScreen = () => {
     }
   };
 
+  const openCamera=()=>{
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(image => {
+      setUserImage(image.path)
+      console.log(image);
+    });
+  }
   return (
     <View style={styles.screen}>
       <View style={styles.view}>
@@ -565,12 +577,12 @@ const ProfileScreen = () => {
             }
             iconName="arrowright"
           /> */}
-          <ProfileOptions
+          {/* <ProfileOptions
             text="Cowin Certificate"
             desc="Add your cowin Certificate"
             btn={() => setIsOpen(true)}
             iconName="arrowright"
-          />
+          /> */}
           <ProfileOptions
             text="Call Support"
             desc="24/7 Service"
@@ -904,12 +916,21 @@ const ProfileScreen = () => {
               </TouchableOpacity>
             </View>
             <View style={{alignItems: 'center', marginVertical: 10}}>
-              <TouchableOpacity activeOpacity={0.8} style={styles.btn1}>
+
+              {/* <TouchableOpacity activeOpacity={0.8} style={styles.btn1}> */}
+              {userImage?
+              <Image source={{uri:userImage}} style={{height:100,width:100,borderRadius:100}}></Image>
+              :
                 <MaterialCommunityIcons
                   name="account-outline"
                   size={40}
                   color="white"
                 />
+                }
+               
+              {/* </TouchableOpacity> */}
+              <TouchableOpacity onPress={()=>openCamera()}>
+              <AntDesign name="camera" style={{marginTop:-5}} size={24} color="black" />
               </TouchableOpacity>
               <View
                 style={{
@@ -917,7 +938,7 @@ const ProfileScreen = () => {
                   alignItems: 'center',
                   marginTop: 10,
                 }}>
-                <View
+                {/* <View
                   style={{
                     alignItems: 'center',
                     flexDirection: 'row',
@@ -935,12 +956,12 @@ const ProfileScreen = () => {
                     }}>
                     Vaccinated
                   </Text>
-                </View>
+                </View> */}
                 <TouchableOpacity
                   style={{
-                    right: -20,
+                    // right: -20,
                     backgroundColor: 'lightgray',
-                    borderRadius: 10,
+                    borderRadius:5,
                     padding: 5,
                   }}
                   onPress={updateAlert}>
