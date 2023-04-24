@@ -803,7 +803,7 @@ const OnewayScreen = () => {
             <TouchableOpacity
               activeOpacity={0.8}
               style={styles.button}
-              onPress={isOneWay ? busesHandler : busesHandler1}>
+              onPress={/*isOneWay ? */busesHandler/* : busesHandler1*/}>
               <Text
                 style={{color: 'white', fontSize: 18, fontFamily: RalewayBold}}>
                 Find Buses
